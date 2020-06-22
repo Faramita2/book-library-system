@@ -58,7 +58,13 @@ configure(subprojects.findAll { it.name.matches('.*-interface') }) {
 }
 
 // services use core-ng
-configure([project(':book-service')]) {
+configure([project(':book-service'),
+           project(':user-service'),
+           project(':borrow-record-service'),
+           project(':notification-service'),
+           project(':admin-service'),
+           project(':website'),
+           project(':back-office')]) {
     dependencies {
         implementation "core.framework:core-ng:${coreNGVersion}"
         testImplementation "core.framework:core-ng-test:${coreNGVersion}"
@@ -66,14 +72,16 @@ configure([project(':book-service')]) {
 }
 
 // services use mongo
-//configure([]) {
-//    dependencies {
-//        implementation "core.framework:core-ng-mongo:${mongoVersion}"
-//    }
-//}
+configure([project(':borrow-record-service')]) {
+    dependencies {
+        implementation "core.framework:core-ng-mongo:${mongoVersion}"
+    }
+}
 
 // services use db
-configure([project(':book-service')]) {
+configure([project(':book-service'),
+           project(':user-service'),
+           project(':notification-service')]) {
     dependencies {
         runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
         testRuntimeOnly "org.hsqldb:hsqldb:${hsqlVersion}"
@@ -81,20 +89,27 @@ configure([project(':book-service')]) {
 }
 
 // services use book-service-interface
-configure([project(':book-service')]) {
+configure([project(':book-service'),
+           project(':website-interface'),
+           project(':back-office-interface')]) {
     dependencies {
         implementation project(':book-service-interface')
     }
 }
 
-//project( ':back-office') {
-//    dependencies {
-//        implementation project(':back-office-interface')
-//    }
-//}
+project(':back-office') {
+    dependencies {
+        implementation project(':back-office-interface')
+        implementation project(':user-service-interface')
+        implementation project(':admin-service-interface')
+        implementation project(':borrow-record-service-interface')
+    }
+}
 
-//project(':website') {
-//    dependencies {
-//        implementation project(':website-interface')
-//    }
-//}
+project(':website') {
+    dependencies {
+        implementation project(':website-interface')
+        implementation project(':user-service-interface')
+        implementation project(':notification-service-interface')
+    }
+}
