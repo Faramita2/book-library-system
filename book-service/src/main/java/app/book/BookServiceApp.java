@@ -11,5 +11,6 @@ public class BookServiceApp extends App {
     protected void initialize() {
         load(new SystemModule("sys.properties"));
         load(new BookModule());
+        load(new AuthorModule());
     }
 }
