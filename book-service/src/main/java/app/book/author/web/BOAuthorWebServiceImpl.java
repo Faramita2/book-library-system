@@ -7,6 +7,7 @@ import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
 import app.book.author.service.BOAuthorService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -27,7 +28,8 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
 
     @Override
     public void update(Long id, BOUpdateAuthorRequest request) {
-
+        ActionLogContext.put("author_id", id);
+        service.update(id, request);
     }
 
     @Override
