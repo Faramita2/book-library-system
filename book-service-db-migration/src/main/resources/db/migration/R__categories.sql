@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS `categories` (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `name` VARCHAR(50) NOT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `created_by` VARCHAR(50) NOT NULL,
+    `updated_by` VARCHAR(50) NOT NULL,
+    INDEX `name_index`(`name` ASC)
+);
