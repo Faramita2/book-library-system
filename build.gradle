@@ -1,14 +1,100 @@
-plugins {
-    id 'java'
+apply from: file("${rootDir}/gradle/project.gradle")
+
+subprojects {
+    group = 'com.lgzzzz'
+    version = '1.0.0'
+
+    repositories {
+        maven {
+            url 'https://neowu.github.io/maven-repo/'
+            content {
+                includeGroup 'core.framework'
+            }
+        }
+    }
+
 }
 
-group 'com.lgzzzz'
-version '1.0-SNAPSHOT'
+def coreNGVersion = '7.4.1'
+def mysqlVersion = '8.0.20'
+def mongoVersion = '7.4.1'
+def hsqlVersion = '2.5.0'
 
-repositories {
-    mavenCentral()
+
+configure(subprojects.findAll { it.name.endsWith('-db-migration') }) {
+    apply from: file("${rootDir}/gradle/db-migration.gradle")
+
+    dependencies {
+        runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
+    }
 }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+configure(subprojects.findAll { it.name.endsWith('-es-migration') }) {
+    apply from: file("${rootDir}/gradle/app.gradle")
+    dependencies {
+        implementation "core.framework:core-ng:${coreNGVersion}"
+        implementation "core.framework:core-ng-search:${coreNGVersion}"
+    }
+    tasks.register('esMigrate') {
+        dependsOn run
+    }
 }
+
+configure(subprojects.findAll { it.name.endsWith('-mongo-migration') }) {
+    apply from: file("${rootDir}/gradle/app.gradle")
+    dependencies {
+        implementation "core.framework:core-ng:${coreNGVersion}"
+        implementation "core.framework:core-ng-mongo:${coreNGVersion}"
+    }
+    tasks.register('mongoMigrate') {
+        dependsOn run
+    }
+}
+
+configure(subprojects.findAll { it.name.matches('.*-interface') }) {
+    dependencies {
+        implementation "core.framework:core-ng-api:${coreNGVersion}"
+    }
+}
+
+// services use core-ng
+configure([project(':book-service')]) {
+    dependencies {
+        implementation "core.framework:core-ng:${coreNGVersion}"
+        testImplementation "core.framework:core-ng-test:${coreNGVersion}"
+    }
+}
+
+// services use mongo
+//configure([]) {
+//    dependencies {
+//        implementation "core.framework:core-ng-mongo:${mongoVersion}"
+//    }
+//}
+
+// services use db
+configure([project(':book-service')]) {
+    dependencies {
+        runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
+        testRuntimeOnly "org.hsqldb:hsqldb:${hsqlVersion}"
+    }
+}
+
+// services use book-service-interface
+configure([project(':book-service')]) {
+    dependencies {
+        implementation project(':book-service-interface')
+    }
+}
+
+//project( ':back-office') {
+//    dependencies {
+//        implementation project(':back-office-interface')
+//    }
+//}
+
+//project(':website') {
+//    dependencies {
+//        implementation project(':website-interface')
+//    }
+//}

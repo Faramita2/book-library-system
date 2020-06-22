@@ -1,1 +1,5 @@
 rootProject.name = 'book-library-system'
+
+include 'book-service-interface',
+        'book-service-db-migration',
+        'book-service'
