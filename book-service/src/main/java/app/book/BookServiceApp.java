@@ -13,5 +13,6 @@ public class BookServiceApp extends App {
         load(new BookModule());
         load(new AuthorModule());
         load(new CategoryModule());
+        load(new TagModule());
     }
 }
