@@ -17,7 +17,7 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
 
     @Override
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
-        return null;
+        return service.search(request);
     }
 
     @Override
