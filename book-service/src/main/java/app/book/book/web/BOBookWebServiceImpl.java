@@ -18,7 +18,7 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOSearchBookResponse search(BOSearchBookRequest request) {
-        return null;
+        return service.search(request);
     }
 
     @Override

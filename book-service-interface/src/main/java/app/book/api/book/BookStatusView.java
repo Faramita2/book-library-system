@@ -5,7 +5,7 @@ import core.framework.api.json.Property;
 /**
  * @author zoo
  */
-public enum BookStatus {
+public enum BookStatusView {
     @Property(name = "NORMAL")
     NORMAL,
     @Property(name = "BORROWED")

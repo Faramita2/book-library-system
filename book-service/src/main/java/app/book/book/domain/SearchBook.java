@@ -1,54 +1,54 @@
-package app.book.api.book;
+package app.book.book.domain;
 
-import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
+import core.framework.db.Column;
 
 import java.time.LocalDateTime;
 
 /**
  * @author zoo
  */
-public class GetBookResponse {
-    @Property(name = "id")
+public class SearchBook {
+    @Column(name = "id")
     @NotNull
     public Long id;
 
-    @Property(name = "name")
+    @Column(name = "name")
     @NotNull
     @NotBlank
     public String name;
 
-    @Property(name = "tag_name")
-    @NotNull
-    @NotBlank
-    public String tagName;
-
-    @Property(name = "description")
+    @Column(name = "description")
     @NotNull
     @NotBlank
     public String description;
 
-    @Property(name = "category_name")
+    @Column(name = "tag_name")
+    @NotNull
+    @NotBlank
+    public String tagName;
+
+    @Column(name = "category_name")
     @NotNull
     @NotBlank
     public String categoryName;
 
-    @Property(name = "author_name")
+    @Column(name = "author_name")
     @NotNull
     @NotBlank
     public String authorName;
 
-    @Property(name = "status")
+    @Column(name = "status")
     @NotNull
-    public BookStatusView status;
+    public BookStatus status;
 
-    @Property(name = "borrower_name")
+    @Column(name = "borrower_name")
     public String borrowerName;
 
-    @Property(name = "borrowed_at")
+    @Column(name = "borrowed_at")
     public LocalDateTime borrowedAt;
 
-    @Property(name = "return_at")
+    @Column(name = "return_at")
     public LocalDateTime returnAt;
 }

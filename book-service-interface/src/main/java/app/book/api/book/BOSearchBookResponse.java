@@ -51,7 +51,7 @@ public class BOSearchBookResponse {
 
         @Property(name = "status")
         @NotNull
-        public BookStatus status;
+        public BookStatusView status;
 
         @Property(name = "borrower_name")
         public String borrowerName;
