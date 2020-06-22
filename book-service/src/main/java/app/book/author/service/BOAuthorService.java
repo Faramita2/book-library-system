@@ -60,4 +60,9 @@ public class BOAuthorService {
         author.name = request.name;
         repository.partialUpdate(author);
     }
+
+    public void delete(Long id) {
+        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id)));
+        repository.delete(id);
+    }
 }

@@ -34,6 +34,7 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
 
     @Override
     public void delete(Long id) {
-
+        ActionLogContext.put("author_id", id);
+        service.delete(id);
     }
 }
