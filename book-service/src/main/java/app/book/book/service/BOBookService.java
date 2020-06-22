@@ -4,24 +4,30 @@ import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BookStatusView;
 import app.book.book.domain.Book;
 import app.book.book.domain.BookStatus;
 import app.book.book.domain.BookView;
 import core.framework.db.Database;
 import core.framework.db.Repository;
+import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * @author zoo
  */
 public class BOBookService {
+    private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
     Repository<Book> bookRepository;
     @Inject
@@ -97,7 +103,7 @@ public class BOBookService {
             args.add(request.authorId);
         }
 
-        response.books = database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
+        response.books = database.select(sql.toString(), BookView.class, args).stream().map(searchBook -> {
             BOSearchBookResponse.Book book = new BOSearchBookResponse.Book();
 
             book.id = searchBook.id;
@@ -116,6 +122,78 @@ public class BOBookService {
         response.total = (long) response.books.size();
 
         return response;
+    }
+
+    public void update(Long id, BOUpdateBookRequest request) {
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
+        book.name = request.name;
+        book.description = request.description;
+
+        try (Transaction transaction = database.beginTransaction()) {
+            logger.warn("==== start update book ====");
+            logger.warn("update book name = {}, description = {}", request.name, request.description);
+            bookRepository.partialUpdate(book);
+
+            List<Long> authorIds = request.authorIds;
+            if (!authorIds.isEmpty()) {
+                updateBookAuthor(id, authorIds);
+            }
+
+            List<Long> tagIds = request.tagIds;
+            if (!tagIds.isEmpty()) {
+                updateBookTag(id, tagIds);
+            }
+
+            List<Long> categoryIds = request.categoryIds;
+            if (!categoryIds.isEmpty()) {
+                updateBookCategory(id, categoryIds);
+            }
+
+            transaction.commit();
+            logger.warn("==== end update book====");
+        }
+    }
+
+    private void updateBookAuthor(Long id, List<Long> authorIds) {
+        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO `book (`book_id`, `author_id`) VALUES");
+
+        String[] values = new String[authorIds.size()];
+        for (int i = 0; i < authorIds.size(); i++) {
+            values[i] = Strings.format("({}, ?)", id);
+        }
+
+        sql.append(String.join(",", values));
+        database.execute(sql.toString(), authorIds);
+    }
+
+    private void updateBookTag(Long id, List<Long> tagIds) {
+        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO `book (`book_id`, `tag_id`) VALUES");
+
+        String[] values = new String[tagIds.size()];
+        for (int i = 0; i < tagIds.size(); i++) {
+            values[i] = Strings.format("({}, ?)", id);
+        }
+
+        sql.append(String.join(",", values));
+        database.execute(sql.toString(), tagIds);
+    }
+
+    private void updateBookCategory(Long id, List<Long> categoryIds) {
+        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+        StringBuilder sql = new StringBuilder();
+        sql.append("INSERT INTO `book (`book_id`, `category_id`) VALUES");
+
+        String[] values = new String[categoryIds.size()];
+        for (int i = 0; i < categoryIds.size(); i++) {
+            values[i] = Strings.format("({}, ?)", id);
+        }
+
+        sql.append(String.join(",", values));
+        database.execute(sql.toString(), categoryIds);
     }
 
     private StringBuilder getSearchSql() {
