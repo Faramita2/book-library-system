@@ -1,15 +1,18 @@
 package app.book.book.service;
 
 import app.book.api.book.BOCreateBookRequest;
+import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BookStatusView;
 import app.book.book.domain.Book;
 import app.book.book.domain.BookStatus;
-import app.book.book.domain.SearchBook;
+import app.book.book.domain.BookView;
 import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Strings;
+import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -39,6 +42,28 @@ public class BOBookService {
         book.updatedBy = "BookService";
 
         bookRepository.insert(book).orElseThrow();
+    }
+
+    public BOGetBookResponse get(Long id) {
+        StringBuilder sql = getSearchSql();
+        sql.append(" AND `b`.`id` = ?");
+        BookView view = database.selectOne(sql.toString(), BookView.class, id).orElseThrow(
+            () -> new NotFoundException(Strings.format("book not found, id = {}", id))
+        );
+
+        BOGetBookResponse response = new BOGetBookResponse();
+        response.id = view.id;
+        response.name = view.name;
+        response.description = view.description;
+        response.authorName = view.authorName == null ? "-" : view.authorName;
+        response.categoryName = view.categoryName == null ? "-" : view.categoryName;
+        response.tagName = view.tagName == null ? "-" : view.tagName;
+        response.status = BookStatusView.valueOf(view.status.name());
+        response.borrowerName = view.borrowerName == null ? "-" : view.borrowerName;
+        response.borrowedAt = view.borrowedAt;
+        response.returnAt = view.returnAt;
+
+        return response;
     }
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
@@ -72,7 +97,7 @@ public class BOBookService {
             args.add(request.authorId);
         }
 
-        response.books = database.select(sql.toString(), SearchBook.class, args.toArray()).stream().map(searchBook -> {
+        response.books = database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
             BOSearchBookResponse.Book book = new BOSearchBookResponse.Book();
 
             book.id = searchBook.id;
@@ -82,7 +107,7 @@ public class BOBookService {
             book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
             book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
             book.status = BookStatusView.valueOf(searchBook.status.name());
-            book.borrowerName = searchBook.borrowerName;
+            book.borrowerName = searchBook.borrowerName == null ? "-" : book.borrowerName;
             book.borrowedAt = searchBook.borrowedAt;
             book.returnAt = searchBook.returnAt;
 

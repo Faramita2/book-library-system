@@ -23,7 +23,7 @@ public class BOBookWebServiceImpl implements BOBookWebService {
 
     @Override
     public BOGetBookResponse get(Long id) {
-        return null;
+        return service.get(id);
     }
 
     @Override

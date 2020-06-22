@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * @author zoo
  */
-public class SearchBook {
+public class BookView {
     @Column(name = "id")
     @NotNull
     public Long id;
