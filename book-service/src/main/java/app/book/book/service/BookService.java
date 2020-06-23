@@ -65,14 +65,9 @@ public class BookService {
 
             book.id = searchBook.id;
             book.name = searchBook.name;
-            book.description = searchBook.description;
             book.authorName = searchBook.authorName == null ? "-" : searchBook.authorName;
             book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
             book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
-            book.status = BookStatusView.valueOf(searchBook.status.name());
-            book.borrowerName = searchBook.borrowerName == null ? "-" : book.borrowerName;
-            book.borrowedAt = searchBook.borrowedAt;
-            book.returnAt = searchBook.returnAt;
 
             return book;
         }).collect(Collectors.toList());
