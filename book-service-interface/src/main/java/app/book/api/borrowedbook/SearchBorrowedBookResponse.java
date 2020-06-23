@@ -35,11 +35,6 @@ public class SearchBorrowedBookResponse {
         @NotBlank
         public String tagName;
 
-        @Property(name = "description")
-        @NotNull
-        @NotBlank
-        public String description;
-
         @Property(name = "category_name")
         @NotNull
         @NotBlank
@@ -49,10 +44,6 @@ public class SearchBorrowedBookResponse {
         @NotNull
         @NotBlank
         public String authorName;
-
-        @Property(name = "status")
-        @NotNull
-        public BookStatusView status;
 
         @Property(name = "borrower_name")
         public String borrowerName;
