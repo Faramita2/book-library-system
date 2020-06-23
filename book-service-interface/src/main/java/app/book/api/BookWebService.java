@@ -1,5 +1,6 @@
 package app.book.api;
 
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
@@ -22,7 +23,7 @@ public interface BookWebService {
 
     @PUT
     @Path("/book/:id/borrow")
-    void borrow(@PathParam("id") Long id);
+    void borrow(@PathParam("id") Long id, BorrowBookRequest request);
 
     @PUT
     @Path("/book/:id/return")

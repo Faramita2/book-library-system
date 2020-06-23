@@ -1,14 +1,17 @@
 package app.book.book.service;
 
 import app.book.api.book.BookStatusView;
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.book.domain.Book;
 import app.book.book.domain.BookCountView;
+import app.book.book.domain.BookStatus;
 import app.book.book.domain.BookView;
 import core.framework.db.Database;
 import core.framework.db.Repository;
+import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Lists;
 import core.framework.util.Strings;
@@ -16,6 +19,7 @@ import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +62,29 @@ public class BookService {
         response.returnAt = view.returnAt;
 
         return response;
+    }
+
+    public void borrow(Long id, BorrowBookRequest request) {
+        Book book = repository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
+            .orElseThrow(() -> new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id)));
+
+        LocalDateTime now = LocalDateTime.now();
+
+        book.status = BookStatus.BORROWED;
+        book.borrowerId = request.userId;
+        book.borrowedAt = now;
+        book.returnAt = request.returnAt;
+        book.updatedAt = now;
+        book.updatedBy = request.updatedBy;
+
+        try (Transaction transaction = database.beginTransaction()) {
+            logger.warn("==== start borrow book ====");
+            repository.partialUpdate(book);
+            // todo insert borrow record
+            logger.warn("==== end borrow book ====");
+
+            transaction.commit();
+        }
     }
 
     private Long getSearchBooksTotal(SearchBookRequest request) {
