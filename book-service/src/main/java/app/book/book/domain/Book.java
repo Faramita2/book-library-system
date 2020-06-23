@@ -27,18 +27,6 @@ public class Book {
     @NotBlank
     public String description;
 
-    @Column(name = "author_id")
-    @NotNull
-    public Long authorId;
-
-    @Column(name = "tag_id")
-    @NotNull
-    public Long tagId;
-
-    @Column(name = "category_id")
-    @NotNull
-    public Long categoryId;
-
     @Column(name = "status")
     @NotNull
     public BookStatus status;

@@ -36,10 +36,7 @@ public class BOBookService {
     public void create(BOCreateBookRequest request) {
         Book book = new Book();
         book.name = request.name;
-        book.tagId = request.tagId;
         book.description = request.description;
-        book.categoryId = request.categoryId;
-        book.authorId = request.authorId;
         book.status = BookStatus.NORMAL;
         book.borrowerId = 0L;
         book.createdAt = LocalDateTime.now();
@@ -47,7 +44,15 @@ public class BOBookService {
         book.createdBy = "BookService";
         book.updatedBy = "BookService";
 
-        bookRepository.insert(book).orElseThrow();
+        try (Transaction transaction = database.beginTransaction()) {
+            logger.warn("==== start create book ====");
+            Long id = bookRepository.insert(book).orElseThrow();
+            insertBookAuthors(id, request.authorIds);
+            insertBookTags(id, request.tagIds);
+            insertBookCategories(id, request.categoryIds);
+            transaction.commit();
+            logger.warn("==== end create book ====");
+        }
     }
 
     public BOGetBookResponse get(Long id) {
@@ -140,17 +145,20 @@ public class BOBookService {
 
             List<Long> authorIds = request.authorIds;
             if (!authorIds.isEmpty()) {
-                updateBookAuthor(id, authorIds);
+                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+                insertBookAuthors(id, authorIds);
             }
 
             List<Long> tagIds = request.tagIds;
             if (!tagIds.isEmpty()) {
-                updateBookTag(id, tagIds);
+                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+                insertBookTags(id, tagIds);
             }
 
             List<Long> categoryIds = request.categoryIds;
             if (!categoryIds.isEmpty()) {
-                updateBookCategory(id, categoryIds);
+                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+                insertBookCategories(id, categoryIds);
             }
 
             transaction.commit();
@@ -158,10 +166,8 @@ public class BOBookService {
         }
     }
 
-    private void updateBookAuthor(Long id, List<Long> authorIds) {
-        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
-        StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO `book (`book_id`, `author_id`) VALUES");
+    private void insertBookAuthors(Long id, List<Long> authorIds) {
+        StringBuilder sql = new StringBuilder("INSERT INTO `book_authors` (`book_id`, `author_id`) VALUES");
 
         String[] values = new String[authorIds.size()];
         for (int i = 0; i < authorIds.size(); i++) {
@@ -169,13 +175,12 @@ public class BOBookService {
         }
 
         sql.append(String.join(",", values));
-        database.execute(sql.toString(), authorIds);
+        logger.info("sql info: {}", sql);
+        database.execute(sql.toString(), authorIds.toArray());
     }
 
-    private void updateBookTag(Long id, List<Long> tagIds) {
-        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
-        StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO `book (`book_id`, `tag_id`) VALUES");
+    private void insertBookTags(Long id, List<Long> tagIds) {
+        StringBuilder sql = new StringBuilder("INSERT INTO `book_tags` (`book_id`, `tag_id`) VALUES");
 
         String[] values = new String[tagIds.size()];
         for (int i = 0; i < tagIds.size(); i++) {
@@ -183,13 +188,12 @@ public class BOBookService {
         }
 
         sql.append(String.join(",", values));
-        database.execute(sql.toString(), tagIds);
+        logger.info("sql info: {}", sql);
+        database.execute(sql.toString(), tagIds.toArray());
     }
 
-    private void updateBookCategory(Long id, List<Long> categoryIds) {
-        database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
-        StringBuilder sql = new StringBuilder();
-        sql.append("INSERT INTO `book (`book_id`, `category_id`) VALUES");
+    private void insertBookCategories(Long id, List<Long> categoryIds) {
+        StringBuilder sql = new StringBuilder("INSERT INTO `book_categories` (`book_id`, `category_id`) VALUES");
 
         String[] values = new String[categoryIds.size()];
         for (int i = 0; i < categoryIds.size(); i++) {
@@ -197,7 +201,8 @@ public class BOBookService {
         }
 
         sql.append(String.join(",", values));
-        database.execute(sql.toString(), categoryIds);
+        logger.info("sql info: {}", sql);
+        database.execute(sql.toString(), categoryIds.toArray());
     }
 
     private StringBuilder getSearchSql() {
