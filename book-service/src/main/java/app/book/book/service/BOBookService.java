@@ -103,7 +103,11 @@ public class BOBookService {
             args.add(request.authorId);
         }
 
-        response.books = database.select(sql.toString(), BookView.class, args).stream().map(searchBook -> {
+        sql.append(" LIMIT ?, ?");
+        args.add(request.skip);
+        args.add(request.limit);
+
+        response.books = database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
             BOSearchBookResponse.Book book = new BOSearchBookResponse.Book();
 
             book.id = searchBook.id;
