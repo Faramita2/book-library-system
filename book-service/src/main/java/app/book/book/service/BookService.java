@@ -3,6 +3,7 @@ package app.book.book.service;
 import app.book.api.book.BookStatusView;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.book.domain.Book;
@@ -85,6 +86,21 @@ public class BookService {
 
             transaction.commit();
         }
+    }
+
+    public void returnBook(Long id, ReturnBookRequest request) {
+        Book book = repository.selectOne(
+            "id = ? AND borrower_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
+            .orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
+
+        book.status = BookStatus.NORMAL;
+        book.borrowerId = 0L;
+        book.returnAt = null;
+        book.borrowedAt = null;
+        book.updatedAt = LocalDateTime.now();
+        book.updatedBy = request.updatedBy;
+
+        repository.update(book);
     }
 
     private Long getSearchBooksTotal(SearchBookRequest request) {

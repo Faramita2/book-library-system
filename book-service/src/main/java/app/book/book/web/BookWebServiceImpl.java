@@ -3,6 +3,7 @@ package app.book.book.web;
 import app.book.api.BookWebService;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.book.service.BookService;
@@ -33,7 +34,8 @@ public class BookWebServiceImpl implements BookWebService {
     }
 
     @Override
-    public void returnBook(Long id) {
-
+    public void returnBook(Long id, ReturnBookRequest request) {
+        ActionLogContext.put("book_id", id);
+        service.returnBook(id, request);
     }
 }
