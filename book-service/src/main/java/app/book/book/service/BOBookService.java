@@ -155,9 +155,6 @@ public class BOBookService {
             book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
             book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
             book.status = BookStatusView.valueOf(searchBook.status.name());
-            book.borrowerName = searchBook.borrowerName == null ? "-" : book.borrowerName;
-            book.borrowedAt = searchBook.borrowedAt;
-            book.returnAt = searchBook.returnAt;
 
             return book;
         }).collect(Collectors.toList());
@@ -207,7 +204,6 @@ public class BOBookService {
         StringBuilder sql = new StringBuilder(690);
         sql.append("SELECT"
             + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,"
-            + " `b`.`borrowed_at` `borrowed_at`, `b`.`return_at` `return_at`,"
             + " `a`.`name` `author_name`, `c`.`name` `category_name`, `t`.`name` `tag_name`, `u`.`username` `borrower_name`"
             + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
             + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"

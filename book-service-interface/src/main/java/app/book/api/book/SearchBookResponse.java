@@ -43,5 +43,9 @@ public class SearchBookResponse {
         @NotNull
         @NotBlank
         public String authorName;
+
+        @Property(name = "status")
+        @NotNull
+        public BookStatusView status;
     }
 }

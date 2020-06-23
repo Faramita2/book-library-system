@@ -133,6 +133,7 @@ public class BookService {
 
             book.id = searchBook.id;
             book.name = searchBook.name;
+            book.status = BookStatusView.valueOf(searchBook.status.name());
             book.authorName = searchBook.authorName == null ? "-" : searchBook.authorName;
             book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
             book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
@@ -185,7 +186,6 @@ public class BookService {
         StringBuilder sql = new StringBuilder(690);
         sql.append("SELECT"
             + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,"
-            + " `b`.`borrowed_at` `borrowed_at`, `b`.`return_at` `return_at`,"
             + " `a`.`name` `author_name`, `c`.`name` `category_name`, `t`.`name` `tag_name`, `u`.`username` `borrower_name`"
             + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
             + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"

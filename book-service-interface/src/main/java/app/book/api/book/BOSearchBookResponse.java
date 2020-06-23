@@ -52,14 +52,5 @@ public class BOSearchBookResponse {
         @Property(name = "status")
         @NotNull
         public BookStatusView status;
-
-        @Property(name = "borrower_name")
-        public String borrowerName;
-
-        @Property(name = "borrowed_at")
-        public LocalDateTime borrowedAt;
-
-        @Property(name = "return_at")
-        public LocalDateTime returnAt;
     }
 }
