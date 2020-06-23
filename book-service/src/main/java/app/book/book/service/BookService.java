@@ -1,6 +1,7 @@
 package app.book.book.service;
 
 import app.book.api.book.BookStatusView;
+import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.book.domain.Book;
@@ -10,6 +11,8 @@ import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.util.Lists;
+import core.framework.util.Strings;
+import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,28 @@ public class BookService {
 
         response.total = getSearchBooksTotal(request);
         response.books = getPagedSearchBooks(request);
+
+        return response;
+    }
+
+    public GetBookResponse get(Long id) {
+        StringBuilder sql = getSearchSql();
+        sql.append(" AND `b`.`id` = ?");
+        BookView view = database.selectOne(sql.toString(), BookView.class, id).orElseThrow(
+            () -> new NotFoundException(Strings.format("book not found, id = {}", id))
+        );
+
+        GetBookResponse response = new GetBookResponse();
+        response.id = view.id;
+        response.name = view.name;
+        response.description = view.description;
+        response.authorName = view.authorName == null ? "-" : view.authorName;
+        response.categoryName = view.categoryName == null ? "-" : view.categoryName;
+        response.tagName = view.tagName == null ? "-" : view.tagName;
+        response.status = BookStatusView.valueOf(view.status.name());
+        response.borrowerName = view.borrowerName == null ? "-" : view.borrowerName;
+        response.borrowedAt = view.borrowedAt;
+        response.returnAt = view.returnAt;
 
         return response;
     }
