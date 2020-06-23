@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author zoo
  */
 public class BookService {
-    private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
+    private final Logger logger = LoggerFactory.getLogger(BookService.class);
     @Inject
     Repository<Book> repository;
     @Inject
@@ -100,8 +100,8 @@ public class BookService {
 
     private void buildSqlWhere(SearchBookRequest request, StringBuilder sql, List<Object> args) {
         if (request.name != null) {
-            sql.append(" AND `b`.`name` like ?%");
-            args.add(request.name);
+            sql.append(" AND `b`.`name` like ?");
+            args.add(request.name + "%");
         }
 
         if (request.tagIds != null && !request.tagIds.isEmpty()) {
@@ -110,8 +110,8 @@ public class BookService {
         }
 
         if (request.description != null) {
-            sql.append(" AND `b`.`description` like ?%");
-            args.add(request.description);
+            sql.append(" AND `b`.`description` like ?");
+            args.add(request.description + "%");
         }
 
         if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
