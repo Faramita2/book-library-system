@@ -96,6 +96,14 @@ configure([project(':book-service'),
         implementation project(':book-service-interface')
     }
 }
+// services use user-service-interface
+configure([project(':user-service'),
+           project(':website-interface'),
+           project(':back-office-interface')]) {
+    dependencies {
+        implementation project(':user-service-interface')
+    }
+}
 
 project(':back-office') {
     dependencies {
