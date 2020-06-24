@@ -115,6 +115,14 @@ configure([project(':book-service'),
     }
 }
 
+// services use notification-service-interface
+configure([project(':book-service'),
+           project(':notification-service')]) {
+    dependencies {
+        implementation project(':notification-service-interface')
+    }
+}
+
 project(':back-office') {
     dependencies {
         implementation project(':back-office-interface')
