@@ -96,12 +96,22 @@ configure([project(':book-service'),
         implementation project(':book-service-interface')
     }
 }
+
 // services use user-service-interface
 configure([project(':user-service'),
-           project(':website-interface'),
-           project(':back-office-interface')]) {
+           project(':website'),
+           project(':back-office')]) {
     dependencies {
         implementation project(':user-service-interface')
+    }
+}
+
+// services use borrow-record-service-interface
+configure([project(':book-service'),
+           project(':borrow-record-service'),
+           project(':back-office')]) {
+    dependencies {
+        implementation project(':borrow-record-service-interface')
     }
 }
 

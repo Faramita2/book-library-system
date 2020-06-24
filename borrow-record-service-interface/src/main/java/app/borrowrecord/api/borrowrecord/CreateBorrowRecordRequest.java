@@ -23,21 +23,6 @@ public class CreateBorrowRecordRequest {
     @NotBlank
     public String bookName;
 
-    @Property(name = "tag_name")
-    @NotNull
-    @NotBlank
-    public String tagName;
-
-    @Property(name = "category_name")
-    @NotNull
-    @NotBlank
-    public String categoryName;
-
-    @Property(name = "author_name")
-    @NotNull
-    @NotBlank
-    public String authorName;
-
     @Property(name = "borrower_name")
     @NotNull
     @NotBlank
