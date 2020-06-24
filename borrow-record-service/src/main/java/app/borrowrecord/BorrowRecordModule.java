@@ -1,8 +1,11 @@
 package app.borrowrecord;
 
+import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.borrowrecord.api.BorrowRecordWebService;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
+import app.borrowrecord.borrowrecord.service.BOBorrowRecordService;
 import app.borrowrecord.borrowrecord.service.BorrowRecordService;
+import app.borrowrecord.borrowrecord.web.BOBorrowRecordWebServiceImpl;
 import app.borrowrecord.borrowrecord.web.BorrowRecordWebServiceImpl;
 import core.framework.module.Module;
 import core.framework.mongo.module.MongoConfig;
@@ -18,6 +21,8 @@ public class BorrowRecordModule extends Module {
         config.collection(BorrowRecord.class);
 
         bind(BorrowRecordService.class);
+        bind(BOBorrowRecordService.class);
         api().service(BorrowRecordWebService.class, bind(BorrowRecordWebServiceImpl.class));
+        api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
     }
 }
