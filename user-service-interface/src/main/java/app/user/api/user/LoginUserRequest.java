@@ -7,21 +7,14 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class GetUserResponse {
-    @Property(name = "id")
-    public Long id;
-
+public class LoginUserRequest {
     @Property(name = "username")
     @NotNull
     @NotBlank
     public String username;
 
-    @Property(name = "email")
+    @Property(name = "password")
     @NotNull
     @NotBlank
-    public String email;
-
-    @Property(name = "status")
-    @NotNull
-    public UserStatusView status;
+    public String password;
 }

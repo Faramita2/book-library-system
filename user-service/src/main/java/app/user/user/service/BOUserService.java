@@ -1,6 +1,7 @@
 package app.user.user.service;
 
 import app.user.api.user.BOCreateUserRequest;
+import app.user.api.user.BOResetPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -13,6 +14,7 @@ import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
+import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -129,5 +131,24 @@ public class BOUserService {
 
         user.password = enc.encodeToString(hash);
         user.salt = enc.encodeToString(salt);
+    }
+
+    public void resetPassword(Long id, BOResetPasswordRequest request) {
+        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id)));
+
+        if (!request.password.equals(request.passwordConfirm)) {
+            throw new BadRequestException("Please make sure both passwords match.");
+        }
+
+        try (Transaction transaction = database.beginTransaction()) {
+            logger.warn("==== start reset user password ====");
+            hashPassword(user, request.password);
+            repository.partialUpdate(user);
+            transaction.commit();
+            logger.warn("==== end reset user password ====");
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error("reset user password failed: {}", e.getMessage());
+        }
+
     }
 }

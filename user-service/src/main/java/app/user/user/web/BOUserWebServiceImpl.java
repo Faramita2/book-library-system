@@ -33,6 +33,6 @@ public class BOUserWebServiceImpl implements BOUserWebService {
 
     @Override
     public void resetPassword(Long id, BOResetPasswordRequest request) {
-
+        service.resetPassword(id, request);
     }
 }
