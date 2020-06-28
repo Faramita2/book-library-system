@@ -4,7 +4,6 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
