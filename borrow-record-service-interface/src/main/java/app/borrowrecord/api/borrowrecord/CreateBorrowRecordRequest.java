@@ -23,11 +23,6 @@ public class CreateBorrowRecordRequest {
     @NotBlank
     public String bookName;
 
-    @Property(name = "borrower_name")
-    @NotNull
-    @NotBlank
-    public String borrowerName;
-
     @Property(name = "borrowed_at")
     @NotNull
     public LocalDateTime borrowedAt;
