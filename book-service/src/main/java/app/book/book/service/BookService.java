@@ -10,10 +10,14 @@ import app.book.book.domain.Book;
 import app.book.book.domain.BookCountView;
 import app.book.book.domain.BookStatus;
 import app.book.book.domain.BookView;
+import app.borrowrecord.api.BorrowRecordWebService;
+import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.notification.api.notification.kafka.ReturnBorrowedMessage;
 import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
+import core.framework.kafka.MessagePublisher;
 import core.framework.util.Lists;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
@@ -33,6 +37,10 @@ public class BookService {
     Repository<Book> repository;
     @Inject
     Database database;
+    @Inject
+    BorrowRecordWebService borrowRecordWebService;
+    @Inject
+    MessagePublisher<ReturnBorrowedMessage> publisher;
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
@@ -81,11 +89,34 @@ public class BookService {
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start borrow book ====");
             repository.partialUpdate(book);
-            // todo insert borrow record
-            logger.warn("==== end borrow book ====");
-
+            createBorrowRecord(book);
             transaction.commit();
+            publishReturnNotification(book);
+            logger.warn("==== end borrow book ====");
         }
+    }
+
+    private void createBorrowRecord(Book book) {
+        CreateBorrowRecordRequest request = new CreateBorrowRecordRequest();
+        request.bookId = book.id;
+        request.bookName = book.name;
+        request.borrowerId = book.borrowerId;
+        request.borrowedAt = book.borrowedAt;
+        request.returnAt = book.returnAt;
+        request.createdBy = book.updatedBy;
+
+        borrowRecordWebService.create(request);
+    }
+
+    private void publishReturnNotification(Book book) {
+        ReturnBorrowedMessage message = new ReturnBorrowedMessage();
+        message.bookId = book.id;
+        message.userId = book.borrowerId;
+        message.borrowedAt = book.borrowedAt;
+        message.returnAt = book.returnAt;
+        logger.info("publish return book message, book_id = {}, user_id = {}, borrowed_at = {}, return_at = {}",
+            message.bookId, message.userId, message.borrowedAt, message.returnAt);
+        publisher.publish("return-book", message);
     }
 
     public void returnBook(Long id, ReturnBookRequest request) {
