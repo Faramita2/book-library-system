@@ -22,6 +22,11 @@ public class User {
     @NotBlank
     public String username;
 
+    @Column(name = "email")
+    @NotNull
+    @NotBlank
+    public String email;
+
     @Column(name = "password")
     @NotNull
     @NotBlank
