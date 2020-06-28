@@ -31,11 +31,6 @@ public class BorrowRecord {
     @NotNull
     @NotBlank
     public String bookName;
-    
-    @Field(name = "borrower_name")
-    @NotNull
-    @NotBlank
-    public String borrowerName;
 
     @Field(name = "borrowed_at")
     @NotNull

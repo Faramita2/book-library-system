@@ -21,7 +21,6 @@ public class BorrowRecordService {
         borrowRecord.bookId = request.bookId;
         borrowRecord.bookName = request.bookName;
         borrowRecord.borrowerId = request.borrowerId;
-        borrowRecord.borrowerName = request.borrowerName;
         borrowRecord.borrowedAt = request.borrowedAt;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.returnAt = request.returnAt;

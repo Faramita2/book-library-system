@@ -10,6 +10,7 @@ public class BorrowRecordServiceApp extends App {
     @Override
     protected void initialize() {
         load(new SystemModule("sys.properties"));
+        loadProperties("app.properties");
         load(new BorrowRecordModule());
     }
 }
