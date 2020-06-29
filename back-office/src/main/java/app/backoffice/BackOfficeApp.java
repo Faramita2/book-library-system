@@ -1,6 +1,7 @@
 package app.backoffice;
 
 import app.api.admin.BOAdminWebService;
+import app.book.api.BOAuthorWebService;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
 
@@ -13,7 +14,7 @@ public class BackOfficeApp extends App {
         load(new SystemModule("sys.properties"));
         loadProperties("app.properties");
         api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
-
+        api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
 
         load(new AdminModule());
         load(new BookModule());

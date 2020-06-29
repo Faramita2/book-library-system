@@ -14,10 +14,10 @@ public class SearchBookAuthorAJAXResponse {
     @NotNull
     public Long total;
 
-    @Property(name = "tags")
-    public List<Tag> tags;
+    @Property(name = "authors")
+    public List<Author> authors;
 
-    public static class Tag {
+    public static class Author {
         @Property(name = "id")
         @NotNull
         public Long id;
