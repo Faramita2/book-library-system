@@ -49,7 +49,7 @@ public class BOBorrowRecordService {
             record.bookName = borrowRecord.bookName;
             record.borrowerId = borrowRecord.borrowerId;
             record.borrowedAt = borrowRecord.borrowedAt;
-            record.returnAt = borrowRecord.returnAt;
+            record.returnAt = borrowRecord.returnAt.toLocalDate();
 
             return record;
         }).collect(Collectors.toList());
