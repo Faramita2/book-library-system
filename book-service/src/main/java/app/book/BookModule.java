@@ -10,7 +10,6 @@ import app.book.book.service.BookService;
 import app.book.book.web.BOBookWebServiceImpl;
 import app.book.book.web.BookWebServiceImpl;
 import app.borrowrecord.api.BorrowRecordWebService;
-import app.notification.api.notification.kafka.ReturnBorrowedMessage;
 import core.framework.module.Module;
 
 /**
@@ -25,7 +24,6 @@ public class BookModule extends Module {
         bind(BOBookService.class);
         api().service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
         api().client(BorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
-        kafka().publish("return-book", ReturnBorrowedMessage.class);
         bind(BookService.class);
         api().service(BookWebService.class, bind(BookWebServiceImpl.class));
     }
