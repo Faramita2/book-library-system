@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * @author zoo
  */
-public class ReturnBorrowedMessage {
+public class ReturnBorrowedBookMessage {
     @Property(name = "book_id")
     @NotNull
     public Long bookId;

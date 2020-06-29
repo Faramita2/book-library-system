@@ -3,7 +3,8 @@ package app.borrowrecord.borrowrecord.service;
 import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordResponse;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
-import app.user.api.UserWebService;
+import app.user.api.BOUserWebService;
+import app.user.api.user.BOSearchUserRequest;
 import com.mongodb.client.model.Filters;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
@@ -21,7 +22,7 @@ public class BOBorrowRecordService {
     @Inject
     MongoCollection<BorrowRecord> collection;
     @Inject
-    UserWebService userWebService;
+    BOUserWebService boUserWebService;
 
     public BOSearchBookBorrowRecordResponse search(BOSearchBookBorrowRecordRequest request) {
         BOSearchBookBorrowRecordResponse response = new BOSearchBookBorrowRecordResponse();
@@ -43,31 +44,30 @@ public class BOBorrowRecordService {
     }
 
     private List<BOSearchBookBorrowRecordResponse.Record> getRecords(Query query) {
-        List<BOSearchBookBorrowRecordResponse.Record> records = collection.find(query).stream().map(borrowRecord -> {
+        Map<Long, String> borrowerNames = getBorrowerNames(query);
+
+        return collection.find(query).stream().map(borrowRecord -> {
             BOSearchBookBorrowRecordResponse.Record record = new BOSearchBookBorrowRecordResponse.Record();
             record.id = borrowRecord.id.toString();
             record.bookName = borrowRecord.bookName;
             record.borrowerId = borrowRecord.borrowerId;
+            record.borrowerName = borrowerNames.get(record.borrowerId);
             record.borrowedAt = borrowRecord.borrowedAt;
             record.returnAt = borrowRecord.returnAt.toLocalDate();
 
             return record;
         }).collect(Collectors.toList());
-
-        Map<String, String> borrowerNames = getBorrowerNames(query);
-
-        records.forEach(record -> record.borrowerName = borrowerNames.get(record.id));
-
-        return records;
     }
 
-    private Map<String, String> getBorrowerNames(Query query) {
-        return collection.find(query).stream().map(borrowRecord -> {
-            BOSearchBookBorrowRecordResponse.Record record = new BOSearchBookBorrowRecordResponse.Record();
-            record.id = borrowRecord.id.toString();
-            record.borrowerName = userWebService.get(borrowRecord.borrowerId).username;
+    private Map<Long, String> getBorrowerNames(Query query) {
+        List<Long> borrowerIds = collection.find(query).stream()
+            .map(borrowRecord -> borrowRecord.borrowerId)
+            .distinct()
+            .collect(Collectors.toList());
+        BOSearchUserRequest boSearchUserRequest = new BOSearchUserRequest();
+        boSearchUserRequest.ids = borrowerIds;
 
-            return record;
-        }).collect(Collectors.toMap(record -> record.id, record -> record.borrowerName));
+        return boUserWebService.search(boSearchUserRequest).users.stream()
+            .collect(Collectors.toMap(user -> user.id, user -> user.username));
     }
 }

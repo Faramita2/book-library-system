@@ -2,7 +2,7 @@ package app.notification;
 
 import app.book.api.BookWebService;
 import app.notification.api.NotificationWebService;
-import app.notification.api.notification.kafka.ReturnBorrowedMessage;
+import app.notification.api.notification.kafka.ReturnBorrowedBookMessage;
 import app.notification.notification.domain.Notification;
 import app.notification.notification.kafka.ReturnBookMessageHandler;
 import app.notification.notification.service.NotificationService;
@@ -20,7 +20,7 @@ public class NotificationModule extends Module {
         api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(UserWebService.class, requiredProperty("app.user.ServiceURL"));
         bind(NotificationService.class);
-        kafka().subscribe("return-book", ReturnBorrowedMessage.class, bind(ReturnBookMessageHandler.class));
+        kafka().subscribe("return-borrowed-book", ReturnBorrowedBookMessage.class, bind(ReturnBookMessageHandler.class));
         api().service(NotificationWebService.class, bind(NotificationWebServiceImpl.class));
     }
 }

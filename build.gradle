@@ -101,6 +101,7 @@ project(':borrow-record-service') {
     dependencies {
         implementation project(':borrow-record-service-interface')
         implementation project(':user-service-interface')
+        implementation project(':notification-service-interface')
     }
 }
 

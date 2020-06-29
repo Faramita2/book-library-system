@@ -4,7 +4,7 @@ import app.book.api.BookWebService;
 import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
-import app.notification.api.notification.kafka.ReturnBorrowedMessage;
+import app.notification.api.notification.kafka.ReturnBorrowedBookMessage;
 import app.notification.notification.domain.Notification;
 import app.user.api.UserWebService;
 import core.framework.db.Query;
@@ -36,7 +36,7 @@ public class NotificationService {
         repository.batchDelete(List.of(request.ids.split(",")));
     }
 
-    public void create(ReturnBorrowedMessage message) {
+    public void create(ReturnBorrowedBookMessage message) {
         Notification notification = new Notification();
         notification.userId = message.userId;
         String username = userWebService.get(message.userId).username;
