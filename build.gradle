@@ -81,7 +81,8 @@ configure([project(':borrow-record-service')]) {
 // services use db
 configure([project(':book-service'),
            project(':user-service'),
-           project(':notification-service')]) {
+           project(':notification-service'),
+           project(':admin-service')]) {
     dependencies {
         runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
         testRuntimeOnly "org.hsqldb:hsqldb:${hsqlVersion}"
@@ -114,6 +115,12 @@ project(':notification-service') {
         implementation project(':notification-service-interface')
         implementation project(':user-service-interface')
         implementation project(':book-service-interface')
+    }
+}
+
+project(':admin-service') {
+    dependencies {
+        implementation project(':admin-service-interface')
     }
 }
 
