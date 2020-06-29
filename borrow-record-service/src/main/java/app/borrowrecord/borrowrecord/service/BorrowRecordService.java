@@ -41,7 +41,7 @@ public class BorrowRecordService {
 
     public List<BorrowRecord> findNeedReturnRecords() {
         Query query = new Query();
-        query.projection = Projections.include("id", "book_name", "borrower_id", "borrowed_at", "return_at");
+        query.projection = Projections.include("book_id", "borrower_id", "borrowed_at", "return_at");
         query.filter = and(
             gte("return_at", LocalDate.now().atStartOfDay().plusDays(1)),
             lte("return_at", LocalDate.now().atStartOfDay().plusDays(2).minusSeconds(1))

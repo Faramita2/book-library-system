@@ -32,5 +32,7 @@ public class BorrowRecordModule extends Module {
         api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
         kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
         schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalDate.now().atStartOfDay().plusDays(1).toLocalTime());
+        // test
+        // schedule().fixedRate("find-need-return-record", bind(FindNeedReturnRecordJob.class), Duration.ofHours(1));
     }
 }
