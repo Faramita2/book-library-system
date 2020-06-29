@@ -73,6 +73,10 @@ public class BOUserService {
         BOSearchUserResponse response = new BOSearchUserResponse();
         Query<User> query = repository.select();
 
+        if (request.ids != null && !request.ids.isEmpty()) {
+            query.in("id", request.ids);
+        }
+
         if (request.username != null) {
             query.where("username like ?", request.username + "%");
         }
