@@ -8,7 +8,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class BOResetPasswordRequest {
+public class BOResetUserPasswordRequest {
     @Property(name = "password")
     @NotNull
     @NotBlank

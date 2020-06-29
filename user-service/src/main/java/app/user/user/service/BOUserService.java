@@ -1,7 +1,7 @@
 package app.user.user.service;
 
 import app.user.api.user.BOCreateUserRequest;
-import app.user.api.user.BOResetPasswordRequest;
+import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -137,7 +137,7 @@ public class BOUserService {
         user.salt = enc.encodeToString(salt);
     }
 
-    public void resetPassword(Long id, BOResetPasswordRequest request) {
+    public void resetPassword(Long id, BOResetUserPasswordRequest request) {
         User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id)));
 
         if (!request.password.equals(request.passwordConfirm)) {
