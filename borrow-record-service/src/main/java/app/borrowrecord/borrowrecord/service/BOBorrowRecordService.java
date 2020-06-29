@@ -1,7 +1,7 @@
 package app.borrowrecord.borrowrecord.service;
 
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordRequest;
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordResponse;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOSearchUserRequest;
@@ -24,8 +24,8 @@ public class BOBorrowRecordService {
     @Inject
     BOUserWebService boUserWebService;
 
-    public BOSearchBookBorrowRecordResponse search(BOSearchBookBorrowRecordRequest request) {
-        BOSearchBookBorrowRecordResponse response = new BOSearchBookBorrowRecordResponse();
+    public BOSearchBorrowRecordResponse search(BOSearchBorrowRecordRequest request) {
+        BOSearchBorrowRecordResponse response = new BOSearchBorrowRecordResponse();
         Query query = new Query();
 
         query.skip = request.skip;
@@ -43,11 +43,11 @@ public class BOBorrowRecordService {
         return response;
     }
 
-    private List<BOSearchBookBorrowRecordResponse.Record> getRecords(Query query) {
+    private List<BOSearchBorrowRecordResponse.Record> getRecords(Query query) {
         Map<Long, String> borrowerNames = getBorrowerNames(query);
 
         return collection.find(query).stream().map(borrowRecord -> {
-            BOSearchBookBorrowRecordResponse.Record record = new BOSearchBookBorrowRecordResponse.Record();
+            BOSearchBorrowRecordResponse.Record record = new BOSearchBorrowRecordResponse.Record();
             record.id = borrowRecord.id.toString();
             record.bookName = borrowRecord.bookName;
             record.borrowerId = borrowRecord.borrowerId;

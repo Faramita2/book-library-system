@@ -1,8 +1,8 @@
 package app.borrowrecord.borrowrecord.web;
 
 import app.borrowrecord.api.BOBorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordRequest;
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordResponse;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
 import app.borrowrecord.borrowrecord.service.BOBorrowRecordService;
 import core.framework.inject.Inject;
 
@@ -14,7 +14,7 @@ public class BOBorrowRecordWebServiceImpl implements BOBorrowRecordWebService {
     BOBorrowRecordService service;
 
     @Override
-    public BOSearchBookBorrowRecordResponse search(BOSearchBookBorrowRecordRequest request) {
+    public BOSearchBorrowRecordResponse search(BOSearchBorrowRecordRequest request) {
         return service.search(request);
     }
 }

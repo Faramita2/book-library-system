@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author zoo
  */
-public class BOSearchBookBorrowRecordResponse {
+public class BOSearchBorrowRecordResponse {
     @Property(name = "total")
     @NotNull
     public Long total;

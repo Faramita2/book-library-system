@@ -6,7 +6,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class BOSearchBookBorrowRecordRequest {
+public class BOSearchBorrowRecordRequest {
     @NotNull
     @Property(name = "skip")
     public Integer skip = 0;

@@ -1,7 +1,7 @@
 package app.borrowrecord.api;
 
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordRequest;
-import app.borrowrecord.api.borrowrecord.BOSearchBookBorrowRecordResponse;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 
@@ -11,5 +11,5 @@ import core.framework.api.web.service.Path;
 public interface BOBorrowRecordWebService {
     @PUT
     @Path("/borrow-record")
-    BOSearchBookBorrowRecordResponse search(BOSearchBookBorrowRecordRequest request);
+    BOSearchBorrowRecordResponse search(BOSearchBorrowRecordRequest request);
 }
