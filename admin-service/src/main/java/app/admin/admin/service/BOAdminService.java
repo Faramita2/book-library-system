@@ -3,6 +3,7 @@ package app.admin.admin.service;
 import app.admin.admin.domain.Admin;
 import app.api.admin.admin.BOCreateAdminRequest;
 import app.api.admin.admin.BOLoginAdminRequest;
+import app.api.admin.admin.BOLoginAdminResponse;
 import app.api.admin.admin.BOSearchAdminRequest;
 import app.api.admin.admin.BOSearchAdminResponse;
 import core.framework.db.Database;
@@ -10,7 +11,6 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
-import core.framework.json.JSON;
 import core.framework.util.Strings;
 import core.framework.web.WebContext;
 import core.framework.web.exception.BadRequestException;
@@ -63,7 +63,7 @@ public class BOAdminService {
             logger.error("create admin failed: {}", e.getMessage());
         }
     }
-    
+
     public BOSearchAdminResponse search(BOSearchAdminRequest request) {
         BOSearchAdminResponse response = new BOSearchAdminResponse();
         Query<Admin> query = repository.select();
@@ -89,19 +89,23 @@ public class BOAdminService {
         return response;
     }
 
-    public void login(BOLoginAdminRequest request) {
+    public BOLoginAdminResponse login(BOLoginAdminRequest request) {
         Admin admin = repository.selectOne("account = ?", request.account).orElseThrow(()
             -> new BadRequestException("account or password incorrect"));
 
+        BOLoginAdminResponse response = new BOLoginAdminResponse();
+
         try {
             if (admin.password.equals(getPasswordHash(request, admin.salt))) {
-                webContext.request().session().set("admin", JSON.toJSON(admin));
-            } else {
-                throw new BadRequestException("account or password incorrect");
+                response.id = admin.id;
+                response.account = admin.account;
+                return response;
             }
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("admin login error, message = {}", e.getMessage());
+            logger.error("login admin failed: {}", e.getMessage());
         }
+
+        throw new BadRequestException("account or password incorrect");
     }
 
     private byte[] generateSalt() {

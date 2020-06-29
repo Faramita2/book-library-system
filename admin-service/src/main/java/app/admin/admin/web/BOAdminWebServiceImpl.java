@@ -4,6 +4,7 @@ import app.admin.admin.service.BOAdminService;
 import app.api.admin.BOAdminWebService;
 import app.api.admin.admin.BOCreateAdminRequest;
 import app.api.admin.admin.BOLoginAdminRequest;
+import app.api.admin.admin.BOLoginAdminResponse;
 import app.api.admin.admin.BOSearchAdminRequest;
 import app.api.admin.admin.BOSearchAdminResponse;
 import core.framework.inject.Inject;
@@ -27,8 +28,8 @@ public class BOAdminWebServiceImpl implements BOAdminWebService {
     }
 
     @Override
-    public void login(BOLoginAdminRequest request) {
+    public BOLoginAdminResponse login(BOLoginAdminRequest request) {
         ActionLogContext.put("admin_account", request.account);
-        service.login(request);
+        return service.login(request);
     }
 }

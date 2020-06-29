@@ -2,6 +2,7 @@ package app.api.admin;
 
 import app.api.admin.admin.BOCreateAdminRequest;
 import app.api.admin.admin.BOLoginAdminRequest;
+import app.api.admin.admin.BOLoginAdminResponse;
 import app.api.admin.admin.BOSearchAdminRequest;
 import app.api.admin.admin.BOSearchAdminResponse;
 import core.framework.api.web.service.POST;
@@ -22,5 +23,5 @@ public interface BOAdminWebService {
 
     @PUT
     @Path("/bo/admin/login")
-    void login(BOLoginAdminRequest request);
+    BOLoginAdminResponse login(BOLoginAdminRequest request);
 }
