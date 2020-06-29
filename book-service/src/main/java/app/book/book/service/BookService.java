@@ -82,7 +82,7 @@ public class BookService {
         book.status = BookStatus.BORROWED;
         book.borrowerId = request.userId;
         book.borrowedAt = now;
-        book.returnAt = request.returnAt;
+        book.returnAt = request.returnAt.atStartOfDay().plusDays(1).minusSeconds(1);
         book.updatedAt = now;
         book.updatedBy = request.updatedBy;
 
@@ -216,7 +216,7 @@ public class BookService {
     private StringBuilder getSearchSql() {
         StringBuilder sql = new StringBuilder(690);
         sql.append("SELECT"
-            + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,"
+            + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,`b`.`borrowed_at` `borrowed_at`, `b`.`return_at` `return_at`,"
             + " `a`.`name` `author_name`, `c`.`name` `category_name`, `t`.`name` `tag_name`, `u`.`username` `borrower_name`"
             + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
             + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"

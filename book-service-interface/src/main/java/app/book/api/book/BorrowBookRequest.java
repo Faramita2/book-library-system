@@ -4,7 +4,7 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * @author zoo
@@ -16,7 +16,7 @@ public class BorrowBookRequest {
 
     @Property(name = "return_at")
     @NotNull
-    public LocalDateTime returnAt;
+    public LocalDate returnAt;
 
     @Property(name = "updated_by")
     @NotNull

@@ -4,6 +4,7 @@ import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 import core.framework.db.Column;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -50,5 +51,5 @@ public class BookView {
     public LocalDateTime borrowedAt;
 
     @Column(name = "return_at")
-    public LocalDateTime returnAt;
+    public LocalDate returnAt;
 }
