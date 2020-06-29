@@ -36,4 +36,5 @@ public class BOSearchAdminResponse {
         @Property(name = "updated_at")
         @NotNull
         public LocalDateTime updatedAt;
-    }}
+    }
+}
