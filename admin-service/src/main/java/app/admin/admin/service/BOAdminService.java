@@ -50,15 +50,12 @@ public class BOAdminService {
         admin.createdBy = request.createdBy;
         admin.updatedBy = request.createdBy;
 
-//        hashPassword(admin, request.password);
+        hashPassword(admin, request.password);
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start create admin ====");
             repository.insert(admin);
             transaction.commit();
-            logger.warn("==== start create admin ====");
-            //TODO
-//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-//            logger.error("create admin failed: {}", e.getMessage());
+            logger.warn("==== end create admin ====");
         }
     }
 
@@ -66,41 +63,36 @@ public class BOAdminService {
         BOSearchAdminResponse response = new BOSearchAdminResponse();
         Query<Admin> query = repository.select();
 
-        if (request.account != null) {//TODO
-            query.where("account like ?", request.account + "%");
+        if (!Strings.isBlank(request.account)) {
+            query.where("account LIKE ?", request.account + "%");
         }
-
-        response.total = query.count();
 
         query.skip(request.skip);
         query.limit(request.limit);
-        response.admins = query.fetch().stream().map(user -> {//TODO
-            BOSearchAdminResponse.Admin a = new BOSearchAdminResponse.Admin();
-            a.id = user.id;
-            a.account = user.account;
-            a.createdAt = user.createdAt;
-            a.updatedAt = user.updatedAt;
 
-            return a;
+        response.total = query.count();
+        response.admins = query.fetch().stream().map(user -> {
+            BOSearchAdminResponse.Admin view = new BOSearchAdminResponse.Admin();
+            view.id = user.id;
+            view.account = user.account;
+            view.createdAt = user.createdAt;
+            view.updatedAt = user.updatedAt;
+            return view;
         }).collect(Collectors.toList());
 
         return response;
     }
 
     public BOLoginAdminResponse login(BOLoginAdminRequest request) {
-        Admin admin = repository.selectOne("account = ?", request.account).orElseThrow(()
-            -> new BadRequestException("account or password incorrect"));
+        Admin admin = repository.selectOne("account = ?", request.account).orElseThrow(() ->
+            new BadRequestException("account or password incorrect"));
 
-        BOLoginAdminResponse response = new BOLoginAdminResponse();
 
-        try {
-            if (admin.password.equals(getPasswordHash(request, admin.salt))) {
-                response.id = admin.id;
-                response.account = admin.account;
-                return response;
-            }
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("login admin failed: {}", e.getMessage());
+        if (admin.password.equals(getPasswordHash(request, admin.salt))) {
+            BOLoginAdminResponse response = new BOLoginAdminResponse();
+            response.id = admin.id;
+            response.account = admin.account;
+            return response;
         }
 
         throw new BadRequestException("account or password incorrect");
@@ -114,26 +106,32 @@ public class BOAdminService {
         return salt;
     }
 
-    private void hashPassword(Admin admin, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private void hashPassword(Admin admin, String password) {
         byte[] salt = generateSalt();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = f.generateSecret(spec).getEncoded();
-        Base64.Encoder enc = Base64.getEncoder();
-
-        logger.info("salt: {}", enc.encodeToString(salt));
-        logger.info("hash: {}", enc.encodeToString(hash));
-
-        admin.password = enc.encodeToString(hash);
-        admin.salt = enc.encodeToString(salt);
+        try {
+            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = f.generateSecret(spec).getEncoded();
+            Base64.Encoder enc = Base64.getEncoder();
+            admin.password = enc.encodeToString(hash);
+            admin.salt = enc.encodeToString(salt);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error("create admin failed: {}", e.getMessage());
+        }
     }
 
-    private String getPasswordHash(BOLoginAdminRequest request, String salt)
-        throws NoSuchAlgorithmException, InvalidKeySpecException {
+    private String getPasswordHash(BOLoginAdminRequest request, String salt) {
+        String passwordHash = "";
         byte[] saltBytes = Base64.getDecoder().decode(salt);
         KeySpec spec = new PBEKeySpec(request.password.toCharArray(), saltBytes, 65536, 128);
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        try {
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
+            passwordHash = Base64.getEncoder().encodeToString(encoded);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error("hash password error, message = {}", e.getMessage());
+        }
 
-        return Base64.getEncoder().encodeToString(f.generateSecret(spec).getEncoded());
+        return passwordHash;
     }
 }
