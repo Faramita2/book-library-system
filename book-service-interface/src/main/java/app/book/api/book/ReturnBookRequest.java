@@ -15,5 +15,5 @@ public class ReturnBookRequest {
     @Property(name = "updated_by")
     @NotNull
     @NotBlank
-    public String updatedBy;
+    public String operator;
 }

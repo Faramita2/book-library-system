@@ -18,8 +18,8 @@ public class BorrowBookRequest {
     @NotNull
     public LocalDate returnAt;
 
-    @Property(name = "updated_by")
+    @Property(name = "operator")
     @NotNull
     @NotBlank
-    public String updatedBy;
+    public String operator;
 }

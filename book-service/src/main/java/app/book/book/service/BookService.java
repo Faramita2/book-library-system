@@ -107,7 +107,8 @@ public class BookService {
 
     public void borrow(Long id, BorrowBookRequest request) {
         Book book = repository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
-            .orElseThrow(() -> new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id)));
+            .orElseThrow(() ->
+                new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id)));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -116,7 +117,7 @@ public class BookService {
         book.borrowedAt = now;
         book.returnAt = request.returnAt.atStartOfDay().plusDays(1).minusSeconds(1);
         book.updatedAt = now;
-        book.updatedBy = request.updatedBy;
+        book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start borrow book ====");
@@ -149,7 +150,7 @@ public class BookService {
         book.returnAt = null;
         book.borrowedAt = null;
         book.updatedAt = LocalDateTime.now();
-        book.updatedBy = request.updatedBy;
+        book.updatedBy = request.operator;
 
         repository.update(book);
     }
