@@ -10,6 +10,7 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
+import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,8 @@ public class NotificationService {
     Repository<Notification> repository;
 
     public void delete(Long id, DeleteNotificationRequest request) {
+        repository.selectOne("id = ? AND user_id = ?", id, request.userId).orElseThrow(() ->
+            new NotFoundException(Strings.format("notification not found, id = ?", id)));
         repository.delete(id);
     }
 

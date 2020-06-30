@@ -10,6 +10,10 @@ import core.framework.api.web.service.QueryParam;
  */
 public class DeleteNotificationRequest {
     @NotNull
+    @QueryParam(name = "user_id")
+    public Long userId;
+
+    @NotNull
     @NotBlank
     @QueryParam(name = "operator")
     public String operator;
