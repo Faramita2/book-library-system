@@ -51,8 +51,4 @@ public class BookAuthorService {
         req.name = request.name;
         service.update(id, req);
     }
-
-    public void delete(Long id) {
-
-    }
 }
