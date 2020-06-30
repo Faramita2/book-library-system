@@ -7,6 +7,7 @@ import app.api.backoffice.booktag.SearchBookTagAJAXResponse;
 import app.api.backoffice.booktag.UpdateBookTagAJAXRequest;
 import app.backoffice.booktag.service.BookTagService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -27,6 +28,7 @@ public class BookTagAJAXWebServiceImpl implements BookTagAJAXWebService {
 
     @Override
     public void update(Long id, UpdateBookTagAJAXRequest request) {
-
+        ActionLogContext.put("tag_id", id);
+        service.update(id, request);
     }
 }
