@@ -3,6 +3,7 @@ package app.backoffice;
 import app.api.admin.BOAdminWebService;
 import app.book.api.BOAuthorWebService;
 import app.book.api.BOCategoryWebService;
+import app.book.api.BOTagWebService;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
 
@@ -17,6 +18,7 @@ public class BackOfficeApp extends App {
         api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
         api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOCategoryWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
 
         load(new AdminModule());
         load(new BookModule());
