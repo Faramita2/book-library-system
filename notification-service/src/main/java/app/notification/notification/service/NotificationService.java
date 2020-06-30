@@ -28,7 +28,7 @@ public class NotificationService {
     }
 
     public void deleteBatch(DeleteBatchNotificationRequest request) {
-        repository.batchDelete(List.of(request.ids));
+        repository.batchDelete(List.of(request.ids.split(",")));
     }
 
     public void create(ReturnBorrowedBookMessage message) {
