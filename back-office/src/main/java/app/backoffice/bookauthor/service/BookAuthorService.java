@@ -5,6 +5,7 @@ import app.api.backoffice.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.backoffice.bookauthor.SearchBookAuthorAJAXResponse;
 import app.api.backoffice.bookauthor.UpdateBookAuthorAJAXRequest;
 import app.book.api.BOAuthorWebService;
+import app.book.api.author.BOCreateAuthorRequest;
 import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import core.framework.inject.Inject;
@@ -39,7 +40,9 @@ public class BookAuthorService {
     }
 
     public void create(CreateBookAuthorAJAXRequest request) {
-
+        BOCreateAuthorRequest req = new BOCreateAuthorRequest();
+        req.name = request.name;
+        service.create(req);
     }
 
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
