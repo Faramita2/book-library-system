@@ -8,6 +8,7 @@ import app.book.api.BOAuthorWebService;
 import app.book.api.author.BOCreateAuthorRequest;
 import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
+import app.book.api.author.BOUpdateAuthorRequest;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -46,7 +47,9 @@ public class BookAuthorService {
     }
 
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
-
+        BOUpdateAuthorRequest req = new BOUpdateAuthorRequest();
+        req.name = request.name;
+        service.update(id, req);
     }
 
     public void delete(Long id) {
