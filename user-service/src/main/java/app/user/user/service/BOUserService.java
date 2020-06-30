@@ -42,22 +42,23 @@ public class BOUserService {
     Database database;
 
     public void create(BOCreateUserRequest request) {
-        repository.selectOne("username = ?", request.username).ifPresent(u -> {
-            throw new ConflictException(Strings.format("user already exists, username = {}", u.username));
+        repository.selectOne("username = ?", request.username).ifPresent(user -> {
+            throw new ConflictException(Strings.format("user already exists, username = {}", user.username));
         });
 
-        repository.selectOne("email = ?", request.email).ifPresent(u -> {
-            throw new ConflictException(Strings.format("user already exists, email = {}", u.email));
+        repository.selectOne("email = ?", request.email).ifPresent(user -> {
+            throw new ConflictException(Strings.format("user already exists, email = {}", user.email));
         });
 
         User user = new User();
         user.username = request.username;
         user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
-        user.createdAt = LocalDateTime.now();
-        user.updatedAt = LocalDateTime.now();
-        user.createdBy = "UserService";
-        user.updatedBy = "UserService";
+        LocalDateTime now = LocalDateTime.now();
+        user.createdAt = now;
+        user.updatedAt = now;
+        user.createdBy = request.operator;
+        user.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start create user ====");
@@ -78,40 +79,42 @@ public class BOUserService {
             query.in("id", request.ids);
         }
 
-        if (request.username != null) {
-            query.where("username like ?", request.username + "%");
+        if (!Strings.isBlank(request.username)) {
+            query.where("username LIKE ?", request.username + "%");
         }
 
-        if (request.email != null) {
-            query.where("email like ?", request.email + "%");
+        if (!Strings.isBlank(request.email)) {
+            query.where("email LIKE ?", request.email + "%");
         }
 
         if (request.status != null) {
             query.where("status = ?", request.status.name());
         }
 
-        response.total = query.count();
-
         query.skip(request.skip);
         query.limit(request.limit);
-        response.users = query.fetch().stream().map(user -> {
-            BOSearchUserResponse.User u = new BOSearchUserResponse.User();
-            u.id = user.id;
-            u.status = UserStatusView.valueOf(user.status.name());
-            u.username = user.username;
-            u.email = user.email;
-            u.createdAt = user.createdAt;
-            u.updatedAt = user.updatedAt;
 
-            return u;
+        response.total = query.count();
+        response.users = query.fetch().stream().map(user -> {
+            BOSearchUserResponse.User view = new BOSearchUserResponse.User();
+            view.id = user.id;
+            view.status = UserStatusView.valueOf(user.status.name());
+            view.username = user.username;
+            view.email = user.email;
+            view.createdAt = user.createdAt;
+            view.updatedAt = user.updatedAt;
+            return view;
         }).collect(Collectors.toList());
 
         return response;
     }
 
     public void update(Long id, BOUpdateUserRequest request) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id)));
+        User user = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("user not found, id = {}", id)));
         user.status = UserStatus.valueOf(request.status.name());
+        user.updatedAt = LocalDateTime.now();
+        user.updatedBy = request.operator;
 
         repository.partialUpdate(user);
     }
@@ -131,20 +134,20 @@ public class BOUserService {
         byte[] hash = f.generateSecret(spec).getEncoded();
         Base64.Encoder enc = Base64.getEncoder();
 
-        logger.info("salt: {}", enc.encodeToString(salt));
-        logger.info("hash: {}", enc.encodeToString(hash));
-
         user.password = enc.encodeToString(hash);
         user.salt = enc.encodeToString(salt);
     }
 
     public void resetPassword(Long id, BOResetUserPasswordRequest request) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id)));
+        User user = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("user not found, id = {}", id)));
 
         if (!request.password.equals(request.passwordConfirm)) {
             throw new BadRequestException("Please make sure both passwords match.");
         }
 
+        user.updatedAt = LocalDateTime.now();
+        user.updatedBy = request.operator;
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start reset user password ====");
             hashPassword(user, request.password);
