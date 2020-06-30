@@ -22,7 +22,7 @@ public class BookTagAJAXWebServiceImpl implements BookTagAJAXWebService {
 
     @Override
     public void create(CreateBookTagAJAXRequest request) {
-
+        service.create(request);
     }
 
     @Override
