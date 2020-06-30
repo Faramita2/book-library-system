@@ -8,6 +8,7 @@ import app.api.booksite.user.SearchUserAJAXResponse;
 import app.api.booksite.user.UpdateUserAJAXRequest;
 import app.booksite.user.service.UserService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author meow
@@ -28,7 +29,8 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public void update(Long id, UpdateUserAJAXRequest request) {
-
+        ActionLogContext.put("user_id", id);
+        service.update(id, request);
     }
 
     @Override

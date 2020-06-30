@@ -3,11 +3,13 @@ package app.booksite.user.service;
 import app.api.booksite.user.CreateUserAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXResponse;
+import app.api.booksite.user.UpdateUserAJAXRequest;
 import app.api.booksite.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
+import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
 
@@ -54,5 +56,12 @@ public class UserService {
         }).collect(Collectors.toList());
 
         return response;
+    }
+
+    public void update(Long id, UpdateUserAJAXRequest request) {
+        BOUpdateUserRequest req = new BOUpdateUserRequest();
+        req.status = UserStatusView.valueOf(request.status.name());
+        req.operator = "book-site";
+        userWebService.update(id, req);
     }
 }
