@@ -16,41 +16,39 @@ import java.time.LocalDateTime;
 public class BorrowRecord {
     @Field(name = "id")
     @Id
-    @NotNull
     public ObjectId id;
 
-    @Field(name = "book_id")
     @NotNull
+    @Field(name = "book_id")
     public Long bookId;
 
+    @NotNull
     @Field(name = "borrower_id")
-    @NotNull
     public Long borrowerId;
-    //TODO
 
-    @Field(name = "borrowed_at")
     @NotNull
+    @Field(name = "borrowed_at")
     public LocalDateTime borrowedAt;
 
-    @Field(name = "return_at")
     @NotNull
+    @Field(name = "return_at")
     public LocalDateTime returnAt;
 
+    @NotNull
     @Field(name = "created_at")
-    @NotNull
     public LocalDateTime createdAt;
-    
+
+    @NotNull
     @Field(name = "updated_at")
-    @NotNull
     public LocalDateTime updatedAt;
-    
+
+    @NotNull
+    @NotBlank
     @Field(name = "created_by")
-    @NotNull
-    @NotBlank
     public String createdBy;
-    
-    @Field(name = "updated_by")
+
     @NotNull
     @NotBlank
+    @Field(name = "updated_by")
     public String updatedBy;
 }

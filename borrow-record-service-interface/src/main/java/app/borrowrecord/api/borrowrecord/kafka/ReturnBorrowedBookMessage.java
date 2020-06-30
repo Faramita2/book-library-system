@@ -1,4 +1,4 @@
-package app.borrowrecord.api.borrowrecord;
+package app.borrowrecord.api.borrowrecord.kafka;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -9,19 +9,14 @@ import java.time.LocalDateTime;
 /**
  * @author zoo
  */
-public class CreateBorrowRecordRequest {
+public class ReturnBorrowedBookMessage {
     @NotNull
-    @Property(name = "book_id")
-    public Long bookId;
-
-    @NotNull
-    @Property(name = "borrower_id")
-    public Long borrowerId;
-
-    @NotNull
-    @NotBlank
     @Property(name = "book_name")
     public String bookName;
+
+    @NotNull
+    @Property(name = "user_id")
+    public Long userId;
 
     @NotNull
     @Property(name = "borrowed_at")

@@ -2,7 +2,6 @@ package app.borrowrecord.borrowrecord.service;
 
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
-import com.mongodb.client.model.Projections;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
@@ -27,24 +26,21 @@ public class BorrowRecordService {
         BorrowRecord borrowRecord = new BorrowRecord();
         borrowRecord.id = ObjectId.get();
         borrowRecord.bookId = request.bookId;
-        //TODO
         borrowRecord.borrowerId = request.borrowerId;
         borrowRecord.borrowedAt = request.borrowedAt;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.returnAt = request.returnAt;
         borrowRecord.createdAt = now;
         borrowRecord.updatedAt = now;
-        borrowRecord.createdBy = request.createdBy;
-        borrowRecord.updatedBy = request.createdBy;
+        borrowRecord.createdBy = request.operator;
+        borrowRecord.updatedBy = request.operator;
         collection.insert(borrowRecord);
     }
 
     public List<BorrowRecord> findNeedReturnRecords() {
         Query query = new Query();
-        query.projection = Projections.include("book_id", "borrower_id", "borrowed_at", "return_at");
         query.filter = and(
             gte("return_at", LocalDate.now().atStartOfDay().plusDays(1)),
-            //TODO
             lt("return_at", LocalDate.now().atStartOfDay().plusDays(2))
         );
 
