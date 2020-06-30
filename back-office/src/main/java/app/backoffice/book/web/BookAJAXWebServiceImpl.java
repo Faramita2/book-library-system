@@ -23,7 +23,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public GetBookAJAXResponse get(Long id) {
-        return null;
+        return service.get(id);
     }
 
     @Override

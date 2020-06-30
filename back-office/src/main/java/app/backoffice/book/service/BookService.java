@@ -1,9 +1,11 @@
 package app.backoffice.book.service;
 
 import app.api.backoffice.book.BookStatusAJAXView;
+import app.api.backoffice.book.GetBookAJAXResponse;
 import app.api.backoffice.book.SearchBookAJAXRequest;
 import app.api.backoffice.book.SearchBookAJAXResponse;
 import app.book.api.BOBookWebService;
+import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import core.framework.inject.Inject;
@@ -41,6 +43,23 @@ public class BookService {
 
             return b;
         }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    public GetBookAJAXResponse get(Long id) {
+        BOGetBookResponse resp = boBookWebService.get(id);
+        GetBookAJAXResponse response = new GetBookAJAXResponse();
+        response.id = resp.id;
+        response.name = resp.name;
+        response.tagName = resp.tagName;
+        response.description = resp.description;
+        response.categoryName = resp.categoryName;
+        response.authorName = resp.authorName;
+        response.status = BookStatusAJAXView.valueOf(resp.status.name());
+        response.borrowerName = resp.borrowerName;
+        response.borrowedAt = resp.borrowedAt;
+        response.returnAt = resp.returnAt;
 
         return response;
     }
