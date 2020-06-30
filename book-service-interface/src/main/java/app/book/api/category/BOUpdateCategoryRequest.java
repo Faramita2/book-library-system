@@ -1,6 +1,8 @@
 package app.book.api.category;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotBlank;
+import core.framework.api.validate.NotNull;
 
 /**
  * @author zoo
@@ -8,4 +10,9 @@ import core.framework.api.json.Property;
 public class BOUpdateCategoryRequest {
     @Property(name = "name")
     public String name;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "operator")
+    public String operator;
 }
