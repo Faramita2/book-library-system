@@ -7,6 +7,7 @@ import app.api.backoffice.bookcategory.SearchBookCategoryAJAXResponse;
 import app.api.backoffice.bookcategory.UpdateBookCategoryAJAXRequest;
 import app.backoffice.bookcategory.service.BookCategoryService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -27,6 +28,7 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
 
     @Override
     public void update(Long id, UpdateBookCategoryAJAXRequest request) {
-
+        ActionLogContext.put("category_id", id);
+        service.update(id, request);
     }
 }

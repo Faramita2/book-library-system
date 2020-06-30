@@ -3,10 +3,12 @@ package app.backoffice.bookcategory.service;
 import app.api.backoffice.bookcategory.CreateBookCategoryAJAXRequest;
 import app.api.backoffice.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.backoffice.bookcategory.SearchBookCategoryAJAXResponse;
+import app.api.backoffice.bookcategory.UpdateBookCategoryAJAXRequest;
 import app.book.api.BOCategoryWebService;
 import app.book.api.category.BOCreateCategoryRequest;
 import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
+import app.book.api.category.BOUpdateCategoryRequest;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -43,5 +45,11 @@ public class BookCategoryService {
         BOCreateCategoryRequest req = new BOCreateCategoryRequest();
         req.name = request.name;
         boCategoryWebService.create(req);
+    }
+
+    public void update(Long id, UpdateBookCategoryAJAXRequest request) {
+        BOUpdateCategoryRequest req = new BOUpdateCategoryRequest();
+        req.name = request.name;
+        boCategoryWebService.update(id, req);
     }
 }
