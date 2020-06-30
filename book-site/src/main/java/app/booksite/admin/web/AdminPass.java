@@ -12,5 +12,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({METHOD, TYPE})
 @Retention(RUNTIME)
-public @interface Pass {
+public @interface AdminPass {
 }

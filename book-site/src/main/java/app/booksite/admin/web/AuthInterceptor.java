@@ -15,7 +15,7 @@ public class AuthInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Invocation invocation) throws Exception {
-        Pass pass = invocation.annotation(Pass.class);
+        AdminPass pass = invocation.annotation(AdminPass.class);
 
         if (pass == null) {
             invocation.context().request().session().get("admin_id").orElseThrow(()
