@@ -13,7 +13,7 @@ include 'book-service-interface',
         'admin-service-interface',
         'admin-service-db-migration',
         'admin-service',
-        'website-interface',
-        'website',
-        'back-office-interface',
-        'back-office'
+        'book-site-frontend-interface',
+        'book-site-frontend',
+        'book-site-interface',
+        'book-site'

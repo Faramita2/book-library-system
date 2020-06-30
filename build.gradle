@@ -52,8 +52,8 @@ configure([project(':book-service'),
            project(':borrow-record-service'),
            project(':notification-service'),
            project(':admin-service'),
-           project(':website'),
-           project(':back-office')]) {
+           project(':book-site-frontend'),
+           project(':book-site')]) {
     dependencies {
         implementation "core.framework:core-ng:${coreNGVersion}"
         testImplementation "core.framework:core-ng-test:${coreNGVersion}"
@@ -88,6 +88,7 @@ project(':book-service') {
 project(':borrow-record-service') {
     dependencies {
         implementation project(':borrow-record-service-interface')
+        implementation project(':book-service-interface')
     }
 }
 
@@ -111,7 +112,7 @@ project(':admin-service') {
 
 project(':book-site') {
     dependencies {
-        implementation project(':back-office-interface')
+        implementation project(':book-site-interface')
         implementation project(':book-service-interface')
         implementation project(':user-service-interface')
         implementation project(':admin-service-interface')
@@ -121,7 +122,7 @@ project(':book-site') {
 
 project(':book-site-frontend') {
     dependencies {
-        implementation project(':website-interface')
+        implementation project(':book-site-frontend-interface')
         implementation project(':book-service-interface')
         implementation project(':user-service-interface')
         implementation project(':notification-service-interface')
