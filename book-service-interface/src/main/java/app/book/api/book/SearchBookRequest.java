@@ -1,6 +1,8 @@
 package app.book.api.book;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.Max;
+import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
 import java.util.List;
@@ -9,14 +11,6 @@ import java.util.List;
  * @author zoo
  */
 public class SearchBookRequest {
-    @NotNull
-    @Property(name = "skip")
-    public Integer skip = 0;
-
-    @NotNull
-    @Property(name = "limit")
-    public Integer limit = 1000;
-
     @Property(name = "name")
     public String name;
 
@@ -31,4 +25,20 @@ public class SearchBookRequest {
 
     @Property(name = "author_ids")
     public List<Long> authorIds;
+
+    @Property(name = "status")
+    public BookStatusView status;
+
+    @Property(name = "borrower_id")
+    public Long borrowerId;
+
+    @NotNull
+    @Property(name = "skip")
+    @Min(0)
+    public Integer skip;
+
+    @NotNull
+    @Property(name = "limit")
+    @Max(1000)
+    public Integer limit;
 }

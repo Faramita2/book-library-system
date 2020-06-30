@@ -69,6 +69,14 @@ public class BookService {
             query.in("id", bookIds);
         }
 
+        if (request.status != null) {
+            query.where("status = ?", request.status.name());
+        }
+
+        if (request.borrowerId != null) {
+            query.where("borrower_id = ?", request.borrowerId);
+        }
+
         response.total = query.count();
         response.books = query.fetch().stream().map(book -> {
             SearchBookResponse.Book view = new SearchBookResponse.Book();
@@ -157,7 +165,7 @@ public class BookService {
 
     private List<Long> queryTagIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT tag_id FROM book_tags WHERE book_id = ?)", TagIdView.class, bookId)
+            "SELECT tag_id FROM book_tags WHERE book_id = ?", TagIdView.class, bookId)
             .stream()
             .map(tagIdView -> tagIdView.tagId)
             .collect(Collectors.toList());
@@ -165,7 +173,7 @@ public class BookService {
 
     private List<Long> queryCategoryIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT category_id FROM book_categories WHERE book_id = ?)", CategoryIdView.class, bookId)
+            "SELECT category_id FROM book_categories WHERE book_id = ?", CategoryIdView.class, bookId)
             .stream()
             .map(categoryIdView -> categoryIdView.categoryId)
             .collect(Collectors.toList());
@@ -173,7 +181,7 @@ public class BookService {
 
     private List<Long> queryAuthorIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT author_id FROM book_authors WHERE book_id = ?)", AuthorIdView.class, bookId)
+            "SELECT author_id FROM book_authors WHERE book_id = ?", AuthorIdView.class, bookId)
             .stream()
             .map(authorIdView -> authorIdView.authorId)
             .collect(Collectors.toList());
