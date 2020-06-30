@@ -2,6 +2,7 @@ package app.user.user.web;
 
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
@@ -19,6 +20,11 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     @Override
     public void create(BOCreateUserRequest request) {
         service.create(request);
+    }
+
+    @Override
+    public BOGetUserResponse get(Long id) {
+        return service.get(id);
     }
 
     @Override

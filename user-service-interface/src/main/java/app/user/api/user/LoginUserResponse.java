@@ -7,7 +7,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class GetUserResponse {
+public class LoginUserResponse {
     @NotNull
     @Property(name = "id")
     public Long id;
@@ -21,8 +21,4 @@ public class GetUserResponse {
     @NotBlank
     @Property(name = "email")
     public String email;
-
-    @NotNull
-    @Property(name = "status")
-    public UserStatusView status;
 }

@@ -1,6 +1,7 @@
 package app.user.user.service;
 
 import app.user.api.user.BOCreateUserRequest;
+import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
@@ -154,5 +155,18 @@ public class BOUserService {
             logger.error("reset user password failed: {}", e.getMessage());
         }
 
+    }
+
+    public BOGetUserResponse get(Long id) {
+        User user = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("user not found, id = {}", id)));
+
+        BOGetUserResponse response = new BOGetUserResponse();
+        response.id = user.id;
+        response.username = user.username;
+        response.email = user.email;
+        response.status = UserStatusView.valueOf(user.status.name());
+
+        return response;
     }
 }

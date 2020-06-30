@@ -2,6 +2,7 @@ package app.user.api;
 
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.LoginUserRequest;
+import app.user.api.user.LoginUserResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -17,5 +18,5 @@ public interface UserWebService {
 
     @PUT
     @Path("/user/login")
-    void login(LoginUserRequest request);
+    LoginUserResponse login(LoginUserRequest request);
 }

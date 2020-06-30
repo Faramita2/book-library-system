@@ -3,6 +3,7 @@ package app.user.user.web;
 import app.user.api.UserWebService;
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.LoginUserRequest;
+import app.user.api.user.LoginUserResponse;
 import app.user.user.service.UserService;
 import core.framework.inject.Inject;
 
@@ -19,7 +20,7 @@ public class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public void login(LoginUserRequest request) {
-        service.login(request);
+    public LoginUserResponse login(LoginUserRequest request) {
+        return service.login(request);
     }
 }

@@ -7,7 +7,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class GetUserResponse {
+public class BOGetUserResponse {
     @NotNull
     @Property(name = "id")
     public Long id;
