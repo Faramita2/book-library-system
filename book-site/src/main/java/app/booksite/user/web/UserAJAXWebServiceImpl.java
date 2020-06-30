@@ -23,7 +23,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public SearchUserAJAXResponse search(SearchUserAJAXRequest request) {
-        return null;
+        return service.search(request);
     }
 
     @Override
