@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author meow
  */
-public class SearchBookAJAXRequest {
+public class SearchBorrowedBookAJAXRequest {
     @Property(name = "name")
     public String name;
 
@@ -25,9 +25,6 @@ public class SearchBookAJAXRequest {
 
     @Property(name = "author_ids")
     public List<Long> authorIds;
-
-    @Property(name = "status")
-    public BookStatusAJAXView status;
 
     @NotNull
     @Property(name = "skip")

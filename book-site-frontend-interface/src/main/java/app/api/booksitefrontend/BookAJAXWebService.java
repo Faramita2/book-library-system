@@ -3,6 +3,8 @@ package app.api.booksitefrontend;
 import app.api.booksitefrontend.book.GetBookAJAXResponse;
 import app.api.booksitefrontend.book.SearchBookAJAXRequest;
 import app.api.booksitefrontend.book.SearchBookAJAXResponse;
+import app.api.booksitefrontend.book.SearchBorrowedBookAJAXRequest;
+import app.api.booksitefrontend.book.SearchBorrowedBookAJAXResponse;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -15,6 +17,10 @@ public interface BookAJAXWebService {
     @PUT
     @Path("/ajax/book")
     SearchBookAJAXResponse search(SearchBookAJAXRequest request);
+
+    @PUT
+    @Path("/ajax/book/borrowed")
+    SearchBorrowedBookAJAXResponse searchBorrowed(SearchBorrowedBookAJAXRequest request);
 
     @GET
     @Path("/ajax/book/:id")
