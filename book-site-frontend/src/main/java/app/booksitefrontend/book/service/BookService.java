@@ -109,31 +109,31 @@ public class BookService {
     }
 
     private List<String> queryTagNames(List<Long> tagIds) {
-        SearchTagRequest SearchTagRequest = new SearchTagRequest();
-        SearchTagRequest.skip = 0;
-        SearchTagRequest.limit = tagIds.size();
-        SearchTagRequest.ids = tagIds;
-        return tagWebService.search(SearchTagRequest).tags.stream()
+        SearchTagRequest searchTagRequest = new SearchTagRequest();
+        searchTagRequest.skip = 0;
+        searchTagRequest.limit = tagIds.size();
+        searchTagRequest.ids = tagIds;
+        return tagWebService.search(searchTagRequest).tags.stream()
             .map(tag -> tag.name)
             .collect(Collectors.toList());
     }
 
     private List<String> queryCategoryNames(List<Long> categoryIds) {
-        SearchCategoryRequest SearchCategoryRequest = new SearchCategoryRequest();
-        SearchCategoryRequest.skip = 0;
-        SearchCategoryRequest.limit = categoryIds.size();
-        SearchCategoryRequest.ids = categoryIds;
-        return categoryWebService.search(SearchCategoryRequest).categories.stream()
+        SearchCategoryRequest searchCategoryRequest = new SearchCategoryRequest();
+        searchCategoryRequest.skip = 0;
+        searchCategoryRequest.limit = categoryIds.size();
+        searchCategoryRequest.ids = categoryIds;
+        return categoryWebService.search(searchCategoryRequest).categories.stream()
             .map(category -> category.name)
             .collect(Collectors.toList());
     }
 
     private List<String> queryAuthorNames(List<Long> authorIds) {
-        SearchAuthorRequest SearchAuthorRequest = new SearchAuthorRequest();
-        SearchAuthorRequest.skip = 0;
-        SearchAuthorRequest.limit = authorIds.size();
-        SearchAuthorRequest.ids = authorIds;
-        return authorWebService.search(SearchAuthorRequest).authors.stream()
+        SearchAuthorRequest searchAuthorRequest = new SearchAuthorRequest();
+        searchAuthorRequest.skip = 0;
+        searchAuthorRequest.limit = authorIds.size();
+        searchAuthorRequest.ids = authorIds;
+        return authorWebService.search(searchAuthorRequest).authors.stream()
             .map(author -> author.name)
             .collect(Collectors.toList());
     }

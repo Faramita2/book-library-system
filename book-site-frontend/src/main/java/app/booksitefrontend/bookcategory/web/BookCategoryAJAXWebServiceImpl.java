@@ -7,7 +7,6 @@ import app.booksitefrontend.bookcategory.service.BookCategoryService;
 import app.booksitefrontend.user.web.UserPass;
 import core.framework.inject.Inject;
 
-;
 
 /**
  * @author zoo
