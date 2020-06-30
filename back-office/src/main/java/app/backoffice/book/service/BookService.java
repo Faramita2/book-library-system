@@ -5,11 +5,13 @@ import app.api.backoffice.book.CreateBookAJAXRequest;
 import app.api.backoffice.book.GetBookAJAXResponse;
 import app.api.backoffice.book.SearchBookAJAXRequest;
 import app.api.backoffice.book.SearchBookAJAXResponse;
+import app.api.backoffice.book.UpdateBookAJAXRequest;
 import app.book.api.BOBookWebService;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
+import app.book.api.book.BOUpdateBookRequest;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;
@@ -74,5 +76,15 @@ public class BookService {
         req.categoryIds = request.categoryIds;
         req.authorIds = request.authorIds;
         boBookWebService.create(req);
+    }
+
+    public void update(Long id, UpdateBookAJAXRequest request) {
+        BOUpdateBookRequest req = new BOUpdateBookRequest();
+        req.name = request.name;
+        req.tagIds = request.tagIds;
+        req.description = request.description;
+        req.categoryIds = request.categoryIds;
+        req.authorIds = request.authorIds;
+        boBookWebService.update(id, req);
     }
 }

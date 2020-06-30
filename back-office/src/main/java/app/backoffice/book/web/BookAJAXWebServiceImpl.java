@@ -8,6 +8,7 @@ import app.api.backoffice.book.SearchBookAJAXResponse;
 import app.api.backoffice.book.UpdateBookAJAXRequest;
 import app.backoffice.book.service.BookService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -33,6 +34,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public void update(Long id, UpdateBookAJAXRequest request) {
-
+        ActionLogContext.put("book_id", id);
+        service.update(id, request);
     }
 }
