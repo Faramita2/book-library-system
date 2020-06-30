@@ -41,12 +41,14 @@ public class BookCategoryService {
     public void create(CreateBookCategoryAJAXRequest request) {
         BOCreateCategoryRequest req = new BOCreateCategoryRequest();
         req.name = request.name;
+        req.operator = "book-site";
         boCategoryWebService.create(req);
     }
 
     public void update(Long id, UpdateBookCategoryAJAXRequest request) {
         BOUpdateCategoryRequest req = new BOUpdateCategoryRequest();
         req.name = request.name;
+        req.operator = "book-site";
         boCategoryWebService.update(id, req);
     }
 }

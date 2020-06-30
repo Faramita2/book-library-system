@@ -9,6 +9,9 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class SearchBookAuthorAJAXRequest {
+    @Property(name = "name")
+    public String name;
+
     @NotNull
     @Property(name = "skip")
     @Min(0)
@@ -18,7 +21,4 @@ public class SearchBookAuthorAJAXRequest {
     @Property(name = "limit")
     @Max(1000)
     public Integer limit;
-
-    @Property(name = "name")
-    public String name;
 }

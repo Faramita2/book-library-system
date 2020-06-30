@@ -42,12 +42,14 @@ public class BookTagService {
     public void create(CreateBookTagAJAXRequest request) {
         BOCreateTagRequest req = new BOCreateTagRequest();
         req.name = request.name;
+        req.operator = "book-site";
         boTagWebService.create(req);
     }
 
     public void update(Long id, UpdateBookTagAJAXRequest request) {
         BOUpdateTagRequest req = new BOUpdateTagRequest();
         req.name = request.name;
+        req.operator = "book-site";
         boTagWebService.update(id, req);
     }
 }

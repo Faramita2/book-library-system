@@ -42,12 +42,14 @@ public class BookAuthorService {
     public void create(CreateBookAuthorAJAXRequest request) {
         BOCreateAuthorRequest req = new BOCreateAuthorRequest();
         req.name = request.name;
+        req.operator = "book-site";
         service.create(req);
     }
 
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
         BOUpdateAuthorRequest req = new BOUpdateAuthorRequest();
         req.name = request.name;
+        req.operator = "book-site";
         service.update(id, req);
     }
 }
