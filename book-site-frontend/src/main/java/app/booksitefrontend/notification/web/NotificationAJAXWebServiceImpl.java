@@ -28,6 +28,6 @@ public class NotificationAJAXWebServiceImpl implements NotificationAJAXWebServic
 
     @Override
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
-
+        service.deleteBatch(request);
     }
 }

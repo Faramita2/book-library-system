@@ -1,8 +1,10 @@
 package app.booksitefrontend.notification.service;
 
+import app.api.booksitefrontend.notification.DeleteBatchNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXResponse;
 import app.notification.api.NotificationWebService;
+import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
@@ -49,5 +51,12 @@ public class NotificationService {
         req.userId = Long.valueOf(userId.get());
         req.operator = "book-site-frontend";
         notificationWebService.delete(id, req);
+    }
+
+    public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
+        DeleteBatchNotificationRequest req = new DeleteBatchNotificationRequest();
+        req.ids = request.ids;
+        req.operator = "book-site-frontend";
+        notificationWebService.deleteBatch(req);
     }
 }

@@ -1,10 +1,8 @@
 package app.api.booksitefrontend.notification;
 
-import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
-
-import java.util.List;
+import core.framework.api.web.service.QueryParam;
 
 /**
  * @author meow
@@ -12,11 +10,6 @@ import java.util.List;
 public class DeleteBatchNotificationAJAXRequest {
     @NotNull
     @NotBlank
-    @Property(name = "ids")
-    public List<String> ids;
-
-    @NotNull
-    @NotBlank
-    @Property(name = "operator")
-    public String operator;
+    @QueryParam(name = "ids")
+    public String ids;
 }
