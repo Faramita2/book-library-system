@@ -10,20 +10,20 @@ import java.time.LocalDateTime;
  * @author zoo
  */
 public class ReturnBorrowedBookMessage {
-    @Property(name = "book_id")
     @NotNull
-    public Long bookId;
+    @Property(name = "book_name")
+    public String bookName;
 
-    @Property(name = "user_id")
     @NotNull
+    @Property(name = "user_id")
     public Long userId;
 
-    @Property(name = "borrowed_at")
     @NotNull
+    @Property(name = "borrowed_at")
     public LocalDateTime borrowedAt;
 
-    @Property(name = "return_at")
     @NotNull
+    @Property(name = "return_at")
     public LocalDateTime returnAt;
 
     @NotNull
