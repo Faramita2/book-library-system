@@ -129,6 +129,8 @@ public class BOBookService {
             new NotFoundException(Strings.format("book not found, id = {}", id)));
         book.name = request.name;
         book.description = request.description;
+        book.updatedAt = LocalDateTime.now();
+        book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start update book ====");
@@ -160,7 +162,7 @@ public class BOBookService {
 
     private List<Long> queryTagIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT tag_id FROM book_tags WHERE book_id = ?)", TagIdView.class, bookId)
+            "SELECT tag_id FROM book_tags WHERE book_id = ?", TagIdView.class, bookId)
             .stream()
             .map(tagIdView -> tagIdView.tagId)
             .collect(Collectors.toList());
@@ -168,7 +170,7 @@ public class BOBookService {
 
     private List<Long> queryCategoryIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT category_id FROM book_categories WHERE book_id = ?)", CategoryIdView.class, bookId)
+            "SELECT category_id FROM book_categories WHERE book_id = ?", CategoryIdView.class, bookId)
             .stream()
             .map(categoryIdView -> categoryIdView.categoryId)
             .collect(Collectors.toList());
@@ -176,7 +178,7 @@ public class BOBookService {
 
     private List<Long> queryAuthorIdsByBookId(Long bookId) {
         return database.select(
-            "SELECT author_id FROM book_authors WHERE book_id = ?)", AuthorIdView.class, bookId)
+            "SELECT author_id FROM book_authors WHERE book_id = ?", AuthorIdView.class, bookId)
             .stream()
             .map(authorIdView -> authorIdView.authorId)
             .collect(Collectors.toList());

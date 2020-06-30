@@ -1,6 +1,8 @@
 package app.book.api.book;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotBlank;
+import core.framework.api.validate.NotNull;
 
 import java.util.List;
 
@@ -22,4 +24,9 @@ public class BOUpdateBookRequest {
 
     @Property(name = "author_ids")
     public List<Long> authorIds;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "operator")
+    public String operator;
 }
