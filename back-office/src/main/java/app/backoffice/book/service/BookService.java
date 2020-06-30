@@ -1,10 +1,12 @@
 package app.backoffice.book.service;
 
 import app.api.backoffice.book.BookStatusAJAXView;
+import app.api.backoffice.book.CreateBookAJAXRequest;
 import app.api.backoffice.book.GetBookAJAXResponse;
 import app.api.backoffice.book.SearchBookAJAXRequest;
 import app.api.backoffice.book.SearchBookAJAXResponse;
 import app.book.api.BOBookWebService;
+import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
@@ -62,5 +64,15 @@ public class BookService {
         response.returnAt = resp.returnAt;
 
         return response;
+    }
+
+    public void create(CreateBookAJAXRequest request) {
+        BOCreateBookRequest req = new BOCreateBookRequest();
+        req.name = request.name;
+        req.tagIds = request.tagIds;
+        req.description = request.description;
+        req.categoryIds = request.categoryIds;
+        req.authorIds = request.authorIds;
+        boBookWebService.create(req);
     }
 }

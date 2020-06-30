@@ -28,7 +28,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public void create(CreateBookAJAXRequest request) {
-
+        service.create(request);
     }
 
     @Override
