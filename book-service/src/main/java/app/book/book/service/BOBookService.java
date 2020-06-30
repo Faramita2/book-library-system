@@ -6,15 +6,17 @@ import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BookStatusView;
+import app.book.book.domain.AuthorIdView;
 import app.book.book.domain.Book;
-import app.book.book.domain.BookCountView;
+import app.book.book.domain.BookIdView;
 import app.book.book.domain.BookStatus;
-import app.book.book.domain.BookView;
+import app.book.book.domain.CategoryIdView;
+import app.book.book.domain.TagIdView;
 import core.framework.db.Database;
+import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
-import core.framework.util.Lists;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
 public class BOBookService {
     private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
-    Repository<Book> bookRepository;
+    Repository<Book> repository;
     @Inject
     Database database;
 
@@ -40,14 +42,15 @@ public class BOBookService {
         book.description = request.description;
         book.status = BookStatus.NORMAL;
         book.borrowerId = 0L;
-        book.createdAt = LocalDateTime.now();
-        book.updatedAt = LocalDateTime.now();
-        book.createdBy = "BookService";
-        book.updatedBy = "BookService";
+        LocalDateTime now = LocalDateTime.now();
+        book.createdAt = now;
+        book.updatedAt = now;
+        book.createdBy = request.operator;
+        book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start create book ====");
-            Long id = bookRepository.insert(book).orElseThrow();
+            Long id = repository.insert(book).orElseThrow();
             insertBookAuthors(id, request.authorIds);
             insertBookTags(id, request.tagIds);
             insertBookCategories(id, request.categoryIds);
@@ -57,45 +60,80 @@ public class BOBookService {
     }
 
     public BOGetBookResponse get(Long id) {
-        StringBuilder sql = getSearchSql();
-        sql.append(" AND `b`.`id` = ?");
-        BookView view = database.selectOne(sql.toString(), BookView.class, id).orElseThrow(
+        Book book = repository.get(id).orElseThrow(
             () -> new NotFoundException(Strings.format("book not found, id = {}", id))
         );
 
         BOGetBookResponse response = new BOGetBookResponse();
-        response.id = view.id;
-        response.name = view.name;
-        response.description = view.description;
-        response.authorName = view.authorName == null ? "-" : view.authorName;
-        response.categoryName = view.categoryName == null ? "-" : view.categoryName;
-        response.tagName = view.tagName == null ? "-" : view.tagName;
-        response.status = BookStatusView.valueOf(view.status.name());
-        response.borrowerName = view.borrowerName == null ? "-" : view.borrowerName;
-        response.borrowedAt = view.borrowedAt;
-        response.returnAt = view.returnAt;
+        response.id = book.id;
+        response.name = book.name;
+        response.description = book.description;
+        response.authorIds = queryAuthorIdsByBookId(id);
+        response.categoryIds = queryCategoryIdsByBookId(id);
+        response.tagIds = queryTagIdsByBookId(id);
+        response.status = BookStatusView.valueOf(book.status.name());
+        response.borrowerId = book.borrowerId;
+        response.borrowedAt = book.borrowedAt;
+        response.returnAt = book.returnAt == null ? null : book.returnAt.toLocalDate();
 
         return response;
     }
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
         BOSearchBookResponse response = new BOSearchBookResponse();
+        Query<Book> query = repository.select();
+        query.skip(request.skip);
+        query.limit(request.limit);
 
-        response.total = getSearchBooksTotal(request);
-        response.books = getPagedSearchBooks(request);
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
+        }
+
+        if (!Strings.isBlank(request.description)) {
+            query.where("description LIKE ?", request.description + "%");
+        }
+
+        if (request.authorIds != null && !request.authorIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByAuthorIds(request);
+            query.in("id", bookIds);
+        }
+
+        if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByCategoryIds(request);
+            query.in("id", bookIds);
+        }
+
+        if (request.tagIds != null && !request.tagIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByTagIds(request);
+            query.in("id", bookIds);
+        }
+
+        response.total = query.count();
+        response.books = query.fetch().stream().map(book -> {
+            BOSearchBookResponse.Book view = new BOSearchBookResponse.Book();
+            view.id = book.id;
+            view.name = book.name;
+            view.tagIds = queryTagIdsByBookId(book.id);
+            view.description = book.description;
+            view.categoryIds = queryCategoryIdsByBookId(book.id);
+            view.authorIds = queryAuthorIdsByBookId(book.id);
+            view.status = BookStatusView.valueOf(book.status.name());
+            return view;
+        }).collect(Collectors.toList());
 
         return response;
     }
 
     public void update(Long id, BOUpdateBookRequest request) {
-        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
+        Book book = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("book not found, id = {}", id)));
         book.name = request.name;
         book.description = request.description;
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start update book ====");
             logger.warn("update book name = {}, description = {}", request.name, request.description);
-            bookRepository.partialUpdate(book);
+            repository.partialUpdate(book);
 
             List<Long> authorIds = request.authorIds;
             if (authorIds != null && !authorIds.isEmpty()) {
@@ -120,102 +158,52 @@ public class BOBookService {
         }
     }
 
-    private Long getSearchBooksTotal(BOSearchBookRequest request) {
-        StringBuilder sql = getCountSearchSql();
-        List<Object> args = Lists.newArrayList();
-
-        buildSqlWhere(request, sql, args);
-
-        logger.info("execute sql = {}", sql);
-        return database.selectOne(sql.toString(), BookCountView.class, args.toArray()).orElseGet(() -> {
-            BookCountView view = new BookCountView();
-            view.total = 0L;
-
-            return view;
-        }).total;
+    private List<Long> queryTagIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT tag_id FROM book_tags WHERE book_id = ?)", TagIdView.class, bookId)
+            .stream()
+            .map(tagIdView -> tagIdView.tagId)
+            .collect(Collectors.toList());
     }
 
-    private List<BOSearchBookResponse.Book> getPagedSearchBooks(BOSearchBookRequest request) {
-        StringBuilder sql = getSearchSql();
-        List<Object> args = Lists.newArrayList();
-
-        buildSqlWhere(request, sql, args);
-
-
-        sql.append(" LIMIT ?, ?");
-        args.add(request.skip);
-        args.add(request.limit);
-
-
-        return database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
-            BOSearchBookResponse.Book book = new BOSearchBookResponse.Book();
-
-            book.id = searchBook.id;
-            book.name = searchBook.name;
-            book.description = searchBook.description;
-            book.authorName = searchBook.authorName == null ? "-" : searchBook.authorName;
-            book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
-            book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
-            book.status = BookStatusView.valueOf(searchBook.status.name());
-
-            return book;
-        }).collect(Collectors.toList());
+    private List<Long> queryCategoryIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT category_id FROM book_categories WHERE book_id = ?)", CategoryIdView.class, bookId)
+            .stream()
+            .map(categoryIdView -> categoryIdView.categoryId)
+            .collect(Collectors.toList());
     }
 
-    private void buildSqlWhere(BOSearchBookRequest request, StringBuilder sql, List<Object> args) {
-        //TODO
-        if (!Strings.isBlank(request.name)) {
-            sql.append(" AND `b`.`name` like ?%");
-            args.add(request.name);
-        }
-
-        if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            sql.append(" AND `t`.`id` IN(?)");
-
-            args.add(request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
-
-        if (request.description != null) {
-            sql.append(" AND `b`.`description` like ?%");
-            args.add(request.description);
-        }
-
-        if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            sql.append(" AND `c`.`id` IN(?)");
-            args.add(request.categoryIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
-
-        if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            sql.append(" AND `a`.`id` IN(?)");
-            args.add(request.authorIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
+    private List<Long> queryAuthorIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT author_id FROM book_authors WHERE book_id = ?)", AuthorIdView.class, bookId)
+            .stream()
+            .map(authorIdView -> authorIdView.authorId)
+            .collect(Collectors.toList());
     }
 
-    private StringBuilder getCountSearchSql() {
-        StringBuilder sql = new StringBuilder(600);
-        sql.append("SELECT"
-            + " COUNT(`b`.`id`) `total`"
-            + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
-            + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"
-            + " LEFT JOIN `authors` `a` ON `a`.`id` = `ba`.`author_id`" + " LEFT JOIN `tags` `t` ON `t`.`id` = `bt`.`tag_id`"
-            + " LEFT JOIN `categories` `c` ON `c`.`id` = `bc`.`category_id`" + " LEFT JOIN `users` `u` ON `u`.`id` = `b`.`borrower_id`"
-            + " WHERE 1 = 1");
-
-        return sql;
+    private List<Long> queryBookIdsByTagIds(BOSearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_tags WHERE tag_id IN(?)", BookIdView.class, request.tagIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
     }
 
-    private StringBuilder getSearchSql() {
-        StringBuilder sql = new StringBuilder(690);
-        sql.append("SELECT"
-            + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,`b`.`borrowed_at` `borrowed_at`, `b`.`return_at` `return_at`,"
-            + " `a`.`name` `author_name`, `c`.`name` `category_name`, `t`.`name` `tag_name`, `u`.`username` `borrower_name`"
-            + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
-            + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"
-            + " LEFT JOIN `authors` `a` ON `a`.`id` = `ba`.`author_id`" + " LEFT JOIN `tags` `t` ON `t`.`id` = `bt`.`tag_id`"
-            + " LEFT JOIN `categories` `c` ON `c`.`id` = `bc`.`category_id`" + " LEFT JOIN `users` `u` ON `u`.`id` = `b`.`borrower_id`"
-            + " WHERE 1 = 1");
+    private List<Long> queryBookIdsByCategoryIds(BOSearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_categories WHERE category_id IN(?)", BookIdView.class, request.categoryIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
+    }
 
-        return sql;
+    private List<Long> queryBookIdsByAuthorIds(BOSearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_authors WHERE author_id IN(?)", BookIdView.class, request.authorIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
     }
 
     private void insertBookAuthors(Long id, List<Long> authorIds) {

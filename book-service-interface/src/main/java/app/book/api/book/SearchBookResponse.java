@@ -10,41 +10,43 @@ import java.util.List;
  * @author zoo
  */
 public class SearchBookResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
-    @Property(name = "books")
     @NotNull
+    @Property(name = "books")
     public List<Book> books;
 
     public static class Book {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "name")
         @NotNull
         @NotBlank
+        @Property(name = "name")
         public String name;
 
-        @Property(name = "tag_name")
+        @NotNull
+        @Property(name = "tag_ids")
+        public List<Long> tagIds;
+
         @NotNull
         @NotBlank
-        public String tagName;
+        @Property(name = "description")
+        public String description;
 
-        @Property(name = "category_name")
         @NotNull
-        @NotBlank
-        public String categoryName;
+        @Property(name = "category_ids")
+        public List<Long> categoryIds;
 
-        @Property(name = "author_name")
         @NotNull
-        @NotBlank
-        public String authorName;
+        @Property(name = "author_ids")
+        public List<Long> authorIds;
 
+        @NotNull
         @Property(name = "status")
-        @NotNull
         public BookStatusView status;
     }
 }

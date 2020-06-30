@@ -6,46 +6,44 @@ import core.framework.api.validate.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author zoo
  */
 public class BOGetBookResponse {
-    @Property(name = "id")
     @NotNull
+    @Property(name = "id")
     public Long id;
 
-    @Property(name = "name")
     @NotNull
     @NotBlank
+    @Property(name = "name")
     public String name;
 
-    @Property(name = "tag_name")
     @NotNull
-    @NotBlank
-    public String tagName;
+    @Property(name = "tag_ids")
+    public List<Long> tagIds;
 
-    @Property(name = "description")
     @NotNull
     @NotBlank
+    @Property(name = "description")
     public String description;
 
-    @Property(name = "category_name")
     @NotNull
-    @NotBlank
-    public String categoryName;
+    @Property(name = "category_ids")
+    public List<Long> categoryIds;
 
-    @Property(name = "author_name")
     @NotNull
-    @NotBlank
-    public String authorName;
+    @Property(name = "author_ids")
+    public List<Long> authorIds;
 
+    @NotNull
     @Property(name = "status")
-    @NotNull
     public BookStatusView status;
 
-    @Property(name = "borrower_name")
-    public String borrowerName;
+    @Property(name = "borrower_id")
+    public Long borrowerId;
 
     @Property(name = "borrowed_at")
     public LocalDateTime borrowedAt;

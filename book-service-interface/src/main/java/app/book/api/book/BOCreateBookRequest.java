@@ -31,4 +31,9 @@ public class BOCreateBookRequest {
     @Property(name = "author_ids")
     @NotNull
     public List<Long> authorIds;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "operator")
+    public String operator;
 }

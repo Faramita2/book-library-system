@@ -6,17 +6,19 @@ import app.book.api.book.GetBookResponse;
 import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.book.domain.AuthorIdView;
 import app.book.book.domain.Book;
-import app.book.book.domain.BookCountView;
+import app.book.book.domain.BookIdView;
 import app.book.book.domain.BookStatus;
-import app.book.book.domain.BookView;
+import app.book.book.domain.CategoryIdView;
+import app.book.book.domain.TagIdView;
 import app.borrowrecord.api.BorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import core.framework.db.Database;
+import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
-import core.framework.util.Lists;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -40,31 +42,65 @@ public class BookService {
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
+        Query<Book> query = repository.select();
+        query.skip(request.skip);
+        query.limit(request.limit);
 
-        response.total = getSearchBooksTotal(request);
-        response.books = getPagedSearchBooks(request);
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
+        }
+
+        if (!Strings.isBlank(request.description)) {
+            query.where("description LIKE ?", request.description + "%");
+        }
+
+        if (request.authorIds != null && !request.authorIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByAuthorIds(request);
+            query.in("id", bookIds);
+        }
+
+        if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByCategoryIds(request);
+            query.in("id", bookIds);
+        }
+
+        if (request.tagIds != null && !request.tagIds.isEmpty()) {
+            List<Long> bookIds = queryBookIdsByTagIds(request);
+            query.in("id", bookIds);
+        }
+
+        response.total = query.count();
+        response.books = query.fetch().stream().map(book -> {
+            SearchBookResponse.Book view = new SearchBookResponse.Book();
+            view.id = book.id;
+            view.name = book.name;
+            view.tagIds = queryTagIdsByBookId(book.id);
+            view.description = book.description;
+            view.categoryIds = queryCategoryIdsByBookId(book.id);
+            view.authorIds = queryAuthorIdsByBookId(book.id);
+            view.status = BookStatusView.valueOf(book.status.name());
+            return view;
+        }).collect(Collectors.toList());
 
         return response;
     }
 
     public GetBookResponse get(Long id) {
-        StringBuilder sql = getSearchSql();
-        sql.append(" AND `b`.`id` = ?");
-        BookView view = database.selectOne(sql.toString(), BookView.class, id).orElseThrow(
+        Book book = repository.get(id).orElseThrow(
             () -> new NotFoundException(Strings.format("book not found, id = {}", id))
         );
 
         GetBookResponse response = new GetBookResponse();
-        response.id = view.id;
-        response.name = view.name;
-        response.description = view.description;
-        response.authorName = view.authorName == null ? "-" : view.authorName;
-        response.categoryName = view.categoryName == null ? "-" : view.categoryName;
-        response.tagName = view.tagName == null ? "-" : view.tagName;
-        response.status = BookStatusView.valueOf(view.status.name());
-        response.borrowerName = view.borrowerName == null ? "-" : view.borrowerName;
-        response.borrowedAt = view.borrowedAt;
-        response.returnAt = view.returnAt;
+        response.id = book.id;
+        response.name = book.name;
+        response.description = book.description;
+        response.authorIds = queryAuthorIdsByBookId(id);
+        response.categoryIds = queryCategoryIdsByBookId(id);
+        response.tagIds = queryTagIdsByBookId(id);
+        response.status = BookStatusView.valueOf(book.status.name());
+        response.borrowerId = book.borrowerId;
+        response.borrowedAt = book.borrowedAt;
+        response.returnAt = book.returnAt == null ? null : book.returnAt.toLocalDate();
 
         return response;
     }
@@ -118,96 +154,52 @@ public class BookService {
         repository.update(book);
     }
 
-    private Long getSearchBooksTotal(SearchBookRequest request) {
-        StringBuilder sql = getCountSearchSql();
-        List<Object> args = Lists.newArrayList();
-
-        buildSqlWhere(request, sql, args);
-
-        logger.info("execute sql = {}", sql);
-        return database.selectOne(sql.toString(), BookCountView.class, args.toArray()).orElseGet(() -> {
-            BookCountView view = new BookCountView();
-            view.total = 0L;
-
-            return view;
-        }).total;
+    private List<Long> queryTagIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT tag_id FROM book_tags WHERE book_id = ?)", TagIdView.class, bookId)
+            .stream()
+            .map(tagIdView -> tagIdView.tagId)
+            .collect(Collectors.toList());
     }
 
-    private List<SearchBookResponse.Book> getPagedSearchBooks(SearchBookRequest request) {
-        StringBuilder sql = getSearchSql();
-        List<Object> args = Lists.newArrayList();
-
-        buildSqlWhere(request, sql, args);
-
-        sql.append(" LIMIT ?, ?");
-        args.add(request.skip);
-        args.add(request.limit);
-
-        return database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
-            SearchBookResponse.Book book = new SearchBookResponse.Book();
-
-            book.id = searchBook.id;
-            book.name = searchBook.name;
-            book.status = BookStatusView.valueOf(searchBook.status.name());
-            book.authorName = searchBook.authorName == null ? "-" : searchBook.authorName;
-            book.categoryName = searchBook.categoryName == null ? "-" : searchBook.categoryName;
-            book.tagName = searchBook.tagName == null ? "-" : searchBook.tagName;
-
-            return book;
-        }).collect(Collectors.toList());
+    private List<Long> queryCategoryIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT category_id FROM book_categories WHERE book_id = ?)", CategoryIdView.class, bookId)
+            .stream()
+            .map(categoryIdView -> categoryIdView.categoryId)
+            .collect(Collectors.toList());
     }
 
-    private void buildSqlWhere(SearchBookRequest request, StringBuilder sql, List<Object> args) {
-        if (request.name != null) {
-            sql.append(" AND `b`.`name` like ?");
-            args.add(request.name + "%");
-        }
-
-        if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            sql.append(" AND `t`.`id` IN(?)");
-            args.add(request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
-
-        if (request.description != null) {
-            sql.append(" AND `b`.`description` like ?");
-            args.add(request.description + "%");
-        }
-
-        if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            sql.append(" AND `c`.`id` IN(?)");
-            args.add(request.categoryIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
-
-        if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            sql.append(" AND `a`.`id` IN(?)");
-            args.add(request.authorIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
-        }
+    private List<Long> queryAuthorIdsByBookId(Long bookId) {
+        return database.select(
+            "SELECT author_id FROM book_authors WHERE book_id = ?)", AuthorIdView.class, bookId)
+            .stream()
+            .map(authorIdView -> authorIdView.authorId)
+            .collect(Collectors.toList());
     }
 
-    private StringBuilder getCountSearchSql() {
-        StringBuilder sql = new StringBuilder(600);
-        sql.append("SELECT"
-            + " COUNT(`b`.`id`) `total`"
-            + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
-            + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"
-            + " LEFT JOIN `authors` `a` ON `a`.`id` = `ba`.`author_id`" + " LEFT JOIN `tags` `t` ON `t`.`id` = `bt`.`tag_id`"
-            + " LEFT JOIN `categories` `c` ON `c`.`id` = `bc`.`category_id`" + " LEFT JOIN `users` `u` ON `u`.`id` = `b`.`borrower_id`"
-            + " WHERE 1 = 1");
-
-        return sql;
+    private List<Long> queryBookIdsByTagIds(SearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_tags WHERE tag_id IN(?)", BookIdView.class, request.tagIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
     }
 
-    private StringBuilder getSearchSql() {
-        StringBuilder sql = new StringBuilder(690);
-        sql.append("SELECT"
-            + " `b`.`id` `id`, `b`.`name` `name`, `b`.`description` `description`, `b`.`status` `status`,`b`.`borrowed_at` `borrowed_at`, `b`.`return_at` `return_at`,"
-            + " `a`.`name` `author_name`, `c`.`name` `category_name`, `t`.`name` `tag_name`, `u`.`username` `borrower_name`"
-            + " FROM `books` `b`" + " LEFT JOIN `book_authors` `ba` ON `b`.`id` = `ba`.`book_id`"
-            + " LEFT JOIN `book_tags` `bt` ON `b`.`id` = `bt`.`book_id`" + " LEFT JOIN `book_categories` `bc` ON `b`.`id` = `bc`.`book_id`"
-            + " LEFT JOIN `authors` `a` ON `a`.`id` = `ba`.`author_id`" + " LEFT JOIN `tags` `t` ON `t`.`id` = `bt`.`tag_id`"
-            + " LEFT JOIN `categories` `c` ON `c`.`id` = `bc`.`category_id`" + " LEFT JOIN `users` `u` ON `u`.`id` = `b`.`borrower_id`"
-            + " WHERE 1 = 1");
-
-        return sql;
+    private List<Long> queryBookIdsByCategoryIds(SearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_categories WHERE category_id IN(?)", BookIdView.class, request.categoryIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
     }
+
+    private List<Long> queryBookIdsByAuthorIds(SearchBookRequest request) {
+        return database.select(
+            "SELECT book_id FROM book_authors WHERE author_id IN(?)", BookIdView.class, request.authorIds)
+            .stream()
+            .map(bookIdView -> bookIdView.bookId)
+            .collect(Collectors.toList());
+    }
+
 }
