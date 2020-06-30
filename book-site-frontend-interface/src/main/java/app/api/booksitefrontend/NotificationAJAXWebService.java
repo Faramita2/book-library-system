@@ -1,7 +1,6 @@
 package app.api.booksitefrontend;
 
 import app.api.booksitefrontend.notification.DeleteBatchNotificationAJAXRequest;
-import app.api.booksitefrontend.notification.DeleteNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXResponse;
 import core.framework.api.web.service.DELETE;
@@ -19,7 +18,7 @@ public interface NotificationAJAXWebService {
 
     @DELETE
     @Path("/ajax/notification/:id")
-    void delete(@PathParam("id") Long id, DeleteNotificationAJAXRequest request);
+    void delete(@PathParam("id") Long id);
 
     @DELETE
     @Path("/ajax/notification")

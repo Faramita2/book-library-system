@@ -3,6 +3,7 @@ package app.booksitefrontend.notification.service;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXResponse;
 import app.notification.api.NotificationWebService;
+import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import core.framework.inject.Inject;
@@ -39,5 +40,14 @@ public class NotificationService {
         }).collect(Collectors.toList());
 
         return response;
+    }
+
+    public void delete(Long id) {
+        DeleteNotificationRequest req = new DeleteNotificationRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow();
+        req.userId = Long.valueOf(userId.get());
+        req.operator = "book-site-frontend";
+        notificationWebService.delete(id, req);
     }
 }

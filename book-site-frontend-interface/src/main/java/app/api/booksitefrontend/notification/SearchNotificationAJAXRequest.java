@@ -9,10 +9,6 @@ import core.framework.api.validate.NotNull;
  * @author meow
  */
 public class SearchNotificationAJAXRequest {
-    @Property(name = "user_id")
-    @NotNull
-    public Long userId;
-
     @Property(name = "skip")
     @NotNull
     @Min(0)
