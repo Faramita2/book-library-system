@@ -6,6 +6,7 @@ import app.book.author.domain.Author;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Strings;
 
 import java.util.stream.Collectors;
 
@@ -20,17 +21,16 @@ public class AuthorService {
         SearchAuthorResponse response = new SearchAuthorResponse();
 
         Query<Author> query = repository.select();
-        if (request.name != null) {
-            //TODO
+        if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", request.name + "%");
         }
 
         response.total = query.count();
-        response.authors = query.fetch().parallelStream().map(a -> {
-            SearchAuthorResponse.Author author = new SearchAuthorResponse.Author();
-            author.id = a.id;
-            author.name = a.name;
-            return author;
+        response.authors = query.fetch().parallelStream().map(author -> {
+            SearchAuthorResponse.Author view = new SearchAuthorResponse.Author();
+            view.id = author.id;
+            view.name = author.name;
+            return view;
         }).collect(Collectors.toList());
         return response;
     }

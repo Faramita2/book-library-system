@@ -24,10 +24,11 @@ public class BOCategoryService {
     public void create(BOCreateCategoryRequest request) {
         Category category = new Category();
         category.name = request.name;
-        category.createdAt = LocalDateTime.now();
-        category.updatedAt = LocalDateTime.now();
-        category.createdBy = "BookService";
-        category.updatedBy = "BookService";
+        LocalDateTime now = LocalDateTime.now();
+        category.createdAt = now;
+        category.updatedAt = now;
+        category.createdBy = request.operator;
+        category.updatedBy = request.operator;
 
         repository.insert(category).orElseThrow();
     }
@@ -35,9 +36,8 @@ public class BOCategoryService {
     public BOSearchCategoryResponse search(BOSearchCategoryRequest request) {
         Query<Category> query = repository.select();
 
-        //TODO
-        if (request.name != null) {
-            query.where("name like ?%", request.name);
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
         }
 
         query.skip(request.skip);
@@ -45,25 +45,26 @@ public class BOCategoryService {
 
         BOSearchCategoryResponse response = new BOSearchCategoryResponse();
         response.total = query.count();
-        response.categories = query.fetch().parallelStream().map(a -> {
-            BOSearchCategoryResponse.Category category = new BOSearchCategoryResponse.Category();
-            category.id = a.id;
-            category.name = a.name;
-
-            return category;
+        response.categories = query.fetch().parallelStream().map(category -> {
+            BOSearchCategoryResponse.Category view = new BOSearchCategoryResponse.Category();
+            view.id = category.id;
+            view.name = category.name;
+            return view;
         }).collect(Collectors.toList());
 
         return response;
     }
 
     public void update(Long id, BOUpdateCategoryRequest request) {
-        Category category = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id)));
+        Category category = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("category not found, id = {}", id)));
         category.name = request.name;
         repository.partialUpdate(category);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id)));
+        repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("category not found, id = {}", id)));
         repository.delete(id);
     }
 }

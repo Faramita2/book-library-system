@@ -26,17 +26,16 @@ public class BOAuthorService {
         author.name = request.name;
         author.createdAt = LocalDateTime.now();
         author.updatedAt = LocalDateTime.now();
-        author.createdBy = "BookService";
-        author.updatedBy = "BookService";
+        author.createdBy = request.operator;
+        author.updatedBy = request.operator;
 
         repository.insert(author).orElseThrow();
     }
 
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
         Query<Author> query = repository.select();
-        //TODO
-        if (request.name != null) {
-            query.where("name like ?%", request.name);
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
         }
 
         query.skip(request.skip);
@@ -44,25 +43,27 @@ public class BOAuthorService {
 
         BOSearchAuthorResponse response = new BOSearchAuthorResponse();
         response.total = query.count();
-        response.authors = query.fetch().parallelStream().map(a -> {
-            BOSearchAuthorResponse.Author author = new BOSearchAuthorResponse.Author();
-            author.id = a.id;
-            author.name = a.name;
+        response.authors = query.fetch().parallelStream().map(author -> {
+            BOSearchAuthorResponse.Author view = new BOSearchAuthorResponse.Author();
+            view.id = author.id;
+            view.name = author.name;
 
-            return author;
+            return view;
         }).collect(Collectors.toList());
 
         return response;
     }
 
     public void update(Long id, BOUpdateAuthorRequest request) {
-        Author author = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id)));
+        Author author = repository.get(id).orElseThrow(()
+            -> new NotFoundException(Strings.format("author not found, id = {}", id)));
         author.name = request.name;
         repository.partialUpdate(author);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id)));
+        repository.get(id).orElseThrow(()
+            -> new NotFoundException(Strings.format("author not found, id = {}", id)));
         repository.delete(id);
     }
 }

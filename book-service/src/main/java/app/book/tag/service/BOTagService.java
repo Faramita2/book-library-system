@@ -24,11 +24,11 @@ public class BOTagService {
     public void create(BOCreateTagRequest request) {
         Tag tag = new Tag();
         tag.name = request.name;
-        tag.createdAt = LocalDateTime.now();
-        tag.updatedAt = LocalDateTime.now();
-        //TODO
-        tag.createdBy = "BookService";
-        tag.updatedBy = "BookService";
+        LocalDateTime now = LocalDateTime.now();
+        tag.createdAt = now;
+        tag.updatedAt = now;
+        tag.createdBy = request.operator;
+        tag.updatedBy = request.operator;
 
         repository.insert(tag).orElseThrow();
     }
@@ -36,8 +36,8 @@ public class BOTagService {
     public BOSearchTagResponse search(BOSearchTagRequest request) {
         Query<Tag> query = repository.select();
 
-        if (request.name != null) {
-            query.where("name like ?", request.name + "%");
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
         }
 
         query.skip(request.skip);
@@ -45,25 +45,26 @@ public class BOTagService {
 
         BOSearchTagResponse response = new BOSearchTagResponse();
         response.total = query.count();
-        response.tags = query.fetch().parallelStream().map(a -> {
-            BOSearchTagResponse.Tag tag = new BOSearchTagResponse.Tag();
-            tag.id = a.id;
-            tag.name = a.name;
-
-            return tag;
+        response.tags = query.fetch().parallelStream().map(tag -> {
+            BOSearchTagResponse.Tag view = new BOSearchTagResponse.Tag();
+            view.id = tag.id;
+            view.name = tag.name;
+            return view;
         }).collect(Collectors.toList());
 
         return response;
     }
 
     public void update(Long id, BOUpdateTagRequest request) {
-        Tag tag = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id)));
+        Tag tag = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("tag not found, id = {}", id)));
         tag.name = request.name;
         repository.partialUpdate(tag);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id)));
+        repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("tag not found, id = {}", id)));
         repository.delete(id);
     }
 }

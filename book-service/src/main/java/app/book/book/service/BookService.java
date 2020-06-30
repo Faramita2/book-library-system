@@ -98,7 +98,7 @@ public class BookService {
         request.borrowerId = book.borrowerId;
         request.borrowedAt = book.borrowedAt;
         request.returnAt = book.returnAt;
-        request.createdBy = book.updatedBy;
+        request.operator = book.updatedBy;
 
         borrowRecordWebService.create(request);
     }

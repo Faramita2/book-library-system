@@ -6,6 +6,7 @@ import app.book.category.domain.Category;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Strings;
 
 import java.util.stream.Collectors;
 
@@ -18,20 +19,17 @@ public class CategoryService {
 
     public SearchCategoryResponse search(SearchCategoryRequest request) {
         SearchCategoryResponse response = new SearchCategoryResponse();
-
         Query<Category> query = repository.select();
-        if (request.name != null) {
-            //TODO
-            query.where("`name` like ?", request.name + "%");
+        if (!Strings.isBlank(request.name)) {
+            query.where("name LIKE ?", request.name + "%");
         }
 
         response.total = query.count();
-        response.categories = query.fetch().parallelStream().map(a -> {
-            SearchCategoryResponse.Category category = new SearchCategoryResponse.Category();
-            category.id = a.id;
-            category.name = a.name;
-
-            return category;
+        response.categories = query.fetch().parallelStream().map(category -> {
+            SearchCategoryResponse.Category view = new SearchCategoryResponse.Category();
+            view.id = category.id;
+            view.name = category.name;
+            return view;
         }).collect(Collectors.toList());
 
         return response;

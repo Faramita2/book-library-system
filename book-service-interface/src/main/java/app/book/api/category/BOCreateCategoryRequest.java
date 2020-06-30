@@ -8,8 +8,13 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOCreateCategoryRequest {
-    @Property(name = "name")
     @NotNull
     @NotBlank
+    @Property(name = "name")
     public String name;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "operator")
+    public String operator;
 }
