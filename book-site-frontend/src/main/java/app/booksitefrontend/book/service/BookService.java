@@ -15,6 +15,7 @@ import app.book.api.author.SearchAuthorRequest;
 import app.book.api.book.BookStatusView;
 import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
+import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.category.SearchCategoryRequest;
@@ -163,5 +164,14 @@ public class BookService {
         req.operator = "book-site-frontend";
         req.returnAt = request.returnAt;
         bookWebService.borrow(id, req);
+    }
+
+    public void returnBook(Long id) {
+        ReturnBookRequest req = new ReturnBookRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow();
+        req.userId = Long.valueOf(userId.get());
+        req.operator = "book-site-frontend";
+        bookWebService.returnBook(id, req);
     }
 }

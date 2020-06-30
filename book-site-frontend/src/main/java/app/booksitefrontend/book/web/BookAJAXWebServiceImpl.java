@@ -44,6 +44,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public void returnBook(Long id) {
-
+        ActionLogContext.put("book_id", id);
+        service.returnBook(id);
     }
 }
