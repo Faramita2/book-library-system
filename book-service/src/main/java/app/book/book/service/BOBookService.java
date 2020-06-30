@@ -98,20 +98,20 @@ public class BOBookService {
             bookRepository.partialUpdate(book);
 
             List<Long> authorIds = request.authorIds;
-            if (!authorIds.isEmpty()) {
+            if (authorIds != null && !authorIds.isEmpty()) {
                 database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
                 insertBookAuthors(id, authorIds);
             }
 
             List<Long> tagIds = request.tagIds;
-            if (!tagIds.isEmpty()) {
-                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+            if (tagIds != null && !tagIds.isEmpty()) {
+                database.execute("DELETE FROM `book_tags` WHERE `book_id` = ?", id);
                 insertBookTags(id, tagIds);
             }
 
             List<Long> categoryIds = request.categoryIds;
-            if (!categoryIds.isEmpty()) {
-                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+            if (categoryIds != null && !categoryIds.isEmpty()) {
+                database.execute("DELETE FROM `book_categories` WHERE `book_id` = ?", id);
                 insertBookCategories(id, categoryIds);
             }
 
