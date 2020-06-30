@@ -1,12 +1,14 @@
 package app.booksite.user.service;
 
 import app.api.booksite.user.CreateUserAJAXRequest;
+import app.api.booksite.user.ResetUserPasswordAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXResponse;
 import app.api.booksite.user.UpdateUserAJAXRequest;
 import app.api.booksite.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
+import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -63,5 +65,13 @@ public class UserService {
         req.status = UserStatusView.valueOf(request.status.name());
         req.operator = "book-site";
         userWebService.update(id, req);
+    }
+
+    public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
+        BOResetUserPasswordRequest req = new BOResetUserPasswordRequest();
+        req.password = request.password;
+        req.passwordConfirm = request.passwordConfirm;
+        req.operator = "book-site";
+        userWebService.resetPassword(id, req);
     }
 }

@@ -35,6 +35,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
-
+        ActionLogContext.put("user_id", id);
+        service.resetPassword(id, request);
     }
 }
