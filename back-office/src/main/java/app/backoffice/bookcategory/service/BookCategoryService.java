@@ -1,8 +1,10 @@
 package app.backoffice.bookcategory.service;
 
+import app.api.backoffice.bookcategory.CreateBookCategoryAJAXRequest;
 import app.api.backoffice.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.backoffice.bookcategory.SearchBookCategoryAJAXResponse;
 import app.book.api.BOCategoryWebService;
+import app.book.api.category.BOCreateCategoryRequest;
 import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
 import core.framework.inject.Inject;
@@ -35,5 +37,11 @@ public class BookCategoryService {
         }
 
         return response;
+    }
+
+    public void create(CreateBookCategoryAJAXRequest request) {
+        BOCreateCategoryRequest req = new BOCreateCategoryRequest();
+        req.name = request.name;
+        boCategoryWebService.create(req);
     }
 }

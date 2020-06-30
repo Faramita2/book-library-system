@@ -22,7 +22,7 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
 
     @Override
     public void create(CreateBookCategoryAJAXRequest request) {
-
+        service.create(request);
     }
 
     @Override
