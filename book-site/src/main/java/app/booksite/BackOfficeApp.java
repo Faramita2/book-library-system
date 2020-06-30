@@ -5,6 +5,7 @@ import app.book.api.BOAuthorWebService;
 import app.book.api.BOBookWebService;
 import app.book.api.BOCategoryWebService;
 import app.book.api.BOTagWebService;
+import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.user.api.BOUserWebService;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
@@ -23,6 +24,7 @@ public class BackOfficeApp extends App {
         api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
+        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
 
         load(new AdminModule());
         load(new BookModule());

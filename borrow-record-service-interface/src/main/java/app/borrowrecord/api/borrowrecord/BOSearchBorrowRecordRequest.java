@@ -9,6 +9,7 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOSearchBorrowRecordRequest {
+    @NotNull
     @Property(name = "book_id")
     public Long bookId;
 

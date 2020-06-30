@@ -10,6 +10,6 @@ import core.framework.api.web.service.Path;
  */
 public interface BorrowRecordAJAXWebService {
     @PUT
-    @Path("/borrow-record")
+    @Path("/ajax/borrow-record")
     SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request);
 }

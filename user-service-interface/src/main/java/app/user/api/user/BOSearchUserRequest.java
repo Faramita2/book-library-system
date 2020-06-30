@@ -1,6 +1,8 @@
 package app.user.api.user;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.Max;
+import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
 import java.util.List;
@@ -9,14 +11,6 @@ import java.util.List;
  * @author zoo
  */
 public class BOSearchUserRequest {
-    @Property(name = "skip")
-    @NotNull
-    public Integer skip = 0;
-
-    @Property(name = "limit")
-    @NotNull
-    public Integer limit = 1000;
-
     @Property(name = "ids")
     public List<Long> ids;
 
@@ -28,4 +22,14 @@ public class BOSearchUserRequest {
 
     @Property(name = "status")
     public UserStatusView status;
+
+    @NotNull
+    @Property(name = "skip")
+    @Min(0)
+    public Integer skip;
+
+    @NotNull
+    @Property(name = "limit")
+    @Max(1000)
+    public Integer limit;
 }

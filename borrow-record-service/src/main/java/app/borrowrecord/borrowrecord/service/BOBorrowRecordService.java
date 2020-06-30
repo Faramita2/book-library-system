@@ -7,7 +7,6 @@ import com.mongodb.client.model.Filters;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
-import org.bson.conversions.Bson;
 
 import java.util.stream.Collectors;
 
@@ -24,14 +23,9 @@ public class BOBorrowRecordService {
 
         query.skip = request.skip;
         query.limit = request.limit;
+        query.filter = Filters.eq("book_id", request.bookId);
 
-        Bson filter = query.filter;
-        if (request.bookId != null) {
-            filter = Filters.eq("book_id", request.bookId);
-            query.filter = filter;
-        }
-
-        response.total = collection.count(filter);
+        response.total = collection.count(query.filter);
         response.records = collection.find(query).stream().map(borrowRecord -> {
             BOSearchBorrowRecordResponse.Record view = new BOSearchBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
