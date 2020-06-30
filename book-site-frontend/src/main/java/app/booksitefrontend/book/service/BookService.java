@@ -1,6 +1,7 @@
 package app.booksitefrontend.book.service;
 
 import app.api.booksitefrontend.book.BookStatusAJAXView;
+import app.api.booksitefrontend.book.BorrowBookAJAXRequest;
 import app.api.booksitefrontend.book.GetBookAJAXResponse;
 import app.api.booksitefrontend.book.SearchBookAJAXRequest;
 import app.api.booksitefrontend.book.SearchBookAJAXResponse;
@@ -12,6 +13,7 @@ import app.book.api.CategoryWebService;
 import app.book.api.TagWebService;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.book.BookStatusView;
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
@@ -22,6 +24,7 @@ import core.framework.inject.Inject;
 import core.framework.web.WebContext;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -150,5 +153,15 @@ public class BookService {
         response.authorNames = queryAuthorNames(resp.authorIds);
 
         return response;
+    }
+
+    public void borrow(Long id, BorrowBookAJAXRequest request) {
+        BorrowBookRequest req = new BorrowBookRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow();
+        req.userId = Long.valueOf(userId.get());
+        req.operator = "book-site-frontend";
+        req.returnAt = request.returnAt;
+        bookWebService.borrow(id, req);
     }
 }

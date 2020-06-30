@@ -1,6 +1,7 @@
 package app.booksitefrontend.book.web;
 
 import app.api.booksitefrontend.BookAJAXWebService;
+import app.api.booksitefrontend.book.BorrowBookAJAXRequest;
 import app.api.booksitefrontend.book.GetBookAJAXResponse;
 import app.api.booksitefrontend.book.SearchBookAJAXRequest;
 import app.api.booksitefrontend.book.SearchBookAJAXResponse;
@@ -9,6 +10,7 @@ import app.api.booksitefrontend.book.SearchBorrowedBookAJAXResponse;
 import app.booksitefrontend.book.service.BookService;
 import app.booksitefrontend.user.web.UserPass;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author meow
@@ -35,8 +37,9 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public void borrow(Long id) {
-
+    public void borrow(Long id, BorrowBookAJAXRequest request) {
+        ActionLogContext.put("book_id", id);
+        service.borrow(id, request);
     }
 
     @Override
