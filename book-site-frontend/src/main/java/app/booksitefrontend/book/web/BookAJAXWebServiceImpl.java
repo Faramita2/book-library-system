@@ -28,9 +28,10 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
         return service.searchBorrowed(request);
     }
 
+    @UserPass
     @Override
     public GetBookAJAXResponse get(Long id) {
-        return null;
+        return service.get(id);
     }
 
     @Override
