@@ -1,6 +1,7 @@
 package app.notification.notification.web;
 
 import app.notification.api.NotificationWebService;
+import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
@@ -20,12 +21,12 @@ public class NotificationWebServiceImpl implements NotificationWebService {
     }
 
     @Override
-    public void delete(Long id) {
-        service.delete(id);
+    public void delete(Long id, DeleteNotificationRequest request) {
+        service.delete(id, request);
     }
 
     @Override
-    public void deleteBatch(DeleteNotificationRequest request) {
+    public void deleteBatch(DeleteBatchNotificationRequest request) {
         service.deleteBatch(request);
     }
 }

@@ -1,5 +1,6 @@
 package app.notification.api;
 
+import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
@@ -18,9 +19,9 @@ public interface NotificationWebService {
 
     @DELETE
     @Path("/notification")
-    void deleteBatch(DeleteNotificationRequest request);
+    void deleteBatch(DeleteBatchNotificationRequest request);
 
     @DELETE
     @Path("/notification/:id")
-    void delete(@PathParam("id") Long id);
+    void delete(@PathParam("id") Long id, DeleteNotificationRequest request);
 }

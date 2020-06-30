@@ -1,5 +1,6 @@
 package app.notification.notification.service;
 
+import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
@@ -22,11 +23,11 @@ public class NotificationService {
     @Inject
     Repository<Notification> repository;
 
-    public void delete(Long id) {
+    public void delete(Long id, DeleteNotificationRequest request) {
         repository.delete(id);
     }
 
-    public void deleteBatch(DeleteNotificationRequest request) {
+    public void deleteBatch(DeleteBatchNotificationRequest request) {
         repository.batchDelete(List.of(request.ids));
     }
 
