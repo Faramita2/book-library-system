@@ -28,8 +28,4 @@ public interface BookCategoryAJAXWebService {
     @PUT
     @Path("/ajax/book-category/:id")
     void update(@PathParam("id") Long id, UpdateBookCategoryAJAXRequest request);
-
-    @DELETE
-    @Path("/ajax/book-category/:id")
-    void delete(@PathParam("id") Long id);
 }
