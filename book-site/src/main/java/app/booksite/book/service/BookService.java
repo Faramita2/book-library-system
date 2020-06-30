@@ -123,7 +123,7 @@ public class BookService {
         req.description = request.description;
         req.categoryIds = request.categoryIds;
         req.authorIds = request.authorIds;
-        req.operator = request.operator;
+        req.operator = "book-site";
         bookWebService.create(req);
     }
 
@@ -134,7 +134,7 @@ public class BookService {
         req.description = request.description;
         req.categoryIds = request.categoryIds;
         req.authorIds = request.authorIds;
-        req.operator = request.operator;
+        req.operator = "book-site";
         bookWebService.update(id, req);
     }
 }

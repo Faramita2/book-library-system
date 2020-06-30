@@ -31,9 +31,4 @@ public class CreateBookAJAXRequest {
     @NotNull
     @Property(name = "author_ids")
     public List<Long> authorIds;
-
-    @NotNull
-    @NotBlank
-    @Property(name = "operator")
-    public String operator;
 }
