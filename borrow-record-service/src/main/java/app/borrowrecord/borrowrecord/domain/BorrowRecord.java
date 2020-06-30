@@ -26,11 +26,7 @@ public class BorrowRecord {
     @Field(name = "borrower_id")
     @NotNull
     public Long borrowerId;
-
-    @Field(name = "book_name")
-    @NotNull
-    @NotBlank
-    public String bookName;
+    //TODO
 
     @Field(name = "borrowed_at")
     @NotNull

@@ -1,6 +1,7 @@
 package app.notification.api.notification.kafka;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 import java.time.LocalDateTime;
@@ -24,4 +25,9 @@ public class ReturnBorrowedBookMessage {
     @Property(name = "return_at")
     @NotNull
     public LocalDateTime returnAt;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "operator")
+    public String operator;
 }

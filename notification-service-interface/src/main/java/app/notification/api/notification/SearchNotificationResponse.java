@@ -14,11 +14,12 @@ public class SearchNotificationResponse {
     @NotNull
     public Long total;
 
-    @Property(name = "notifications")
     @NotNull
+    @Property(name = "notifications")
     public List<Notification> notifications;
 
     public static class Notification {
+        @NotNull
         @Property(name = "id")
         public Long id;
 

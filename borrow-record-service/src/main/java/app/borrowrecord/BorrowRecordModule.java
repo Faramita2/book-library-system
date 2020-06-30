@@ -13,7 +13,7 @@ import app.user.api.BOUserWebService;
 import core.framework.module.Module;
 import core.framework.mongo.module.MongoConfig;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 /**
  * @author zoo
@@ -25,14 +25,17 @@ public class BorrowRecordModule extends Module {
         config.uri(requiredProperty("sys.mongo.uri"));
         config.collection(BorrowRecord.class);
 
+        //TODO
         api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
+
         bind(BOBorrowRecordService.class);
         bind(BorrowRecordService.class);
+
         api().service(BorrowRecordWebService.class, bind(BorrowRecordWebServiceImpl.class));
         api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
+
         kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
-        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalDate.now().atStartOfDay().plusDays(1).toLocalTime());
-        // test
-        // schedule().fixedRate("find-need-return-record", bind(FindNeedReturnRecordJob.class), Duration.ofHours(1));
+        //TODO
+        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalTime.of(23,59));
     }
 }

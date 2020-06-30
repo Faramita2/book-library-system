@@ -141,9 +141,11 @@ public class BOBookService {
 
         buildSqlWhere(request, sql, args);
 
+
         sql.append(" LIMIT ?, ?");
         args.add(request.skip);
         args.add(request.limit);
+
 
         return database.select(sql.toString(), BookView.class, args.toArray()).stream().map(searchBook -> {
             BOSearchBookResponse.Book book = new BOSearchBookResponse.Book();
@@ -161,13 +163,15 @@ public class BOBookService {
     }
 
     private void buildSqlWhere(BOSearchBookRequest request, StringBuilder sql, List<Object> args) {
-        if (request.name != null) {
+        //TODO
+        if (!Strings.isBlank(request.name)) {
             sql.append(" AND `b`.`name` like ?%");
             args.add(request.name);
         }
 
         if (request.tagIds != null && !request.tagIds.isEmpty()) {
             sql.append(" AND `t`.`id` IN(?)");
+
             args.add(request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 

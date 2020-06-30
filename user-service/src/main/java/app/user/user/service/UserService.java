@@ -41,9 +41,6 @@ public class UserService {
         response.email = user.email;
         response.status = UserStatusView.valueOf(user.status.name());
 
-        webContext.request().session().get("user").ifPresent(u -> {
-            logger.info("login user, username = {}", JSON.fromJSON(User.class, u).username);
-        });
         return response;
     }
 
@@ -52,6 +49,7 @@ public class UserService {
             -> new BadRequestException("username or password incorrect"));
 
         try {
+            //TODO
             if (user.password.equals(getPasswordHash(request, user.salt))) {
                 webContext.request().session().set("user", JSON.toJSON(user));
             } else {

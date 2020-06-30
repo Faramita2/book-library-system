@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.gte;
-import static com.mongodb.client.model.Filters.lte;
+import static com.mongodb.client.model.Filters.lt;
 
 /**
  * @author zoo
@@ -27,7 +27,7 @@ public class BorrowRecordService {
         BorrowRecord borrowRecord = new BorrowRecord();
         borrowRecord.id = ObjectId.get();
         borrowRecord.bookId = request.bookId;
-        borrowRecord.bookName = request.bookName;
+        //TODO
         borrowRecord.borrowerId = request.borrowerId;
         borrowRecord.borrowedAt = request.borrowedAt;
         LocalDateTime now = LocalDateTime.now();
@@ -44,7 +44,8 @@ public class BorrowRecordService {
         query.projection = Projections.include("book_id", "borrower_id", "borrowed_at", "return_at");
         query.filter = and(
             gte("return_at", LocalDate.now().atStartOfDay().plusDays(1)),
-            lte("return_at", LocalDate.now().atStartOfDay().plusDays(2).minusSeconds(1))
+            //TODO
+            lt("return_at", LocalDate.now().atStartOfDay().plusDays(2))
         );
 
         return collection.find(query);

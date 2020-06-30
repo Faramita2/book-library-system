@@ -7,6 +7,7 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class SearchAuthorRequest {
+    //TODO
     @NotNull
     @Property(name = "skip")
     public Integer skip = 0;

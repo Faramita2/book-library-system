@@ -26,6 +26,7 @@ public class BOTagService {
         tag.name = request.name;
         tag.createdAt = LocalDateTime.now();
         tag.updatedAt = LocalDateTime.now();
+        //TODO
         tag.createdBy = "BookService";
         tag.updatedBy = "BookService";
 

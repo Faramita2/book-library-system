@@ -12,7 +12,6 @@ import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
-import core.framework.web.WebContext;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
 import org.slf4j.Logger;
@@ -37,8 +36,6 @@ public class BOAdminService {
     Repository<Admin> repository;
     @Inject
     Database database;
-    @Inject
-    WebContext webContext;
 
     public void create(BOCreateAdminRequest request) {
         repository.selectOne("account = ?", request.account).ifPresent(admin -> {
@@ -53,14 +50,15 @@ public class BOAdminService {
         admin.createdBy = request.createdBy;
         admin.updatedBy = request.createdBy;
 
+//        hashPassword(admin, request.password);
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start create admin ====");
-            hashPassword(admin, request.password);
             repository.insert(admin);
             transaction.commit();
             logger.warn("==== start create admin ====");
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("create admin failed: {}", e.getMessage());
+            //TODO
+//        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+//            logger.error("create admin failed: {}", e.getMessage());
         }
     }
 
@@ -68,7 +66,7 @@ public class BOAdminService {
         BOSearchAdminResponse response = new BOSearchAdminResponse();
         Query<Admin> query = repository.select();
 
-        if (request.account != null) {
+        if (request.account != null) {//TODO
             query.where("account like ?", request.account + "%");
         }
 
@@ -76,7 +74,7 @@ public class BOAdminService {
 
         query.skip(request.skip);
         query.limit(request.limit);
-        response.admins = query.fetch().stream().map(user -> {
+        response.admins = query.fetch().stream().map(user -> {//TODO
             BOSearchAdminResponse.Admin a = new BOSearchAdminResponse.Admin();
             a.id = user.id;
             a.account = user.account;

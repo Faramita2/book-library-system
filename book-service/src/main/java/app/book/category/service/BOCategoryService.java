@@ -35,6 +35,7 @@ public class BOCategoryService {
     public BOSearchCategoryResponse search(BOSearchCategoryRequest request) {
         Query<Category> query = repository.select();
 
+        //TODO
         if (request.name != null) {
             query.where("name like ?%", request.name);
         }

@@ -21,6 +21,7 @@ public class CategoryService {
 
         Query<Category> query = repository.select();
         if (request.name != null) {
+            //TODO
             query.where("`name` like ?", request.name + "%");
         }
 

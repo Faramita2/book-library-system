@@ -15,6 +15,7 @@ import core.framework.api.web.service.Path;
 public interface BOAdminWebService {
     @POST
     @Path("/bo/admin")
+        //TODO
     void create(BOCreateAdminRequest request);
 
     @PUT

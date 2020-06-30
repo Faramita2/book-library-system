@@ -21,7 +21,8 @@ public class AuthorService {
 
         Query<Author> query = repository.select();
         if (request.name != null) {
-            query.where("`name` like ?", request.name + "%");
+            //TODO
+            query.where("name LIKE ?", request.name + "%");
         }
 
         response.total = query.count();
@@ -29,10 +30,8 @@ public class AuthorService {
             SearchAuthorResponse.Author author = new SearchAuthorResponse.Author();
             author.id = a.id;
             author.name = a.name;
-
             return author;
         }).collect(Collectors.toList());
-
         return response;
     }
 }
