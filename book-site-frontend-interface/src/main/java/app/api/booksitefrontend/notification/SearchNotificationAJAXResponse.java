@@ -10,8 +10,8 @@ import java.util.List;
  * @author meow
  */
 public class SearchNotificationAJAXResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
     @NotNull

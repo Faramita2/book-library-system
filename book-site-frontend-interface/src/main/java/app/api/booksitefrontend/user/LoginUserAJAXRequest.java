@@ -8,13 +8,13 @@ import core.framework.api.validate.NotNull;
  * @author meow
  */
 public class LoginUserAJAXRequest {
-    @Property(name = "username")
     @NotNull
     @NotBlank
+    @Property(name = "username")
     public String username;
 
-    @Property(name = "password")
     @NotNull
     @NotBlank
+    @Property(name = "password")
     public String password;
 }

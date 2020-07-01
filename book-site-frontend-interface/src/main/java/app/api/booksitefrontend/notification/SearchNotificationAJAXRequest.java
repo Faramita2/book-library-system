@@ -9,13 +9,13 @@ import core.framework.api.validate.NotNull;
  * @author meow
  */
 public class SearchNotificationAJAXRequest {
-    @Property(name = "skip")
     @NotNull
     @Min(0)
+    @Property(name = "skip")
     public Integer skip;
 
-    @Property(name = "limit")
     @NotNull
     @Max(1000)
+    @Property(name = "limit")
     public Integer limit;
 }

@@ -55,8 +55,8 @@ public class BookService {
         req.authorIds = request.authorIds;
         req.categoryIds = request.categoryIds;
 
-        if (req.status != null) {
-            BookStatusView.valueOf(request.status.name());
+        if (request.status != null) {
+            req.status = BookStatusView.valueOf(request.status.name());
         }
         SearchBookResponse resp = bookWebService.search(req);
         SearchBookAJAXResponse response = new SearchBookAJAXResponse();
@@ -73,6 +73,24 @@ public class BookService {
             view.status = BookStatusAJAXView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    public GetBookAJAXResponse get(Long id) {
+        GetBookResponse resp = bookWebService.get(id);
+        GetBookAJAXResponse response = new GetBookAJAXResponse();
+
+        response.id = resp.id;
+        response.name = resp.name;
+        response.description = resp.description;
+        response.status = BookStatusAJAXView.valueOf(resp.status.name());
+        response.borrowerName = resp.borrowerId != 0 ? userWebService.get(resp.borrowerId).username : null;
+        response.borrowedAt = resp.borrowedAt;
+        response.returnAt = resp.returnAt;
+        response.tagNames = queryTagNames(resp.tagIds);
+        response.categoryNames = queryCategoryNames(resp.categoryIds);
+        response.authorNames = queryAuthorNames(resp.authorIds);
 
         return response;
     }
@@ -108,6 +126,25 @@ public class BookService {
         return response;
     }
 
+    public void borrow(Long id, BorrowBookAJAXRequest request) {
+        BorrowBookRequest req = new BorrowBookRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow();
+        req.userId = Long.valueOf(userId.get());
+        req.operator = "book-site-frontend";
+        req.returnAt = request.returnAt;
+        bookWebService.borrow(id, req);
+    }
+
+    public void returnBook(Long id) {
+        ReturnBookRequest req = new ReturnBookRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow();
+        req.userId = Long.valueOf(userId.get());
+        req.operator = "book-site-frontend";
+        bookWebService.returnBook(id, req);
+    }
+
     private List<String> queryTagNames(List<Long> tagIds) {
         SearchTagRequest searchTagRequest = new SearchTagRequest();
         searchTagRequest.skip = 0;
@@ -136,42 +173,5 @@ public class BookService {
         return authorWebService.search(searchAuthorRequest).authors.stream()
             .map(author -> author.name)
             .collect(Collectors.toList());
-    }
-
-    public GetBookAJAXResponse get(Long id) {
-        GetBookResponse resp = bookWebService.get(id);
-        GetBookAJAXResponse response = new GetBookAJAXResponse();
-
-        response.id = resp.id;
-        response.name = resp.name;
-        response.description = resp.description;
-        response.status = BookStatusAJAXView.valueOf(resp.status.name());
-        response.borrowerName = resp.borrowerId != 0 ? userWebService.get(resp.borrowerId).username : null;
-        response.borrowedAt = resp.borrowedAt;
-        response.returnAt = resp.returnAt;
-        response.tagNames = queryTagNames(resp.tagIds);
-        response.categoryNames = queryCategoryNames(resp.categoryIds);
-        response.authorNames = queryAuthorNames(resp.authorIds);
-
-        return response;
-    }
-
-    public void borrow(Long id, BorrowBookAJAXRequest request) {
-        BorrowBookRequest req = new BorrowBookRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
-        req.userId = Long.valueOf(userId.get());
-        req.operator = "book-site-frontend";
-        req.returnAt = request.returnAt;
-        bookWebService.borrow(id, req);
-    }
-
-    public void returnBook(Long id) {
-        ReturnBookRequest req = new ReturnBookRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
-        req.userId = Long.valueOf(userId.get());
-        req.operator = "book-site-frontend";
-        bookWebService.returnBook(id, req);
     }
 }
