@@ -13,7 +13,7 @@ import core.framework.module.SystemModule;
 /**
  * @author zoo
  */
-public class BackOfficeApp extends App {
+public class BookSiteApp extends App {
     @Override
     protected void initialize() {
         load(new SystemModule("sys.properties"));

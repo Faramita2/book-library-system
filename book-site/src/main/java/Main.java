@@ -1,10 +1,10 @@
-import app.booksite.BackOfficeApp;
+import app.booksite.BookSiteApp;
 
 /**
  * @author zoo
  */
 public class Main {
     public static void main(String[] args) {
-        new BackOfficeApp().start();
+        new BookSiteApp().start();
     }
 }
