@@ -8,8 +8,8 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class CreateBookAuthorAJAXRequest {
-    @Property(name = "name")
     @NotNull
     @NotBlank
+    @Property(name = "name")
     public String name;
 }

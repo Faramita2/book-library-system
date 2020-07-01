@@ -10,25 +10,25 @@ import core.framework.api.validate.Pattern;
  * @author zoo
  */
 public class CreateUserAJAXRequest {
-    @Property(name = "username")
     @NotNull
     @NotBlank
+    @Property(name = "username")
     @Length(min = 6)
     public String username;
 
-    @Property(name = "email")
     @NotNull
     @NotBlank
+    @Property(name = "email")
     @Pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
     public String email;
 
-    @Property(name = "password")
     @NotNull
-    @Length(min = 6)
     @NotBlank
+    @Property(name = "password")
+    @Length(min = 6)
     public String password;
 
-    @Property(name = "status")
     @NotNull
+    @Property(name = "status")
     public UserStatusAJAXView status;
 }

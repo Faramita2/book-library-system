@@ -9,15 +9,15 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class ResetUserPasswordAJAXRequest {
-    @Property(name = "password")
     @NotNull
     @NotBlank
+    @Property(name = "password")
     @Length(min = 6)
     public String password;
 
-    @Property(name = "password_confirm")
     @NotNull
     @NotBlank
+    @Property(name = "password_confirm")
     @Length(min = 6)
     public String passwordConfirm;
 }

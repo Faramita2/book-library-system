@@ -11,39 +11,39 @@ import java.util.List;
  * @author zoo
  */
 public class SearchUserAJAXResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
-    @Property(name = "users")
     @NotNull
+    @Property(name = "users")
     public List<User> users;
 
     public static class User {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "username")
         @NotNull
         @NotBlank
+        @Property(name = "username")
         public String username;
 
-        @Property(name = "email")
         @NotNull
         @NotBlank
+        @Property(name = "email")
         public String email;
 
-        @Property(name = "status")
         @NotNull
+        @Property(name = "status")
         public UserStatusAJAXView status;
 
-        @Property(name = "created_at")
         @NotNull
+        @Property(name = "created_at")
         public LocalDateTime createdAt;
 
-        @Property(name = "updated_at")
         @NotNull
+        @Property(name = "updated_at")
         public LocalDateTime updatedAt;
     }
 }

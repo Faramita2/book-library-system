@@ -19,13 +19,13 @@ public class SearchBookCategoryAJAXResponse {
     public List<Category> categories;
 
     public static class Category {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "name")
         @NotNull
         @NotBlank
+        @Property(name = "name")
         public String name;
     }
 }

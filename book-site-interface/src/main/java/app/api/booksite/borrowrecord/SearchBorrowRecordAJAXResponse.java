@@ -12,38 +12,38 @@ import java.util.List;
  * @author zoo
  */
 public class SearchBorrowRecordAJAXResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
-    @Property(name = "records")
     @NotNull
+    @Property(name = "records")
     public List<Record> records;
 
     public static class Record {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public String id;
 
-        @Property(name = "book_name")
         @NotNull
+        @Property(name = "book_name")
         public String bookName;
 
-        @Property(name = "borrower_id")
         @NotNull
+        @Property(name = "borrower_id")
         public Long borrowerId;
 
-        @Property(name = "borrower_name")
         @NotNull
         @NotBlank
+        @Property(name = "borrower_name")
         public String borrowerName;
 
-        @Property(name = "borrowed_at")
         @NotNull
+        @Property(name = "borrowed_at")
         public LocalDateTime borrowedAt;
 
-        @Property(name = "return_at")
         @NotNull
+        @Property(name = "return_at")
         public LocalDate returnAt;
     }
 }
