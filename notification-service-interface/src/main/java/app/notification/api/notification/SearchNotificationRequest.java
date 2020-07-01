@@ -9,18 +9,18 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class SearchNotificationRequest {
-    @Property(name = "user_id")
     @NotNull
+    @Property(name = "user_id")
     public Long userId;
 
-    @Property(name = "skip")
     @NotNull
     @Min(0)
+    @Property(name = "skip")
     public Integer skip;
 
-    @Property(name = "limit")
     @NotNull
     @Max(1000)
+    @Property(name = "limit")
     public Integer limit;
 
 }

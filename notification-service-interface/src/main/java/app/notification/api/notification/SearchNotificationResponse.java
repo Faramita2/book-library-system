@@ -10,8 +10,8 @@ import java.util.List;
  * @author zoo
  */
 public class SearchNotificationResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
     @NotNull
@@ -23,9 +23,9 @@ public class SearchNotificationResponse {
         @Property(name = "id")
         public Long id;
 
-        @Property(name = "content")
         @NotNull
         @NotBlank
+        @Property(name = "content")
         public String content;
     }
 }

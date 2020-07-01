@@ -17,30 +17,30 @@ public class Notification {
     @PrimaryKey(autoIncrement = true)
     public Long id;
 
-    @Column(name = "user_id")
     @NotNull
+    @Column(name = "user_id")
     public Long userId;
 
-    @Column(name = "content")
     @NotNull
     @NotBlank
+    @Column(name = "content")
     public String content;
 
-    @Column(name = "created_at")
     @NotNull
+    @Column(name = "created_at")
     public LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @NotNull
+    @Column(name = "updated_at")
     public LocalDateTime updatedAt;
 
-    @Column(name = "created_by")
     @NotNull
     @NotBlank
+    @Column(name = "created_by")
     public String createdBy;
 
-    @Column(name = "updated_by")
     @NotNull
     @NotBlank
+    @Column(name = "updated_by")
     public String updatedBy;
 }
