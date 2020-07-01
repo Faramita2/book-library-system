@@ -17,45 +17,45 @@ public class User {
     @PrimaryKey(autoIncrement = true)
     public Long id;
 
-    @Column(name = "username")
     @NotNull
     @NotBlank
+    @Column(name = "username")
     public String username;
 
-    @Column(name = "email")
     @NotNull
     @NotBlank
+    @Column(name = "email")
     public String email;
 
-    @Column(name = "password")
     @NotNull
     @NotBlank
+    @Column(name = "password")
     public String password;
 
-    @Column(name = "salt")
     @NotNull
     @NotBlank
+    @Column(name = "salt")
     public String salt;
 
-    @Column(name = "status")
     @NotNull
+    @Column(name = "status")
     public UserStatus status;
 
-    @Column(name = "created_at")
     @NotNull
+    @Column(name = "created_at")
     public LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @NotNull
+    @Column(name = "updated_at")
     public LocalDateTime updatedAt;
 
-    @Column(name = "created_by")
     @NotNull
     @NotBlank
+    @Column(name = "created_by")
     public String createdBy;
 
-    @Column(name = "updated_by")
     @NotNull
     @NotBlank
+    @Column(name = "updated_by")
     public String updatedBy;
 }
