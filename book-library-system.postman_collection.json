@@ -1,0 +1,2129 @@
+{
+	"info": {
+		"_postman_id": "2dba153c-9c9c-4ffa-b078-a7c4c6f3ad80",
+		"name": "book-library-system",
+		"description": "book library system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "book-service",
+			"item": [
+				{
+					"name": "book",
+					"item": [
+						{
+							"name": "bo",
+							"item": [
+								{
+									"name": "bo get book",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}:9000/bo/book/1",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"bo",
+												"book",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo create book",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"water margin 2\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1],\r\n    \"operator\": \"book-site\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/bo/book",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"bo",
+												"book"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo update book",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1]\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/bo/book/3",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"bo",
+												"book",
+												"3"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo search books",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"category_ids\": [],\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/bo/book",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"bo",
+												"book"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "front",
+							"item": [
+								{
+									"name": "search book",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"water\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/book",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"book"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get book",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}:9000/book/1",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"book",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "borrow book",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_id\": 1,\r\n    \"return_at\": \"2020-07-30\",\r\n\t\"operator\": \"book-site-front\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/book/1/borrow",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"book",
+												"1",
+												"borrow"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "return book",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_id\": 1,\r\n    \"updated_by\": \"BookService\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9000/book/1/return",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9000",
+											"path": [
+												"book",
+												"1",
+												"return"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "author",
+					"item": [
+						{
+							"name": "bo create author",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"tom\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"author"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo search author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"author"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo update author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"jake\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/author/2",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"author",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo delete author",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/author/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"author",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"author"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "category",
+					"item": [
+						{
+							"name": "bo search category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo update category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"aa\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/category/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo delete category",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9000/bo/category/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo create category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"female\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"category"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "tag",
+					"item": [
+						{
+							"name": "bo create tag",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"good\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo search tag",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo update tag",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"bad\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/tag/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"tag",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo delete tag",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9000/bo/tag/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"tag",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search tag",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"tag"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "borrowed book",
+					"item": [
+						{
+							"name": "search borrowed book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/borrowed-book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"borrowed-book"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user-service",
+			"item": [
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "bo",
+							"item": [
+								{
+									"name": "bo create user",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"meoaawfa\",\r\n    \"password\": \"aaadaaa1\",\r\n    \"status\": \"INACTIVE\",\r\n    \"email\": \"dd@ddd.com\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9001/bo/user",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"bo",
+												"user"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo search user",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n\t\"skip\": 0,\r\n\t\"limit\": 1000\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9001/bo/user",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"bo",
+												"user"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo update user",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"status\": \"ACTIVE\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9001/bo/user/1",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"bo",
+												"user",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "bo reset user password",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"password\": \"1234567\",\r\n    \"password_confirm\": \"1234567\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9001/bo/user/1/reset-password",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"bo",
+												"user",
+												"1",
+												"reset-password"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "front",
+							"item": [
+								{
+									"name": "get user",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{url}}:9001/user/1",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"user",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "login user",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"username\": \"meowmeow\",\r\n    \"password\": \"7654321\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}:9001/user/login",
+											"host": [
+												"{{url}}"
+											],
+											"port": "9001",
+											"path": [
+												"user",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "borrow-record-service",
+			"item": [
+				{
+					"name": "front",
+					"item": [
+						{
+							"name": "create borrow record",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"book_id\": 1,\r\n    \"borrower_id\": 1,\r\n    \"book_name\": \"water margin\",\r\n    \"borrower_name\": \"a\",\r\n    \"borrowed_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"return_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"created_by\": \"self\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9003/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "bo",
+					"item": [
+						{
+							"name": "search record",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9003/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "notification-service",
+			"item": [
+				{
+					"name": "front",
+					"item": [
+						{
+							"name": "search notification",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9004/notification",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9004",
+									"path": [
+										"notification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete notification",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9004/notification?ids=2",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9004",
+									"path": [
+										"notification"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete batch notification",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "admin-service",
+			"item": [
+				{
+					"name": "bo create admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\",\r\n    \"operator\": \"self\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:9005/bo/admin",
+							"host": [
+								"{{url}}"
+							],
+							"port": "9005",
+							"path": [
+								"bo",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bo search admin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:9005/bo/admin",
+							"host": [
+								"{{url}}"
+							],
+							"port": "9005",
+							"path": [
+								"bo",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bo login admin",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:9005/bo/admin/login",
+							"host": [
+								"{{url}}"
+							],
+							"port": "9005",
+							"path": [
+								"bo",
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "book-site",
+			"item": [
+				{
+					"name": "admin",
+					"item": [
+						{
+							"name": "admin login",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/admin/login",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"admin",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-author",
+					"item": [
+						{
+							"name": "search book author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-author"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create book author",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"jay choua\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-author"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update book author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"aa\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-author/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-author",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-category",
+					"item": [
+						{
+							"name": "search book category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create book category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"fiction a\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update book category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"sad a\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-category/3",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-category",
+										"3"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-tag",
+					"item": [
+						{
+							"name": "search book tag",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create book tag",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"moving\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update book tag",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"go a\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-tag/2",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-tag",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book",
+					"item": [
+						{
+							"name": "search book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get book",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9006/ajax/book/3",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create book",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"test\",\r\n    \"tag_ids\": [1],\r\n    \"description\": \"test book\",\r\n    \"category_ids\": [1],\r\n    \"author_ids\": [1]\r\n\t\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"no operator\",\r\n    \"operator\": \"book-site\",\r\n    \"tag_ids\": [1, 2]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "borrow-record",
+					"item": [
+						{
+							"name": "search borrow record",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "create user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"email\": \"meow@qq.com\",\n\t\"password\": \"1234567\",\n\t\"status\": \"ACTIVE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/user",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"skip\": 0,\r\n\t\"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/user",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"status\": \"INACTIVE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/user/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset user password",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"password\": \"7654321\",\n\t\"password_confirm\": \"7654321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/user/1/reset-password",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"user",
+										"1",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "book-site-front",
+			"item": [
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "user login",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"password\": \"7654321\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/user/login",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"user",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book",
+					"item": [
+						{
+							"name": "search book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search borrowed book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book/borrowed",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book",
+										"borrowed"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get book",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/book/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "borrow book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"return_at\": \"2020-07-02\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book/2/borrow",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book",
+										"2",
+										"borrow"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "return book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book/2/return",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book",
+										"2",
+										"return"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-author",
+					"item": [
+						{
+							"name": "search book author",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-author"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-category",
+					"item": [
+						{
+							"name": "search book category",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-category"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "book-tag",
+					"item": [
+						{
+							"name": "search book tag",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-tag"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "notification",
+					"item": [
+						{
+							"name": "search notification",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/notification",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"notification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete notification",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/notification/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"notification",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete batch notification",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/notification?ids=1,2,3",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"notification"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "1,2,3"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dff94776-bb1b-4ad5-bd42-a653d5d1d30d",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0e039d0a-58f8-4c48-b5ae-41009d563bee",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f88ef8e7-2a39-41e5-99f7-40de41459b3b",
+			"key": "url",
+			"value": "https://localhost"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
