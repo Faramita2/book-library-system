@@ -8,12 +8,12 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOLoginAdminResponse {
-    @Property(name = "id")
     @NotNull
+    @Property(name = "id")
     public Long id;
 
-    @Property(name = "account")
     @NotNull
     @NotBlank
+    @Property(name = "account")
     public String account;
 }

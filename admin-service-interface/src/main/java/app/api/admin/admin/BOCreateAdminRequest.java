@@ -9,19 +9,19 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOCreateAdminRequest {
-    @Property(name = "account")
     @NotNull
     @NotBlank
+    @Property(name = "account")
     public String account;
 
-    @Property(name = "password")
     @NotNull
     @NotBlank
+    @Property(name = "password")
     @Length(min = 6)
     public String password;
 
-    @Property(name = "created_by")
     @NotNull
     @NotBlank
-    public String createdBy;
+    @Property(name = "operator")
+    public String operator;
 }

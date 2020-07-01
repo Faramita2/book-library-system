@@ -11,30 +11,30 @@ import java.util.List;
  * @author zoo
  */
 public class BOSearchAdminResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
-    @Property(name = "admins")
     @NotNull
+    @Property(name = "admins")
     public List<Admin> admins;
 
     public static class Admin {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "account")
         @NotNull
         @NotBlank
+        @Property(name = "account")
         public String account;
 
-        @Property(name = "created_at")
         @NotNull
+        @Property(name = "created_at")
         public LocalDateTime createdAt;
 
-        @Property(name = "updated_at")
         @NotNull
+        @Property(name = "updated_at")
         public LocalDateTime updatedAt;
     }
 }

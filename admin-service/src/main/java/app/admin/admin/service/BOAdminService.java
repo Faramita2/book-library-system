@@ -47,8 +47,8 @@ public class BOAdminService {
         LocalDateTime now = LocalDateTime.now();
         admin.createdAt = now;
         admin.updatedAt = now;
-        admin.createdBy = request.createdBy;
-        admin.updatedBy = request.createdBy;
+        admin.createdBy = request.operator;
+        admin.updatedBy = request.operator;
 
         hashPassword(admin, request.password);
         try (Transaction transaction = database.beginTransaction()) {
