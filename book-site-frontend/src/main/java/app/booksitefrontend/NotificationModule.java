@@ -11,7 +11,16 @@ import core.framework.module.Module;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        bind(NotificationService.class);
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(NotificationAJAXWebService.class, bind(NotificationAJAXWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(NotificationService.class);
     }
 }

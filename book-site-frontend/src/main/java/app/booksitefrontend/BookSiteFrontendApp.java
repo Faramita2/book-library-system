@@ -15,21 +15,33 @@ import core.framework.module.SystemModule;
 public class BookSiteFrontendApp extends App {
     @Override
     protected void initialize() {
-        load(new SystemModule("sys.properties"));
-        loadProperties("app.properties");
+        sys();
 
-        api().client(UserWebService.class, requiredProperty("app.user.ServiceURL"));
-        api().client(AuthorWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(CategoryWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(TagWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(NotificationWebService.class, requiredProperty("app.notification.ServiceURL"));
+        apiClients();
 
+        modules();
+    }
+
+    private void modules() {
         load(new UserModule());
         load(new BookAuthorModule());
         load(new BookCategoryModule());
         load(new BookTagModule());
         load(new BookModule());
         load(new NotificationModule());
+    }
+
+    private void apiClients() {
+        api().client(UserWebService.class, requiredProperty("app.user.ServiceURL"));
+        api().client(AuthorWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(CategoryWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(TagWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(NotificationWebService.class, requiredProperty("app.notification.ServiceURL"));
+    }
+
+    private void sys() {
+        load(new SystemModule("sys.properties"));
+        loadProperties("app.properties");
     }
 }
