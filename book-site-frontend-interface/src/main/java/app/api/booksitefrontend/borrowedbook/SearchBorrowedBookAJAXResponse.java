@@ -1,4 +1,4 @@
-package app.api.booksitefrontend.book;
+package app.api.booksitefrontend.borrowedbook;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -16,7 +16,7 @@ public class SearchBorrowedBookAJAXResponse {
 
     @NotNull
     @Property(name = "books")
-    public List<SearchBookAJAXResponse.Book> books;
+    public List<Book> books;
 
     public static class Book {
         @NotNull
@@ -44,9 +44,5 @@ public class SearchBorrowedBookAJAXResponse {
         @NotNull
         @Property(name = "author_names")
         public List<String> authorNames;
-
-        @NotNull
-        @Property(name = "status")
-        public BookStatusAJAXView status;
     }
 }

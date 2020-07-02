@@ -5,8 +5,6 @@ import app.api.booksitefrontend.book.BorrowBookAJAXRequest;
 import app.api.booksitefrontend.book.GetBookAJAXResponse;
 import app.api.booksitefrontend.book.SearchBookAJAXRequest;
 import app.api.booksitefrontend.book.SearchBookAJAXResponse;
-import app.api.booksitefrontend.book.SearchBorrowedBookAJAXRequest;
-import app.api.booksitefrontend.book.SearchBorrowedBookAJAXResponse;
 import app.booksitefrontend.book.service.BookService;
 import app.booksitefrontend.user.web.UserPass;
 import core.framework.inject.Inject;
@@ -23,11 +21,6 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         return service.search(request);
-    }
-
-    @Override
-    public SearchBorrowedBookAJAXResponse searchBorrowed(SearchBorrowedBookAJAXRequest request) {
-        return service.searchBorrowed(request);
     }
 
     @UserPass

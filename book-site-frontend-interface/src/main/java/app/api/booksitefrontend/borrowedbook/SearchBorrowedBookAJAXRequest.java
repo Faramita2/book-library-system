@@ -1,4 +1,4 @@
-package app.api.booksitefrontend.book;
+package app.api.booksitefrontend.borrowedbook;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.Max;

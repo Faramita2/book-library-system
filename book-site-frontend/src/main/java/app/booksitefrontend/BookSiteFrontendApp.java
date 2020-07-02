@@ -29,6 +29,7 @@ public class BookSiteFrontendApp extends App {
         load(new BookTagModule());
         load(new BookModule());
         load(new NotificationModule());
+        load(new BorrowedBookModule());
     }
 
     private void apiClients() {
