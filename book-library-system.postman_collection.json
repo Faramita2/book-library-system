@@ -13,198 +13,184 @@
 					"name": "book",
 					"item": [
 						{
-							"name": "bo",
-							"item": [
-								{
-									"name": "bo get book",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{url}}:9000/bo/book/1",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"bo",
-												"book",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo create book",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"water margin 2\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1],\r\n    \"operator\": \"book-site\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/bo/book",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"bo",
-												"book"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo update book",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1]\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/bo/book/3",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"bo",
-												"book",
-												"3"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo search books",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"category_ids\": [],\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/bo/book",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"bo",
-												"book"
-											]
-										}
-									},
-									"response": []
+							"name": "bo get book",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9000/bo/book/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"book",
+										"1"
+									]
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							},
+							"response": []
 						},
 						{
-							"name": "front",
-							"item": [
-								{
-									"name": "search book",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"water\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/book",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"book"
-											]
+							"name": "bo create book",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"water margin 2\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1],\r\n    \"operator\": \"book-site\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
 										}
-									},
-									"response": []
+									}
 								},
-								{
-									"name": "get book",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{url}}:9000/book/1",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"book",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "return book",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"user_id\": 1,\r\n    \"updated_by\": \"BookService\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/book/1/return",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"book",
-												"1",
-												"return"
-											]
-										}
-									},
-									"response": []
+								"url": {
+									"raw": "{{url}}:9000/bo/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"book"
+									]
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							},
+							"response": []
+						},
+						{
+							"name": "bo update book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"testdd\",\r\n    \"tag_ids\": [1],\r\n    \"author_ids\": [1],\r\n    \"description\": \"108 men\",\r\n    \"category_ids\": [1]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/book/3",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"book",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo search books",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"category_ids\": [],\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"water\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/book",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"book"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get book",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9000/book/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"book",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "return book",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 1,\r\n    \"updated_by\": \"BookService\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/book/1/return",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"book",
+										"1",
+										"return"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -641,18 +627,24 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user-service",
+			"item": [
 				{
-					"name": "borrowed book",
+					"name": "user",
 					"item": [
 						{
-							"name": "search borrowed book",
+							"name": "bo create user",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"user_id\": 1\r\n}",
+									"raw": "{\r\n    \"username\": \"meoaawfa\",\r\n    \"password\": \"aaadaaa1\",\r\n    \"status\": \"INACTIVE\",\r\n    \"email\": \"dd@ddd.com\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -660,13 +652,148 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9000/borrowed-book",
+									"raw": "{{url}}:9001/bo/user",
 									"host": [
 										"{{url}}"
 									],
-									"port": "9000",
+									"port": "9001",
 									"path": [
-										"borrowed-book"
+										"bo",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo search user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"skip\": 0,\r\n\t\"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9001/bo/user",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9001",
+									"path": [
+										"bo",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo update user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"status\": \"ACTIVE\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9001/bo/user/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9001",
+									"path": [
+										"bo",
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo reset user password",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"1234567\",\r\n    \"password_confirm\": \"1234567\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9001/bo/user/1/reset-password",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9001",
+									"path": [
+										"bo",
+										"user",
+										"1",
+										"reset-password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9001/user/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9001",
+									"path": [
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"meowmeow\",\r\n    \"password\": \"7654321\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9001/user/login",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9001",
+									"path": [
+										"user",
+										"login"
 									]
 								}
 							},
@@ -680,199 +807,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "user-service",
-			"item": [
-				{
-					"name": "user",
-					"item": [
-						{
-							"name": "bo",
-							"item": [
-								{
-									"name": "bo create user",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"username\": \"meoaawfa\",\r\n    \"password\": \"aaadaaa1\",\r\n    \"status\": \"INACTIVE\",\r\n    \"email\": \"dd@ddd.com\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9001/bo/user",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"bo",
-												"user"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo search user",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n\t\"skip\": 0,\r\n\t\"limit\": 1000\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9001/bo/user",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"bo",
-												"user"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo update user",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"status\": \"ACTIVE\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9001/bo/user/1",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"bo",
-												"user",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "bo reset user password",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"password\": \"1234567\",\r\n    \"password_confirm\": \"1234567\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9001/bo/user/1/reset-password",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"bo",
-												"user",
-												"1",
-												"reset-password"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "front",
-							"item": [
-								{
-									"name": "get user",
-									"request": {
-										"method": "GET",
-										"header": [],
-										"url": {
-											"raw": "{{url}}:9001/user/1",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"user",
-												"1"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "login user",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"username\": \"meowmeow\",\r\n    \"password\": \"7654321\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9001/user/login",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9001",
-											"path": [
-												"user",
-												"login"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "borrow-record-service",
 			"item": [
 				{
-					"name": "front",
+					"name": "borrow-record",
 					"item": [
 						{
 							"name": "create borrow record",
@@ -900,16 +838,9 @@
 								}
 							},
 							"response": []
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "bo",
-					"item": [
+						},
 						{
-							"name": "search record",
+							"name": "search borrow record",
 							"request": {
 								"method": "PUT",
 								"header": [],
@@ -934,7 +865,14 @@
 								}
 							},
 							"response": []
-						},
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "job",
+					"item": [
 						{
 							"name": "search job",
 							"request": {
@@ -985,7 +923,7 @@
 			"name": "notification-service",
 			"item": [
 				{
-					"name": "front",
+					"name": "notification",
 					"item": [
 						{
 							"name": "search notification",
@@ -1060,89 +998,96 @@
 			"name": "admin-service",
 			"item": [
 				{
-					"name": "bo create admin",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\",\r\n    \"operator\": \"self\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "admin",
+					"item": [
+						{
+							"name": "bo create admin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\",\r\n    \"operator\": \"self\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9005/bo/admin",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9005",
+									"path": [
+										"bo",
+										"admin"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}:9005/bo/admin",
-							"host": [
-								"{{url}}"
-							],
-							"port": "9005",
-							"path": [
-								"bo",
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "bo search admin",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "bo search admin",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"skip\":0,\r\n    \"limit\": 1000\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9005/bo/admin",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9005",
+									"path": [
+										"bo",
+										"admin"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{url}}:9005/bo/admin",
-							"host": [
-								"{{url}}"
-							],
-							"port": "9005",
-							"path": [
-								"bo",
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "bo login admin",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+						{
+							"name": "bo login admin",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9005/bo/admin/login",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9005",
+									"path": [
+										"bo",
+										"admin",
+										"login"
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}:9005/bo/admin/login",
-							"host": [
-								"{{url}}"
-							],
-							"port": "9005",
-							"path": [
-								"bo",
-								"admin",
-								"login"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -2130,7 +2075,7 @@
 	],
 	"variable": [
 		{
-			"id": "a2a33f13-00c3-43f3-88ac-0638496b524b",
+			"id": "21bd6478-1c79-4daa-8ed7-6067be8aec4d",
 			"key": "url",
 			"value": "https://localhost"
 		}
