@@ -32,7 +32,6 @@ public class BookTagService {
             SearchBookTagAJAXResponse.Tag view = new SearchBookTagAJAXResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;
-
             return view;
         }).collect(Collectors.toList());
 
