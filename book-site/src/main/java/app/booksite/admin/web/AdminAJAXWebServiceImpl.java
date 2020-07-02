@@ -16,7 +16,7 @@ public class AdminAJAXWebServiceImpl implements AdminAJAXWebService {
     @AdminPass
     @Override
     public void login(LoginAdminAJAXRequest request) {
-        ActionLogContext.put("admin_account", request.account);
+        ActionLogContext.put("account", request.account);
         service.login(request);
     }
 }

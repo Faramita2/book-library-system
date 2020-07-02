@@ -29,13 +29,13 @@ public class BookWebServiceImpl implements BookWebService {
 
     @Override
     public void borrow(Long id, BorrowBookRequest request) {
-        ActionLogContext.put("book_id", id);
+        ActionLogContext.put("id", id);
         service.borrow(id, request);
     }
 
     @Override
     public void returnBook(Long id, ReturnBookRequest request) {
-        ActionLogContext.put("book_id", id);
+        ActionLogContext.put("id", id);
         service.returnBook(id, request);
     }
 }

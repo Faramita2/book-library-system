@@ -34,13 +34,13 @@ public class BOTagWebServiceImpl implements BOTagWebService {
 
     @Override
     public void update(Long id, BOUpdateTagRequest request) {
-        ActionLogContext.put("tag_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 
     @Override
     public void delete(Long id) {
-        ActionLogContext.put("tag_id", id);
+        ActionLogContext.put("id", id);
         service.delete(id);
     }
 }

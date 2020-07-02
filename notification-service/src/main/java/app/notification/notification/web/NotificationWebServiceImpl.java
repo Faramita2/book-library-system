@@ -8,6 +8,7 @@ import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import app.notification.notification.service.NotificationService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -28,11 +29,13 @@ public class NotificationWebServiceImpl implements NotificationWebService {
 
     @Override
     public void delete(Long id, DeleteNotificationRequest request) {
+        ActionLogContext.put("id", id);
         service.delete(id, request);
     }
 
     @Override
     public void deleteBatch(DeleteBatchNotificationRequest request) {
+        ActionLogContext.put("ids", request.ids);
         service.deleteBatch(request);
     }
 }

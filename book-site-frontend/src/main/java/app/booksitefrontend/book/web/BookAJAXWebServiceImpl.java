@@ -31,13 +31,13 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public void borrow(Long id, BorrowBookAJAXRequest request) {
-        ActionLogContext.put("book_id", id);
+        ActionLogContext.put("id", id);
         service.borrow(id, request);
     }
 
     @Override
     public void returnBook(Long id) {
-        ActionLogContext.put("book_id", id);
+        ActionLogContext.put("id", id);
         service.returnBook(id);
     }
 }

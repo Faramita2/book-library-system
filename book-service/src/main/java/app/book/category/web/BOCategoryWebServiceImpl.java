@@ -34,13 +34,13 @@ public class BOCategoryWebServiceImpl implements BOCategoryWebService {
 
     @Override
     public void update(Long id, BOUpdateCategoryRequest request) {
-        ActionLogContext.put("category_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 
     @Override
     public void delete(Long id) {
-        ActionLogContext.put("category_id", id);
+        ActionLogContext.put("id", id);
         service.delete(id);
     }
 }

@@ -34,13 +34,13 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
 
     @Override
     public void update(Long id, BOUpdateAuthorRequest request) {
-        ActionLogContext.put("author_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 
     @Override
     public void delete(Long id) {
-        ActionLogContext.put("author_id", id);
+        ActionLogContext.put("id", id);
         service.delete(id);
     }
 }

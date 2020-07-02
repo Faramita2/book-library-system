@@ -29,13 +29,13 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public void update(Long id, UpdateUserAJAXRequest request) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 
     @Override
     public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
-        ActionLogContext.put("user_id", id);
+        ActionLogContext.put("id", id);
         service.resetPassword(id, request);
     }
 }

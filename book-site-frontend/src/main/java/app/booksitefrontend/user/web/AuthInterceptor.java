@@ -9,6 +9,8 @@ import core.framework.web.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 /**
  * @author zoo
  */
@@ -25,11 +27,15 @@ public class AuthInterceptor implements Interceptor {
             session.get("user_id").orElseThrow(()
                 -> new UnauthorizedException("You need login first."));
 
-            session.get("user_status").ifPresent(status -> {
-                if (!status.equals(UserStatusView.ACTIVE.name())) {
+            Optional<String> userStatus = session.get("user_status");
+
+            if (userStatus.isPresent()) {
+                if (!userStatus.get().equals(UserStatusView.ACTIVE.name())) {
                     throw new UnauthorizedException("Your account is inactive.");
                 }
-            });
+            } else {
+                throw new UnauthorizedException("Your account is inactive.");
+            }
         }
 
         logger.info("pass authorize");

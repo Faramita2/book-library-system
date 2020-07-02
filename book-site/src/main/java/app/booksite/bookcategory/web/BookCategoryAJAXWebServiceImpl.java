@@ -34,7 +34,7 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
 
     @Override
     public void update(Long id, UpdateBookCategoryAJAXRequest request) {
-        ActionLogContext.put("category_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 }

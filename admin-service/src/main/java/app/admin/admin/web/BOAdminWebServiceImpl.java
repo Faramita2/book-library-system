@@ -29,7 +29,7 @@ public class BOAdminWebServiceImpl implements BOAdminWebService {
 
     @Override
     public BOLoginAdminResponse login(BOLoginAdminRequest request) {
-        ActionLogContext.put("admin_account", request.account);
+        ActionLogContext.put("account", request.account);
         return service.login(request);
     }
 }

@@ -28,12 +28,13 @@ public class NotificationAJAXWebServiceImpl implements NotificationAJAXWebServic
 
     @Override
     public void delete(Long id) {
-        ActionLogContext.put("notification_id", id);
+        ActionLogContext.put("id", id);
         service.delete(id);
     }
 
     @Override
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
+        ActionLogContext.put("ids", request.ids);
         service.deleteBatch(request);
     }
 }

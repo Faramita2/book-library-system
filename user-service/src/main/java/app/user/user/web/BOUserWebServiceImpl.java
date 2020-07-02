@@ -9,6 +9,7 @@ import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.user.service.BOUserService;
 import core.framework.inject.Inject;
+import core.framework.log.ActionLogContext;
 
 /**
  * @author zoo
@@ -34,11 +35,13 @@ public class BOUserWebServiceImpl implements BOUserWebService {
 
     @Override
     public void update(Long id, BOUpdateUserRequest request) {
+        ActionLogContext.put("id", id);
         service.update(id, request);
     }
 
     @Override
     public void resetPassword(Long id, BOResetUserPasswordRequest request) {
+        ActionLogContext.put("id", id);
         service.resetPassword(id, request);
     }
 }
