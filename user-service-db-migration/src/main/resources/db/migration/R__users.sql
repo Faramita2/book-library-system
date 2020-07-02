@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
     `username` VARCHAR(50) NOT NULL,
     `password` VARCHAR(50) NOT NULL,
-    `email` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(255) NOT NULL,
     `salt` VARCHAR(50) NOT NULL,
     `status` VARCHAR(50) NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     `created_by` VARCHAR(50) NOT NULL,
     `updated_by` VARCHAR(50) NOT NULL,
     UNIQUE INDEX `username_index`(`username` ASC),
-    INDEX `email_index`(`email` ASC)
+    INDEX `email_index`(`email` ASC),
+    INDEX `status_index`(`status` ASC)
 );
 
 -- add column `email` if not exists.

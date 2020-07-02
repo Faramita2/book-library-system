@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `books` (
     `created_by` VARCHAR(50) NOT NULL,
     `updated_by` VARCHAR(50) NOT NULL,
 
+    INDEX `status_index`(`status` ASC),
     INDEX `name_index`(`name` ASC),
     INDEX `description_index`(`description`(255) ASC),
     INDEX `borrower_id_index`(`borrower_id` ASC)
