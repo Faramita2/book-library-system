@@ -7,6 +7,7 @@ import app.api.booksite.bookcategory.SearchBookCategoryAJAXResponse;
 import app.api.booksite.bookcategory.UpdateBookCategoryAJAXRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,7 +22,7 @@ public interface BookCategoryAJAXWebService {
     @Path("/ajax/book-category")
     SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request);
 
-    @PUT
+    @GET
     @Path("/ajax/book-category")
     ListBookCategoryAJAXResponse list();
 

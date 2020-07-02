@@ -7,6 +7,7 @@ import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,7 +22,7 @@ public interface BOAuthorWebService {
     @Path("/bo/author")
     BOSearchAuthorResponse search(BOSearchAuthorRequest request);
 
-    @PUT
+    @GET
     @Path("/bo/author")
     BOListAuthorResponse list();
 

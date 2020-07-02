@@ -29,11 +29,11 @@ public class AuthInterceptor implements Interceptor {
 
             Optional<String> userStatus = session.get("user_status");
 
-            if (userStatus.isPresent()) {
-                if (!userStatus.get().equals(UserStatusView.ACTIVE.name())) {
-                    throw new UnauthorizedException("Your account is inactive.");
-                }
-            } else {
+            if (userStatus.isEmpty()) {
+                throw new UnauthorizedException("Your account is inactive.");
+            }
+
+            if (!userStatus.get().equals(UserStatusView.ACTIVE.name())) {
                 throw new UnauthorizedException("Your account is inactive.");
             }
         }

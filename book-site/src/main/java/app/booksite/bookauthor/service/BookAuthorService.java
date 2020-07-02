@@ -52,7 +52,8 @@ public class BookAuthorService {
             return view;
         }).collect(Collectors.toList());
 
-        return response;    }
+        return response;
+    }
 
     public void create(CreateBookAuthorAJAXRequest request) {
         BOCreateAuthorRequest boCreateAuthorRequest = new BOCreateAuthorRequest();

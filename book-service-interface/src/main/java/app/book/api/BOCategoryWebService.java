@@ -7,6 +7,7 @@ import app.book.api.category.BOSearchCategoryResponse;
 import app.book.api.category.BOUpdateCategoryRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,7 +22,7 @@ public interface BOCategoryWebService {
     @Path("/bo/category")
     BOSearchCategoryResponse search(BOSearchCategoryRequest request);
 
-    @PUT
+    @GET
     @Path("/bo/category")
     BOListCategoryResponse list();
 

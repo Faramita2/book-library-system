@@ -3,6 +3,7 @@ package app.api.booksitefrontend;
 import app.api.booksitefrontend.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.booksitefrontend.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.booksitefrontend.bookauthor.SearchBookAuthorAJAXResponse;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 
@@ -14,7 +15,7 @@ public interface BookAuthorAJAXWebService {
     @Path("/ajax/book-author")
     SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request);
 
-    @PUT
+    @GET
     @Path("/ajax/book-author")
     ListBookAuthorAJAXResponse list();
 }

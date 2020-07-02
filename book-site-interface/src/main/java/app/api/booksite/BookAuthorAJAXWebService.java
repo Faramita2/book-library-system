@@ -7,6 +7,7 @@ import app.api.booksite.bookauthor.SearchBookAuthorAJAXResponse;
 import app.api.booksite.bookauthor.UpdateBookAuthorAJAXRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
+import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,7 +22,7 @@ public interface BookAuthorAJAXWebService {
     @Path("/ajax/book-author")
     SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request);
 
-    @PUT
+    @GET
     @Path("/ajax/book-author")
     ListBookAuthorAJAXResponse list();
 
