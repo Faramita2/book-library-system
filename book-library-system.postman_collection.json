@@ -348,6 +348,34 @@
 					"name": "category",
 					"item": [
 						{
+							"name": "bo create category",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"novel\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9000/bo/category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9000",
+									"path": [
+										"bo",
+										"category"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "bo search category",
 							"request": {
 								"method": "PUT",
@@ -700,7 +728,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"status\": \"ACTIVE\"\r\n}",
+									"raw": "{\r\n    \"status\": \"INACTIVE\",\r\n    \"operator\": \"self\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -813,13 +841,59 @@
 					"name": "borrow-record",
 					"item": [
 						{
+							"name": "list need return borrow record",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9003/need-return-borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"need-return-borrow-record"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "bo search borrow record",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9003/bo/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"bo",
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "create borrow record",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"book_id\": 1,\r\n    \"borrower_id\": 1,\r\n    \"book_name\": \"water margin\",\r\n    \"borrower_name\": \"a\",\r\n    \"borrowed_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"return_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"created_by\": \"self\"\r\n}",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"borrower_id\": 1,\n\t\"borrowed_at\": \"2020-07-03T00:18:24.068656\",\n\t\"return_at\": \"2020-07-04\",\n\t\"operator\": \"self\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -834,79 +908,6 @@
 									"port": "9003",
 									"path": [
 										"borrow-record"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "search borrow record",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}:9003/borrow-record",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9003",
-									"path": [
-										"borrow-record"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "job",
-					"item": [
-						{
-							"name": "search job",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9003/_sys/job",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9003",
-									"path": [
-										"_sys",
-										"job"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "trigger job",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9003/_sys/job/find-need-return-record",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9003",
-									"path": [
-										"_sys",
-										"job",
-										"find-need-return-record"
 									]
 								}
 							},
@@ -924,70 +925,7 @@
 			"item": [
 				{
 					"name": "notification",
-					"item": [
-						{
-							"name": "search notification",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"user_id\": 1\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}:9004/notification",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9004",
-									"path": [
-										"notification"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "delete notification",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9004/notification?ids=2",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9004",
-									"path": [
-										"notification"
-									],
-									"query": [
-										{
-											"key": "ids",
-											"value": "2"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "delete batch notification",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": ""
-								}
-							},
-							"response": []
-						}
-					],
+					"item": [],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				}
@@ -1141,7 +1079,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000,\r\n    \"name\": \"a\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1214,6 +1152,25 @@
 										"ajax",
 										"book-author",
 										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list book author",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-author"
 									]
 								}
 							},
@@ -1297,7 +1254,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9006/ajax/book-category/3",
+									"raw": "{{url}}:9006/ajax/book-category/1",
 									"host": [
 										"{{url}}"
 									],
@@ -1305,7 +1262,26 @@
 									"path": [
 										"ajax",
 										"book-category",
-										"3"
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list book category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-category"
 									]
 								}
 							},
@@ -1389,7 +1365,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9006/ajax/book-tag/2",
+									"raw": "{{url}}:9006/ajax/book-tag/1",
 									"host": [
 										"{{url}}"
 									],
@@ -1397,7 +1373,26 @@
 									"path": [
 										"ajax",
 										"book-tag",
-										"2"
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list book tag",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-tag"
 									]
 								}
 							},
@@ -1444,7 +1439,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}:9006/ajax/book/3",
+									"raw": "{{url}}:9006/ajax/book/1",
 									"host": [
 										"{{url}}"
 									],
@@ -1452,7 +1447,7 @@
 									"path": [
 										"ajax",
 										"book",
-										"3"
+										"1"
 									]
 								}
 							},
@@ -1493,7 +1488,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"no operator\",\r\n    \"operator\": \"book-site\",\r\n    \"tag_ids\": [1, 2]\r\n}",
+									"raw": "{\r\n    \"name\": \"no operator\",\r\n    \"operator\": \"book-site\",\r\n    \"tag_ids\": []\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1620,7 +1615,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"status\": \"INACTIVE\"\n}",
+									"raw": "{\n\t\"status\": \"ACTIVE\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1764,15 +1759,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/borrowed",
+									"raw": "{{url}}:9007/ajax/borrowed-book",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9007",
 									"path": [
 										"ajax",
-										"book",
-										"borrowed"
+										"borrowed-book"
 									]
 								}
 							},
@@ -1784,7 +1778,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/1",
+									"raw": "{{url}}:9007/ajax/book/2",
 									"host": [
 										"{{url}}"
 									],
@@ -1792,7 +1786,7 @@
 									"path": [
 										"ajax",
 										"book",
-										"1"
+										"2"
 									]
 								}
 							},
@@ -1805,7 +1799,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"return_at\": \"2020-07-03\"\n}",
+									"raw": "{\n\t\"return_at\": \"2020-07-04\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1813,7 +1807,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/1/borrow",
+									"raw": "{{url}}:9007/ajax/book/2/borrow",
 									"host": [
 										"{{url}}"
 									],
@@ -1821,7 +1815,7 @@
 									"path": [
 										"ajax",
 										"book",
-										"1",
+										"2",
 										"borrow"
 									]
 								}
@@ -1872,13 +1866,32 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000,\r\n    \"name\": \"b\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-author",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-author"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list book author",
+							"request": {
+								"method": "GET",
+								"header": [],
 								"url": {
 									"raw": "{{url}}:9007/ajax/book-author",
 									"host": [
@@ -1927,6 +1940,25 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "list book category",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-category",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-category"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1949,6 +1981,25 @@
 										}
 									}
 								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/book-tag",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"book-tag"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list book tag",
+							"request": {
+								"method": "GET",
+								"header": [],
 								"url": {
 									"raw": "{{url}}:9007/ajax/book-tag",
 									"host": [
@@ -2042,10 +2093,75 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "get notification",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/notification/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"notification",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "scheduler-service",
+			"item": [
+				{
+					"name": "trigger job",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:9008/_sys/job/find-need-return-record",
+							"host": [
+								"{{url}}"
+							],
+							"port": "9008",
+							"path": [
+								"_sys",
+								"job",
+								"find-need-return-record"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list job",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:9008/_sys/job",
+							"host": [
+								"{{url}}"
+							],
+							"port": "9008",
+							"path": [
+								"_sys",
+								"job"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -2075,9 +2191,10 @@
 	],
 	"variable": [
 		{
-			"id": "21bd6478-1c79-4daa-8ed7-6067be8aec4d",
+			"id": "875c4766-336d-48d7-b21f-cb120cf2670f",
 			"key": "url",
-			"value": "https://localhost"
+			"value": "https://localhost",
+			"type": "string"
 		}
 	],
 	"protocolProfileBehavior": {}
