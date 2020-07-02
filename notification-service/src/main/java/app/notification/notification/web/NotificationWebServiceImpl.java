@@ -3,6 +3,7 @@ package app.notification.notification.web;
 import app.notification.api.NotificationWebService;
 import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
+import app.notification.api.notification.GetNotificationResponse;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import app.notification.notification.service.NotificationService;
@@ -18,6 +19,11 @@ public class NotificationWebServiceImpl implements NotificationWebService {
     @Override
     public SearchNotificationResponse search(SearchNotificationRequest request) {
         return service.search(request);
+    }
+
+    @Override
+    public GetNotificationResponse get(Long id) {
+        return service.get(id);
     }
 
     @Override

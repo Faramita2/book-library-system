@@ -19,14 +19,14 @@ public class ReturnBookMessageHandler implements MessageHandler<ReturnBorrowedBo
     NotificationService service;
 
     @Override
-    public void handle(String key, ReturnBorrowedBookMessage value) {
-        service.create(value);
+    public void handle(String key, ReturnBorrowedBookMessage message) {
+        service.create(message);
         String content = Strings.format(
             "The book '{}' you borrowed at {} should be returned tomorrow({}).",
-            value.bookName,
-            value.borrowedAt.format(DateTimeFormatter.ISO_DATE),
-            value.returnAt.format(DateTimeFormatter.ISO_DATE)
+            message.bookName,
+            message.borrowedAt.format(DateTimeFormatter.ISO_DATE_TIME),
+            message.returnAt.format(DateTimeFormatter.ISO_DATE)
         );
-        logger.info("[mock] send email to user(id = {}): {}", value.userId, content);
+        logger.info("[mock] send email to user(id = {}): {}", message.userId, content);
     }
 }

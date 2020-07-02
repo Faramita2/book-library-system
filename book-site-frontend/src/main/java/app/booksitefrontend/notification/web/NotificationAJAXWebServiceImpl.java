@@ -2,6 +2,7 @@ package app.booksitefrontend.notification.web;
 
 import app.api.booksitefrontend.NotificationAJAXWebService;
 import app.api.booksitefrontend.notification.DeleteBatchNotificationAJAXRequest;
+import app.api.booksitefrontend.notification.GetNotificationAJAXResponse;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXRequest;
 import app.api.booksitefrontend.notification.SearchNotificationAJAXResponse;
 import app.booksitefrontend.notification.service.NotificationService;
@@ -18,6 +19,11 @@ public class NotificationAJAXWebServiceImpl implements NotificationAJAXWebServic
     @Override
     public SearchNotificationAJAXResponse search(SearchNotificationAJAXRequest request) {
         return service.search(request);
+    }
+
+    @Override
+    public GetNotificationAJAXResponse get(Long id) {
+        return service.get(id);
     }
 
     @Override

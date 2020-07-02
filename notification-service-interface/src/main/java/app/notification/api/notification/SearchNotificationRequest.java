@@ -13,6 +13,9 @@ public class SearchNotificationRequest {
     @Property(name = "user_id")
     public Long userId;
 
+    @Property(name = "content")
+    public String content;
+
     @NotNull
     @Min(0)
     @Property(name = "skip")

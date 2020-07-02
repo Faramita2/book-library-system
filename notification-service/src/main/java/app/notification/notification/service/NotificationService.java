@@ -2,6 +2,7 @@ package app.notification.notification.service;
 
 import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;
+import app.notification.api.notification.GetNotificationResponse;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import app.notification.api.notification.kafka.ReturnBorrowedBookMessage;
@@ -24,24 +25,13 @@ public class NotificationService {
     @Inject
     Repository<Notification> repository;
 
-    public void delete(Long id, DeleteNotificationRequest request) {
-        repository.selectOne("id = ? AND user_id = ?", id, request.userId).orElseThrow(() ->
-            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
-        repository.delete(id);
-    }
-
-    public void deleteBatch(DeleteBatchNotificationRequest request) {
-        repository.batchDelete(List.of(request.ids.split(",")));
-    }
-
     public void create(ReturnBorrowedBookMessage message) {
         Notification notification = new Notification();
         notification.userId = message.userId;
-        String bookName = message.bookName;
         notification.content = Strings.format(
             "The book '{}' you borrowed at {} should be returned tomorrow({}).",
-            bookName,
-            message.borrowedAt.format(DateTimeFormatter.ISO_DATE),
+            message.bookName,
+            message.borrowedAt.format(DateTimeFormatter.ISO_DATE_TIME),
             message.returnAt.format(DateTimeFormatter.ISO_DATE)
         );
         LocalDateTime now = LocalDateTime.now();
@@ -58,17 +48,44 @@ public class NotificationService {
 
         query.skip(request.skip);
         query.limit(request.limit);
+        query.orderBy("created_at DESC");
         query.where("user_id = ?", request.userId);
+
+        if (!Strings.isBlank(request.content)) {
+            query.where("content LIKE ?", Strings.format("{}%", request.content));
+        }
 
         SearchNotificationResponse response = new SearchNotificationResponse();
         response.total = query.count();
         response.notifications = query.fetch().stream().map(notification -> {
             SearchNotificationResponse.Notification view = new SearchNotificationResponse.Notification();
             view.id = notification.id;
-            view.content = notification.content;
+            view.content = Strings.truncate(notification.content, 50);
+            view.createdAt = notification.createdAt;
             return view;
         }).collect(Collectors.toList());
 
         return response;
+    }
+
+    public GetNotificationResponse get(Long id) {
+        Notification notification = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
+        GetNotificationResponse response = new GetNotificationResponse();
+        response.id = notification.id;
+        response.content = notification.content;
+        response.createdAt = notification.createdAt;
+
+        return response;
+    }
+
+    public void delete(Long id, DeleteNotificationRequest request) {
+        repository.selectOne("id = ? AND user_id = ?", id, request.userId).orElseThrow(() ->
+            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
+        repository.delete(id);
+    }
+
+    public void deleteBatch(DeleteBatchNotificationRequest request) {
+        repository.batchDelete(List.of(request.ids.split(",")));
     }
 }
