@@ -9,6 +9,10 @@ import core.framework.module.SystemModule;
 public class AdminServiceApp extends App {
     @Override
     protected void initialize() {
+        sys();
+    }
+
+    private void sys() {
         load(new SystemModule("sys.properties"));
         load(new AdminModule());
     }

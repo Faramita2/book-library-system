@@ -12,10 +12,22 @@ import core.framework.module.Module;
 public class AdminModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(Admin.class);
+        dbs();
 
-        bind(BOAdminService.class);
+        services();
 
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BOAdminWebService.class, bind(BOAdminWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOAdminService.class);
+    }
+
+    private void dbs() {
+        db().repository(Admin.class);
     }
 }

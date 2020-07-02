@@ -15,10 +15,24 @@ import core.framework.module.Module;
 public class UserModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(User.class);
-        bind(BOUserService.class);
-        bind(UserService.class);
+        dbs();
+
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BOUserWebService.class, bind(BOUserWebServiceImpl.class));
         api().service(UserWebService.class, bind(UserWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOUserService.class);
+        bind(UserService.class);
+    }
+
+    private void dbs() {
+        db().repository(User.class);
     }
 }
