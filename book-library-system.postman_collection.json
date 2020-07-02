@@ -174,35 +174,6 @@
 									"response": []
 								},
 								{
-									"name": "borrow book",
-									"request": {
-										"method": "PUT",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"user_id\": 1,\r\n    \"return_at\": \"2020-07-30\",\r\n\t\"operator\": \"book-site-front\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}:9000/book/1/borrow",
-											"host": [
-												"{{url}}"
-											],
-											"port": "9000",
-											"path": [
-												"book",
-												"1",
-												"borrow"
-											]
-										}
-									},
-									"response": []
-								},
-								{
 									"name": "return book",
 									"request": {
 										"method": "PUT",
@@ -2120,7 +2091,7 @@
 	],
 	"variable": [
 		{
-			"id": "f88ef8e7-2a39-41e5-99f7-40de41459b3b",
+			"id": "7120b25e-89f6-48ae-a73f-7017f426d950",
 			"key": "url",
 			"value": "https://localhost"
 		}
