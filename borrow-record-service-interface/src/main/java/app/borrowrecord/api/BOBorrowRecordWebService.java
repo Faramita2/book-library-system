@@ -10,6 +10,6 @@ import core.framework.api.web.service.Path;
  */
 public interface BOBorrowRecordWebService {
     @PUT
-    @Path("/borrow-record")
+    @Path("/bo/borrow-record")
     BOSearchBorrowRecordResponse search(BOSearchBorrowRecordRequest request);
 }

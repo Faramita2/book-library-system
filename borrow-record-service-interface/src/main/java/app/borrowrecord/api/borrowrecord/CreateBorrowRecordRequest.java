@@ -4,6 +4,7 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -19,17 +20,12 @@ public class CreateBorrowRecordRequest {
     public Long borrowerId;
 
     @NotNull
-    @NotBlank
-    @Property(name = "book_name")
-    public String bookName;
-
-    @NotNull
     @Property(name = "borrowed_at")
     public LocalDateTime borrowedAt;
 
     @NotNull
     @Property(name = "return_at")
-    public LocalDateTime returnAt;
+    public LocalDate returnAt;
 
     @NotNull
     @NotBlank

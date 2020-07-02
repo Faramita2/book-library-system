@@ -2,17 +2,15 @@ package app.borrowrecord;
 
 import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.borrowrecord.api.BorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
+import app.borrowrecord.api.NeedReturnBorrowRecordWebService;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
-import app.borrowrecord.borrowrecord.job.FindNeedReturnRecordJob;
 import app.borrowrecord.borrowrecord.service.BOBorrowRecordService;
 import app.borrowrecord.borrowrecord.service.BorrowRecordService;
 import app.borrowrecord.borrowrecord.web.BOBorrowRecordWebServiceImpl;
 import app.borrowrecord.borrowrecord.web.BorrowRecordWebServiceImpl;
+import app.borrowrecord.borrowrecord.web.NeedReturnBorrowRecordWebServiceImpl;
 import core.framework.module.Module;
 import core.framework.mongo.module.MongoConfig;
-
-import java.time.LocalTime;
 
 /**
  * @author zoo
@@ -25,18 +23,12 @@ public class BorrowRecordModule extends Module {
         services();
 
         apiServices();
-
-        async();
-    }
-
-    private void async() {
-        kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
-        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalTime.of(23, 59));
     }
 
     private void apiServices() {
         api().service(BorrowRecordWebService.class, bind(BorrowRecordWebServiceImpl.class));
         api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
+        api().service(NeedReturnBorrowRecordWebService.class, bind(NeedReturnBorrowRecordWebServiceImpl.class));
     }
 
     private void services() {

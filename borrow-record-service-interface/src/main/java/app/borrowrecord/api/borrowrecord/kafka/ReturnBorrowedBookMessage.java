@@ -4,6 +4,7 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -24,7 +25,7 @@ public class ReturnBorrowedBookMessage {
 
     @NotNull
     @Property(name = "return_at")
-    public LocalDateTime returnAt;
+    public LocalDate returnAt;
 
     @NotNull
     @NotBlank
