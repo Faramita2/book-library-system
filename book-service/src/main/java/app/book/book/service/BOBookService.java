@@ -41,7 +41,6 @@ public class BOBookService {
         book.name = request.name;
         book.description = request.description;
         book.status = BookStatus.NORMAL;
-        book.borrowerId = 0L;
         LocalDateTime now = LocalDateTime.now();
         book.createdAt = now;
         book.updatedAt = now;
