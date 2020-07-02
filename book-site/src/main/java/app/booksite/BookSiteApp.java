@@ -16,16 +16,14 @@ import core.framework.module.SystemModule;
 public class BookSiteApp extends App {
     @Override
     protected void initialize() {
-        load(new SystemModule("sys.properties"));
-        loadProperties("app.properties");
-        api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
-        api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOCategoryWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
-        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
+        sys();
 
+        apiClients();
+
+        modules();
+    }
+
+    private void modules() {
         load(new AdminModule());
         load(new BookModule());
         load(new BookAuthorModule());
@@ -33,5 +31,20 @@ public class BookSiteApp extends App {
         load(new BookTagModule());
         load(new BorrowRecordModule());
         load(new UserModule());
+    }
+
+    private void apiClients() {
+        api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
+        api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOCategoryWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
+        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
+    }
+
+    private void sys() {
+        load(new SystemModule("sys.properties"));
+        loadProperties("app.properties");
     }
 }

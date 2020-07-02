@@ -11,7 +11,16 @@ import core.framework.module.Module;
 public class BookTagModule extends Module {
     @Override
     protected void initialize() {
-        bind(BookTagService.class);
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BookTagAJAXWebService.class, bind(BookTagAJAXWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BookTagService.class);
     }
 }

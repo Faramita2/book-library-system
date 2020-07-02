@@ -11,7 +11,16 @@ import core.framework.module.Module;
 public class UserModule extends Module {
     @Override
     protected void initialize() {
-        bind(UserService.class);
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(UserService.class);
     }
 }

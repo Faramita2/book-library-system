@@ -12,8 +12,17 @@ import core.framework.module.Module;
 public class AdminModule extends Module {
     @Override
     protected void initialize() {
-        bind(AdminService.class);
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         http().intercept(bind(AuthInterceptor.class));
         api().service(AdminAJAXWebService.class, bind(AdminAJAXWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(AdminService.class);
     }
 }
