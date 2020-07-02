@@ -30,7 +30,7 @@ public class UserService {
 
     public GetUserResponse get(Long id) {
         User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id)));
+            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         GetUserResponse response = new GetUserResponse();
         response.id = user.id;
@@ -43,7 +43,7 @@ public class UserService {
 
     public LoginUserResponse login(LoginUserRequest request) {
         User user = repository.selectOne("username = ?", request.username).orElseThrow(() ->
-            new BadRequestException("username or password incorrect"));
+            new BadRequestException("username or password incorrect", "USER_PASSWORD_INCORRECT"));
 
 
         if (user.password.equals(getPasswordHash(request, user.salt))) {
@@ -54,7 +54,7 @@ public class UserService {
             return response;
         }
 
-        throw new BadRequestException("username or password incorrect");
+        throw new BadRequestException("username or password incorrect", "USER_PASSWORD_INCORRECT");
     }
 
     private String getPasswordHash(LoginUserRequest request, String salt) {

@@ -43,11 +43,11 @@ public class BOUserService {
 
     public void create(BOCreateUserRequest request) {
         repository.selectOne("username = ?", request.username).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, username = {}", user.username));
+            throw new ConflictException(Strings.format("user already exists, username = {}", user.username), "USER_USERNAME_EXISTS");
         });
 
         repository.selectOne("email = ?", request.email).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, email = {}", user.email));
+            throw new ConflictException(Strings.format("user already exists, email = {}", user.email), "USER_EMAIL_EXISTS");
         });
 
         User user = new User();
@@ -80,11 +80,11 @@ public class BOUserService {
         }
 
         if (!Strings.isBlank(request.username)) {
-            query.where("username LIKE ?", request.username + "%");
+            query.where("username LIKE ?", Strings.format("{}%", request.username));
         }
 
         if (!Strings.isBlank(request.email)) {
-            query.where("email LIKE ?", request.email + "%");
+            query.where("email LIKE ?", Strings.format("{}%", request.email));
         }
 
         if (request.status != null) {
@@ -111,7 +111,7 @@ public class BOUserService {
 
     public void update(Long id, BOUpdateUserRequest request) {
         User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id)));
+            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
         user.updatedAt = LocalDateTime.now();
         user.updatedBy = request.operator;
@@ -140,10 +140,10 @@ public class BOUserService {
 
     public void resetPassword(Long id, BOResetUserPasswordRequest request) {
         User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id)));
+            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         if (!request.password.equals(request.passwordConfirm)) {
-            throw new BadRequestException("Please make sure both passwords match.");
+            throw new BadRequestException("Please make sure both passwords match.", "USER_PASSWORD_INCORRECT");
         }
 
         user.updatedAt = LocalDateTime.now();
@@ -162,7 +162,7 @@ public class BOUserService {
 
     public BOGetUserResponse get(Long id) {
         User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id)));
+            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;
