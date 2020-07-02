@@ -10,6 +10,7 @@ import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import core.framework.inject.Inject;
 import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class NotificationService {
         req.skip = request.skip;
         req.limit = request.limit;
         Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
+        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.userId = Long.valueOf(userId.get());
         SearchNotificationResponse resp = notificationWebService.search(req);
 
@@ -47,7 +48,7 @@ public class NotificationService {
     public void delete(Long id) {
         DeleteNotificationRequest req = new DeleteNotificationRequest();
         Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
+        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.userId = Long.valueOf(userId.get());
         req.operator = "book-site-frontend";
         notificationWebService.delete(id, req);
@@ -55,6 +56,8 @@ public class NotificationService {
 
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
         DeleteBatchNotificationRequest req = new DeleteBatchNotificationRequest();
+        Optional<String> userId = webContext.request().session().get("user_id");
+        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.ids = request.ids;
         req.operator = "book-site-frontend";
         notificationWebService.deleteBatch(req);

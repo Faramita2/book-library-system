@@ -23,6 +23,7 @@ import app.book.api.tag.SearchTagRequest;
 import app.user.api.UserWebService;
 import core.framework.inject.Inject;
 import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 import java.util.List;
 import java.util.Optional;
@@ -129,7 +130,7 @@ public class BookService {
     public void borrow(Long id, BorrowBookAJAXRequest request) {
         BorrowBookRequest req = new BorrowBookRequest();
         Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
+        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.userId = Long.valueOf(userId.get());
         req.operator = "book-site-frontend";
         req.returnAt = request.returnAt;
@@ -139,7 +140,7 @@ public class BookService {
     public void returnBook(Long id) {
         ReturnBookRequest req = new ReturnBookRequest();
         Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow();
+        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.userId = Long.valueOf(userId.get());
         req.operator = "book-site-frontend";
         bookWebService.returnBook(id, req);
