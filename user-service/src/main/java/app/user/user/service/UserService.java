@@ -5,6 +5,7 @@ import app.user.api.user.LoginUserRequest;
 import app.user.api.user.LoginUserResponse;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
+import app.user.user.domain.UserStatus;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
@@ -44,7 +45,9 @@ public class UserService {
     public LoginUserResponse login(LoginUserRequest request) {
         User user = repository.selectOne("username = ?", request.username).orElseThrow(() ->
             new BadRequestException("username or password incorrect", "USER_PASSWORD_INCORRECT"));
-
+        if (user.status != UserStatus.ACTIVE) {
+            throw new BadRequestException("user not active", "USER_INACTIVE");
+        }
 
         if (user.password.equals(getPasswordHash(request, user.salt))) {
             LoginUserResponse response = new LoginUserResponse();
