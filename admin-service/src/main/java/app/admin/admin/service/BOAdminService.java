@@ -39,7 +39,7 @@ public class BOAdminService {
 
     public void create(BOCreateAdminRequest request) {
         repository.selectOne("account = ?", request.account).ifPresent(admin -> {
-            throw new ConflictException(Strings.format("admin exists, account = {}", admin.account));
+            throw new ConflictException(Strings.format("admin exists, account = {}", admin.account), "ADMIN_ACCOUNT_EXISTS");
         });
 
         Admin admin = new Admin();
@@ -64,7 +64,7 @@ public class BOAdminService {
         Query<Admin> query = repository.select();
 
         if (!Strings.isBlank(request.account)) {
-            query.where("account LIKE ?", request.account + "%");
+            query.where("account LIKE ?", Strings.format("{}%", request.account));
         }
 
         query.skip(request.skip);
@@ -85,7 +85,7 @@ public class BOAdminService {
 
     public BOLoginAdminResponse login(BOLoginAdminRequest request) {
         Admin admin = repository.selectOne("account = ?", request.account).orElseThrow(() ->
-            new BadRequestException("account or password incorrect"));
+            new BadRequestException("account or password incorrect", "ADMIN_ACCOUNT_NOT_EXISTS"));
 
 
         if (admin.password.equals(getPasswordHash(request, admin.salt))) {
@@ -95,7 +95,7 @@ public class BOAdminService {
             return response;
         }
 
-        throw new BadRequestException("account or password incorrect");
+        throw new BadRequestException("account or password incorrect", "ADMIN_PASSWORD_INCORRECT");
     }
 
     private byte[] generateSalt() {
