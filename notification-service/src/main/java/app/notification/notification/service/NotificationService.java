@@ -26,7 +26,7 @@ public class NotificationService {
 
     public void delete(Long id, DeleteNotificationRequest request) {
         repository.selectOne("id = ? AND user_id = ?", id, request.userId).orElseThrow(() ->
-            new NotFoundException(Strings.format("notification not found, id = ?", id)));
+            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
         repository.delete(id);
     }
 
