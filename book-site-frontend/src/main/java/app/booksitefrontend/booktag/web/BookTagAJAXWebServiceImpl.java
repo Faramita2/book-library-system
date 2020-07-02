@@ -1,6 +1,7 @@
 package app.booksitefrontend.booktag.web;
 
 import app.api.booksitefrontend.BookTagAJAXWebService;
+import app.api.booksitefrontend.booktag.ListBookTagAJAXResponse;
 import app.api.booksitefrontend.booktag.SearchBookTagAJAXRequest;
 import app.api.booksitefrontend.booktag.SearchBookTagAJAXResponse;
 import app.booksitefrontend.booktag.service.BookTagService;
@@ -18,5 +19,10 @@ public class BookTagAJAXWebServiceImpl implements BookTagAJAXWebService {
     @Override
     public SearchBookTagAJAXResponse search(SearchBookTagAJAXRequest request) {
         return service.search(request);
+    }
+
+    @Override
+    public ListBookTagAJAXResponse list() {
+        return service.list();
     }
 }

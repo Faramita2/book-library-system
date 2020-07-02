@@ -1,6 +1,7 @@
 package app.api.booksite;
 
 import app.api.booksite.bookauthor.CreateBookAuthorAJAXRequest;
+import app.api.booksite.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.booksite.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.booksite.bookauthor.SearchBookAuthorAJAXResponse;
 import app.api.booksite.bookauthor.UpdateBookAuthorAJAXRequest;
@@ -18,6 +19,10 @@ public interface BookAuthorAJAXWebService {
     @PUT
     @Path("/ajax/book-author")
     SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request);
+
+    @PUT
+    @Path("/ajax/book-author")
+    ListBookAuthorAJAXResponse list();
 
     @POST
     @Path("/ajax/book-author")

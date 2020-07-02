@@ -1,6 +1,7 @@
 package app.api.booksite;
 
 import app.api.booksite.booktag.CreateBookTagAJAXRequest;
+import app.api.booksite.booktag.ListBookTagAJAXResponse;
 import app.api.booksite.booktag.SearchBookTagAJAXRequest;
 import app.api.booksite.booktag.SearchBookTagAJAXResponse;
 import app.api.booksite.booktag.UpdateBookTagAJAXRequest;
@@ -18,6 +19,10 @@ public interface BookTagAJAXWebService {
     @PUT
     @Path("/ajax/book-tag")
     SearchBookTagAJAXResponse search(SearchBookTagAJAXRequest request);
+
+    @PUT
+    @Path("/ajax/book-tag")
+    ListBookTagAJAXResponse list();
 
     @POST
     @Path("/ajax/book-tag")

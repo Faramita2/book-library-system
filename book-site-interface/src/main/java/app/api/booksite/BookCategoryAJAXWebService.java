@@ -1,6 +1,7 @@
 package app.api.booksite;
 
 import app.api.booksite.bookcategory.CreateBookCategoryAJAXRequest;
+import app.api.booksite.bookcategory.ListBookCategoryAJAXResponse;
 import app.api.booksite.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.booksite.bookcategory.SearchBookCategoryAJAXResponse;
 import app.api.booksite.bookcategory.UpdateBookCategoryAJAXRequest;
@@ -18,6 +19,10 @@ public interface BookCategoryAJAXWebService {
     @PUT
     @Path("/ajax/book-category")
     SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request);
+
+    @PUT
+    @Path("/ajax/book-category")
+    ListBookCategoryAJAXResponse list();
 
     @POST
     @Path("/ajax/book-category")
