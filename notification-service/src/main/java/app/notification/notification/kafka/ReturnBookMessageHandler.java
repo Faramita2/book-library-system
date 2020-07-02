@@ -27,6 +27,6 @@ public class ReturnBookMessageHandler implements MessageHandler<ReturnBorrowedBo
             value.borrowedAt.format(DateTimeFormatter.ISO_DATE),
             value.returnAt.format(DateTimeFormatter.ISO_DATE)
         );
-        logger.info("send email to user(id = {}): {}", value.userId, content);
+        logger.info("[mock] send email to user(id = {}): {}", value.userId, content);
     }
 }
