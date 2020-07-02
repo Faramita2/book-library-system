@@ -1,6 +1,5 @@
 package app.borrowrecord;
 
-import app.book.api.BookWebService;
 import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.borrowrecord.api.BorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
@@ -21,20 +20,33 @@ import java.time.LocalTime;
 public class BorrowRecordModule extends Module {
     @Override
     protected void initialize() {
+        dbs();
+
+        services();
+
+        apiServices();
+
+        async();
+    }
+
+    private void async() {
+        kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
+        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalTime.of(23, 59));
+    }
+
+    private void apiServices() {
+        api().service(BorrowRecordWebService.class, bind(BorrowRecordWebServiceImpl.class));
+        api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOBorrowRecordService.class);
+        bind(BorrowRecordService.class);
+    }
+
+    private void dbs() {
         MongoConfig config = config(MongoConfig.class);
         config.uri(requiredProperty("sys.mongo.uri"));
         config.collection(BorrowRecord.class);
-
-        api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
-
-        bind(BOBorrowRecordService.class);
-        bind(BorrowRecordService.class);
-
-        api().service(BorrowRecordWebService.class, bind(BorrowRecordWebServiceImpl.class));
-        api().service(BOBorrowRecordWebService.class, bind(BOBorrowRecordWebServiceImpl.class));
-
-        kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
-
-        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnRecordJob.class), LocalTime.of(23, 59));
     }
 }

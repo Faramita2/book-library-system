@@ -14,9 +14,28 @@ import core.framework.module.Module;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(Notification.class);
-        bind(NotificationService.class);
+        dbs();
+
+        services();
+
+        apiServices();
+
+        async();
+    }
+
+    private void async() {
         kafka().subscribe("return-borrowed-book", ReturnBorrowedBookMessage.class, bind(ReturnBookMessageHandler.class));
+    }
+
+    private void apiServices() {
         api().service(NotificationWebService.class, bind(NotificationWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(NotificationService.class);
+    }
+
+    private void dbs() {
+        db().repository(Notification.class);
     }
 }
