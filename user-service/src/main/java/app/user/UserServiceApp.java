@@ -10,10 +10,14 @@ public class UserServiceApp extends App {
     @Override
     protected void initialize() {
         sys();
+        modules();
     }
 
     private void sys() {
         load(new SystemModule("sys.properties"));
+    }
+
+    private void modules() {
         load(new UserModule());
     }
 }
