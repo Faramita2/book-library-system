@@ -12,20 +12,21 @@ import core.framework.api.validate.Pattern;
 public class BOCreateUserRequest {
     @NotNull
     @NotBlank
+    @Length(min = 6, max = 50)
     @Property(name = "username")
-    @Length(min = 6)
     public String username;
 
     @NotNull
     @NotBlank
-    @Property(name = "email")
+    @Length(max = 255)
     @Pattern("^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$")
+    @Property(name = "email")
     public String email;
 
     @NotNull
     @NotBlank
-    @Property(name = "password")
     @Length(min = 6)
+    @Property(name = "password")
     public String password;
 
     @NotNull

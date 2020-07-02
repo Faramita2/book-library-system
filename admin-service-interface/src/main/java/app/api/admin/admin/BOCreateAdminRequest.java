@@ -11,6 +11,7 @@ import core.framework.api.validate.NotNull;
 public class BOCreateAdminRequest {
     @NotNull
     @NotBlank
+    @Length(max = 50)
     @Property(name = "account")
     public String account;
 

@@ -1,6 +1,7 @@
 package app.api.booksite.book;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.Length;
 
 import java.util.List;
 
@@ -8,12 +9,14 @@ import java.util.List;
  * @author zoo
  */
 public class UpdateBookAJAXRequest {
+    @Length(max = 50)
     @Property(name = "name")
     public String name;
 
     @Property(name = "tag_ids")
     public List<Long> tagIds;
 
+    @Length(max = 255)
     @Property(name = "description")
     public String description;
 
