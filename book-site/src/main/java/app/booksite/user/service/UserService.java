@@ -14,6 +14,7 @@ import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.web.WebContext;
 
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 public class UserService {
     @Inject
     BOUserWebService userWebService;
+    @Inject
+    WebContext webContext;
 
     public void create(CreateUserAJAXRequest request) {
         BOCreateUserRequest req = new BOCreateUserRequest();
@@ -62,9 +65,14 @@ public class UserService {
 
     public void update(Long id, UpdateUserAJAXRequest request) {
         BOUpdateUserRequest req = new BOUpdateUserRequest();
-        req.status = UserStatusView.valueOf(request.status.name());
+        if (request.status != null) {
+            req.status = UserStatusView.valueOf(request.status.name());
+        }
         req.operator = "book-site";
         userWebService.update(id, req);
+        if (request.status != null) {
+            webContext.request().session().set("user_status", request.status.name());
+        }
     }
 
     public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {

@@ -14,7 +14,6 @@ import core.framework.inject.Inject;
 import core.framework.web.WebContext;
 import core.framework.web.exception.UnauthorizedException;
 
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -31,9 +30,8 @@ public class NotificationService {
         searchNotificationRequest.skip = request.skip;
         searchNotificationRequest.limit = request.limit;
         searchNotificationRequest.content = request.content;
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
-        searchNotificationRequest.userId = Long.valueOf(userId.get());
+        searchNotificationRequest.userId = Long.valueOf(webContext.request().session().get("user_id").orElseThrow(() ->
+            new UnauthorizedException("please login first.")));
         SearchNotificationResponse searchNotificationResponse = notificationWebService.search(searchNotificationRequest);
 
         SearchNotificationAJAXResponse response = new SearchNotificationAJAXResponse();
@@ -61,17 +59,15 @@ public class NotificationService {
 
     public void delete(Long id) {
         DeleteNotificationRequest req = new DeleteNotificationRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
-        req.userId = Long.valueOf(userId.get());
+        String userId = webContext.request().session().get("user_id").orElseThrow(() ->
+            new UnauthorizedException("please login first."));
+        req.userId = Long.valueOf(userId);
         req.operator = "book-site-frontend";
         notificationWebService.delete(id, req);
     }
 
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
         DeleteBatchNotificationRequest req = new DeleteBatchNotificationRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
         req.ids = request.ids;
         req.operator = "book-site-frontend";
         notificationWebService.deleteBatch(req);

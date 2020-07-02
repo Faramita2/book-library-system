@@ -26,5 +26,6 @@ public class UserService {
         session.set("user_id", String.valueOf(resp.id));
         session.set("username", resp.username);
         session.set("email", resp.email);
+        session.set("user_status", resp.status.name());
     }
 }

@@ -26,7 +26,6 @@ import core.framework.web.WebContext;
 import core.framework.web.exception.UnauthorizedException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -86,7 +85,7 @@ public class BookService {
         response.name = resp.name;
         response.description = resp.description;
         response.status = BookStatusAJAXView.valueOf(resp.status.name());
-        response.borrowerName = resp.borrowerId != 0 ? userWebService.get(resp.borrowerId).username : null;
+        response.borrowerName = resp.borrowerId != null ? userWebService.get(resp.borrowerId).username : null;
         response.borrowedAt = resp.borrowedAt;
         response.returnAt = resp.returnAt;
         response.tagNames = queryTagNames(resp.tagIds);
@@ -106,7 +105,7 @@ public class BookService {
         req.authorIds = request.authorIds;
         req.categoryIds = request.categoryIds;
         req.status = BookStatusView.BORROWED;
-        req.borrowerId = Long.valueOf(webContext.request().session().get("user_id").orElse(String.valueOf(0)));
+        req.borrowerId = Long.valueOf(getUserId());
 
         SearchBookResponse resp = bookWebService.search(req);
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
@@ -129,9 +128,8 @@ public class BookService {
 
     public void borrow(Long id, BorrowBookAJAXRequest request) {
         BorrowBookRequest req = new BorrowBookRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
-        req.userId = Long.valueOf(userId.get());
+        String userId = getUserId();
+        req.userId = Long.valueOf(userId);
         req.operator = "book-site-frontend";
         req.returnAt = request.returnAt;
         bookWebService.borrow(id, req);
@@ -139,11 +137,15 @@ public class BookService {
 
     public void returnBook(Long id) {
         ReturnBookRequest req = new ReturnBookRequest();
-        Optional<String> userId = webContext.request().session().get("user_id");
-        userId.orElseThrow(() -> new UnauthorizedException("please login first."));
-        req.userId = Long.valueOf(userId.get());
+        String userId = getUserId();
+        req.userId = Long.valueOf(userId);
         req.operator = "book-site-frontend";
         bookWebService.returnBook(id, req);
+    }
+
+    private String getUserId() {
+        return webContext.request().session().get("user_id").orElseThrow(() ->
+            new UnauthorizedException("please login first."));
     }
 
     private List<String> queryTagNames(List<Long> tagIds) {

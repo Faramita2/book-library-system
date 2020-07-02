@@ -54,6 +54,7 @@ public class UserService {
             response.id = user.id;
             response.username = user.username;
             response.email = user.email;
+            response.status = UserStatusView.valueOf(user.status.name());
             return response;
         }
 

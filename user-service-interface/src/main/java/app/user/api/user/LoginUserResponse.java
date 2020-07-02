@@ -21,4 +21,8 @@ public class LoginUserResponse {
     @NotBlank
     @Property(name = "email")
     public String email;
+
+    @NotNull
+    @Property(name = "status")
+    public UserStatusView status;
 }
