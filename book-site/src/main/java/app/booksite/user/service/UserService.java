@@ -28,28 +28,28 @@ public class UserService {
     WebContext webContext;
 
     public void create(CreateUserAJAXRequest request) {
-        BOCreateUserRequest req = new BOCreateUserRequest();
-        req.email = request.email;
-        req.username = request.username;
-        req.password = request.password;
-        req.status = UserStatusView.valueOf(request.status.name());
-        req.operator = "book-site";
-        userWebService.create(req);
+        BOCreateUserRequest boCreateUserRequest = new BOCreateUserRequest();
+        boCreateUserRequest.email = request.email;
+        boCreateUserRequest.username = request.username;
+        boCreateUserRequest.password = request.password;
+        boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
+        boCreateUserRequest.operator = "book-site";
+        userWebService.create(boCreateUserRequest);
     }
 
     public SearchUserAJAXResponse search(SearchUserAJAXRequest request) {
-        BOSearchUserRequest req = new BOSearchUserRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.email = request.email;
-        req.username = request.username;
-        req.ids = request.ids;
-        req.status = request.status != null ? UserStatusView.valueOf(request.status.name()) : null;
-        BOSearchUserResponse resp = userWebService.search(req);
+        BOSearchUserRequest boSearchUserRequest = new BOSearchUserRequest();
+        boSearchUserRequest.skip = request.skip;
+        boSearchUserRequest.limit = request.limit;
+        boSearchUserRequest.email = request.email;
+        boSearchUserRequest.username = request.username;
+        boSearchUserRequest.ids = request.ids;
+        boSearchUserRequest.status = request.status != null ? UserStatusView.valueOf(request.status.name()) : null;
+        BOSearchUserResponse boSearchUserResponse = userWebService.search(boSearchUserRequest);
 
         SearchUserAJAXResponse response = new SearchUserAJAXResponse();
-        response.total = resp.total;
-        response.users = resp.users.stream().map(user -> {
+        response.total = boSearchUserResponse.total;
+        response.users = boSearchUserResponse.users.stream().map(user -> {
             SearchUserAJAXResponse.User view = new SearchUserAJAXResponse.User();
             view.id = user.id;
             view.email = user.email;
@@ -64,22 +64,22 @@ public class UserService {
     }
 
     public void update(Long id, UpdateUserAJAXRequest request) {
-        BOUpdateUserRequest req = new BOUpdateUserRequest();
+        BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         if (request.status != null) {
-            req.status = UserStatusView.valueOf(request.status.name());
+            boUpdateUserRequest.status = UserStatusView.valueOf(request.status.name());
         }
-        req.operator = "book-site";
-        userWebService.update(id, req);
+        boUpdateUserRequest.operator = "book-site";
+        userWebService.update(id, boUpdateUserRequest);
         if (request.status != null) {
             webContext.request().session().set("user_status", request.status.name());
         }
     }
 
     public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
-        BOResetUserPasswordRequest req = new BOResetUserPasswordRequest();
-        req.password = request.password;
-        req.passwordConfirm = request.passwordConfirm;
-        req.operator = "book-site";
-        userWebService.resetPassword(id, req);
+        BOResetUserPasswordRequest boResetUserPasswordRequest = new BOResetUserPasswordRequest();
+        boResetUserPasswordRequest.password = request.password;
+        boResetUserPasswordRequest.passwordConfirm = request.passwordConfirm;
+        boResetUserPasswordRequest.operator = "book-site";
+        userWebService.resetPassword(id, boResetUserPasswordRequest);
     }
 }

@@ -18,14 +18,14 @@ public class UserService {
     WebContext webContext;
 
     public void login(LoginUserAJAXRequest request) {
-        LoginUserRequest req = new LoginUserRequest();
-        req.username = request.username;
-        req.password = request.password;
-        LoginUserResponse resp = userWebService.login(req);
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.username = request.username;
+        loginUserRequest.password = request.password;
+        LoginUserResponse loginUserResponse = userWebService.login(loginUserRequest);
         Session session = webContext.request().session();
-        session.set("user_id", String.valueOf(resp.id));
-        session.set("username", resp.username);
-        session.set("email", resp.email);
-        session.set("user_status", resp.status.name());
+        session.set("user_id", String.valueOf(loginUserResponse.id));
+        session.set("username", loginUserResponse.username);
+        session.set("email", loginUserResponse.email);
+        session.set("user_status", loginUserResponse.status.name());
     }
 }

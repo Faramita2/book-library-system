@@ -35,22 +35,22 @@ public class BorrowedBookService {
     CategoryWebService categoryWebService;
 
     public SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request) {
-        SearchBookRequest req = new SearchBookRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        req.description = request.description;
-        req.tagIds = request.tagIds;
-        req.authorIds = request.authorIds;
-        req.categoryIds = request.categoryIds;
-        req.status = BookStatusView.BORROWED;
-        req.borrowerId = Long.valueOf(getUserId());
+        SearchBookRequest searchBookRequest = new SearchBookRequest();
+        searchBookRequest.skip = request.skip;
+        searchBookRequest.limit = request.limit;
+        searchBookRequest.name = request.name;
+        searchBookRequest.description = request.description;
+        searchBookRequest.tagIds = request.tagIds;
+        searchBookRequest.authorIds = request.authorIds;
+        searchBookRequest.categoryIds = request.categoryIds;
+        searchBookRequest.status = BookStatusView.BORROWED;
+        searchBookRequest.borrowerId = Long.valueOf(getUserId());
 
-        SearchBookResponse resp = bookWebService.search(req);
+        SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
 
-        response.total = resp.total;
-        response.books = resp.books.stream().map(book -> {
+        response.total = searchBookResponse.total;
+        response.books = searchBookResponse.books.stream().map(book -> {
             SearchBorrowedBookAJAXResponse.Book view = new SearchBorrowedBookAJAXResponse.Book();
             view.id = book.id;
             view.name = book.name;

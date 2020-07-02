@@ -19,15 +19,15 @@ public class BookAuthorService {
     AuthorWebService authorWebService;
 
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
-        SearchAuthorRequest req = new SearchAuthorRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
+        SearchAuthorRequest searchAuthorRequest = new SearchAuthorRequest();
+        searchAuthorRequest.skip = request.skip;
+        searchAuthorRequest.limit = request.limit;
+        searchAuthorRequest.name = request.name;
 
         SearchBookAuthorAJAXResponse response = new SearchBookAuthorAJAXResponse();
-        SearchAuthorResponse resp = authorWebService.search(req);
-        response.total = resp.total;
-        response.authors = resp.authors.stream().map(author -> {
+        SearchAuthorResponse searchAuthorResponse = authorWebService.search(searchAuthorRequest);
+        response.total = searchAuthorResponse.total;
+        response.authors = searchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();
             view.id = author.id;
             view.name = author.name;

@@ -23,15 +23,15 @@ public class BookAuthorService {
     BOAuthorWebService boAuthorWebService;
 
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
-        BOSearchAuthorRequest req = new BOSearchAuthorRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
+        BOSearchAuthorRequest boSearchAuthorRequest = new BOSearchAuthorRequest();
+        boSearchAuthorRequest.skip = request.skip;
+        boSearchAuthorRequest.limit = request.limit;
+        boSearchAuthorRequest.name = request.name;
 
         SearchBookAuthorAJAXResponse response = new SearchBookAuthorAJAXResponse();
-        BOSearchAuthorResponse resp = boAuthorWebService.search(req);
-        response.total = resp.total;
-        response.authors = resp.authors.stream().map(author -> {
+        BOSearchAuthorResponse boSearchAuthorResponse = boAuthorWebService.search(boSearchAuthorRequest);
+        response.total = boSearchAuthorResponse.total;
+        response.authors = boSearchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();
             view.id = author.id;
             view.name = author.name;
@@ -55,16 +55,16 @@ public class BookAuthorService {
         return response;    }
 
     public void create(CreateBookAuthorAJAXRequest request) {
-        BOCreateAuthorRequest req = new BOCreateAuthorRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boAuthorWebService.create(req);
+        BOCreateAuthorRequest boCreateAuthorRequest = new BOCreateAuthorRequest();
+        boCreateAuthorRequest.name = request.name;
+        boCreateAuthorRequest.operator = "book-site";
+        boAuthorWebService.create(boCreateAuthorRequest);
     }
 
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
-        BOUpdateAuthorRequest req = new BOUpdateAuthorRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boAuthorWebService.update(id, req);
+        BOUpdateAuthorRequest boUpdateAuthorRequest = new BOUpdateAuthorRequest();
+        boUpdateAuthorRequest.name = request.name;
+        boUpdateAuthorRequest.operator = "book-site";
+        boAuthorWebService.update(id, boUpdateAuthorRequest);
     }
 }

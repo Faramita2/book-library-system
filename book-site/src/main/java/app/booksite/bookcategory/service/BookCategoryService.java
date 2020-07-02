@@ -23,14 +23,14 @@ public class BookCategoryService {
     BOCategoryWebService boCategoryWebService;
 
     public SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request) {
-        BOSearchCategoryRequest req = new BOSearchCategoryRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        BOSearchCategoryResponse resp = boCategoryWebService.search(req);
+        BOSearchCategoryRequest boSearchCategoryRequest = new BOSearchCategoryRequest();
+        boSearchCategoryRequest.skip = request.skip;
+        boSearchCategoryRequest.limit = request.limit;
+        boSearchCategoryRequest.name = request.name;
+        BOSearchCategoryResponse boSearchCategoryResponse = boCategoryWebService.search(boSearchCategoryRequest);
         SearchBookCategoryAJAXResponse response = new SearchBookCategoryAJAXResponse();
-        response.total = resp.total;
-        response.categories = resp.categories.stream().map(category -> {
+        response.total = boSearchCategoryResponse.total;
+        response.categories = boSearchCategoryResponse.categories.stream().map(category -> {
             SearchBookCategoryAJAXResponse.Category view = new SearchBookCategoryAJAXResponse.Category();
             view.id = category.id;
             view.name = category.name;
@@ -55,16 +55,16 @@ public class BookCategoryService {
     }
 
     public void create(CreateBookCategoryAJAXRequest request) {
-        BOCreateCategoryRequest req = new BOCreateCategoryRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boCategoryWebService.create(req);
+        BOCreateCategoryRequest boCreateCategoryRequest = new BOCreateCategoryRequest();
+        boCreateCategoryRequest.name = request.name;
+        boCreateCategoryRequest.operator = "book-site";
+        boCategoryWebService.create(boCreateCategoryRequest);
     }
 
     public void update(Long id, UpdateBookCategoryAJAXRequest request) {
-        BOUpdateCategoryRequest req = new BOUpdateCategoryRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boCategoryWebService.update(id, req);
+        BOUpdateCategoryRequest boUpdateCategoryRequest = new BOUpdateCategoryRequest();
+        boUpdateCategoryRequest.name = request.name;
+        boUpdateCategoryRequest.operator = "book-site";
+        boCategoryWebService.update(id, boUpdateCategoryRequest);
     }
 }

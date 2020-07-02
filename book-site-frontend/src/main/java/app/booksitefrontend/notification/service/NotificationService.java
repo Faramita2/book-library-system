@@ -58,18 +58,18 @@ public class NotificationService {
     }
 
     public void delete(Long id) {
-        DeleteNotificationRequest req = new DeleteNotificationRequest();
+        DeleteNotificationRequest deleteNotificationRequest = new DeleteNotificationRequest();
         String userId = webContext.request().session().get("user_id").orElseThrow(() ->
             new UnauthorizedException("please login first."));
-        req.userId = Long.valueOf(userId);
-        req.operator = "book-site-frontend";
-        notificationWebService.delete(id, req);
+        deleteNotificationRequest.userId = Long.valueOf(userId);
+        deleteNotificationRequest.operator = "book-site-frontend";
+        notificationWebService.delete(id, deleteNotificationRequest);
     }
 
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
-        DeleteBatchNotificationRequest req = new DeleteBatchNotificationRequest();
-        req.ids = request.ids;
-        req.operator = "book-site-frontend";
-        notificationWebService.deleteBatch(req);
+        DeleteBatchNotificationRequest deleteBatchNotificationRequest = new DeleteBatchNotificationRequest();
+        deleteBatchNotificationRequest.ids = request.ids;
+        deleteBatchNotificationRequest.operator = "book-site-frontend";
+        notificationWebService.deleteBatch(deleteBatchNotificationRequest);
     }
 }

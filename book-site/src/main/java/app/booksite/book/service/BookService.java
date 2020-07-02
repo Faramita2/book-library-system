@@ -31,39 +31,39 @@ import java.util.stream.Collectors;
  */
 public class BookService {
     @Inject
-    BOBookWebService bookWebService;
+    BOBookWebService boBookWebService;
     @Inject
-    BOTagWebService tagWebService;
+    BOTagWebService boTagWebService;
     @Inject
-    BOCategoryWebService categoryWebService;
+    BOCategoryWebService boCategoryWebService;
     @Inject
-    BOAuthorWebService authorWebService;
+    BOAuthorWebService boAuthorWebService;
     @Inject
-    BOUserWebService userWebService;
+    BOUserWebService boUserWebService;
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
-        BOSearchBookRequest req = new BOSearchBookRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        req.tagIds = request.tagIds;
-        req.description = request.description;
-        req.categoryIds = request.categoryIds;
-        req.authorIds = request.authorIds;
+        BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
+        boSearchBookRequest.skip = request.skip;
+        boSearchBookRequest.limit = request.limit;
+        boSearchBookRequest.name = request.name;
+        boSearchBookRequest.tagIds = request.tagIds;
+        boSearchBookRequest.description = request.description;
+        boSearchBookRequest.categoryIds = request.categoryIds;
+        boSearchBookRequest.authorIds = request.authorIds;
 
-        BOSearchBookResponse resp = bookWebService.search(req);
+        BOSearchBookResponse boSearchBookResponse = boBookWebService.search(boSearchBookRequest);
         SearchBookAJAXResponse response = new SearchBookAJAXResponse();
 
-        List<Long> tagIds = distinctTagIds(resp);
-        List<Long> categoryIds = distinctCategoryIds(resp);
-        List<Long> authorIds = distinctAuthorIds(resp);
+        List<Long> tagIds = distinctTagIds(boSearchBookResponse);
+        List<Long> categoryIds = distinctCategoryIds(boSearchBookResponse);
+        List<Long> authorIds = distinctAuthorIds(boSearchBookResponse);
 
         Map<Long, String> tagNames = queryTagNames(tagIds);
         Map<Long, String> categoryNames = queryCategoryNames(categoryIds);
         Map<Long, String> authorNames = queryAuthorNames(authorIds);
 
-        response.total = resp.total;
-        response.books = resp.books.stream().map(book -> {
+        response.total = boSearchBookResponse.total;
+        response.books = boSearchBookResponse.books.stream().map(book -> {
             SearchBookAJAXResponse.Book view = new SearchBookAJAXResponse.Book();
             view.id = book.id;
             view.name = book.name;
@@ -79,67 +79,67 @@ public class BookService {
     }
 
     public GetBookAJAXResponse get(Long id) {
-        BOGetBookResponse resp = bookWebService.get(id);
+        BOGetBookResponse boGetBookResponse = boBookWebService.get(id);
         GetBookAJAXResponse response = new GetBookAJAXResponse();
 
-        Map<Long, String> authorNames = queryAuthorNames(resp.authorIds);
-        Map<Long, String> categoryNames = queryCategoryNames(resp.categoryIds);
-        Map<Long, String> tagNames = queryTagNames(resp.tagIds);
+        Map<Long, String> authorNames = queryAuthorNames(boGetBookResponse.authorIds);
+        Map<Long, String> categoryNames = queryCategoryNames(boGetBookResponse.categoryIds);
+        Map<Long, String> tagNames = queryTagNames(boGetBookResponse.tagIds);
 
-        response.id = resp.id;
-        response.name = resp.name;
-        response.description = resp.description;
-        response.status = BookStatusAJAXView.valueOf(resp.status.name());
-        response.borrowerName = resp.borrowerId != 0 ? userWebService.get(resp.borrowerId).username : null;
-        response.authorNames = resp.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
-        response.categoryNames = resp.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
-        response.tagNames = resp.tagIds.stream().map(tagNames::get).collect(Collectors.toList());
-        response.borrowedAt = resp.borrowedAt;
-        response.returnAt = resp.returnAt;
+        response.id = boGetBookResponse.id;
+        response.name = boGetBookResponse.name;
+        response.description = boGetBookResponse.description;
+        response.status = BookStatusAJAXView.valueOf(boGetBookResponse.status.name());
+        response.borrowerName = boGetBookResponse.borrowerId != 0 ? boUserWebService.get(boGetBookResponse.borrowerId).username : null;
+        response.authorNames = boGetBookResponse.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
+        response.categoryNames = boGetBookResponse.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
+        response.tagNames = boGetBookResponse.tagIds.stream().map(tagNames::get).collect(Collectors.toList());
+        response.borrowedAt = boGetBookResponse.borrowedAt;
+        response.returnAt = boGetBookResponse.returnAt;
 
         return response;
     }
 
     public void create(CreateBookAJAXRequest request) {
-        BOCreateBookRequest req = new BOCreateBookRequest();
-        req.name = request.name;
-        req.tagIds = request.tagIds;
-        req.description = request.description;
-        req.categoryIds = request.categoryIds;
-        req.authorIds = request.authorIds;
-        req.operator = "book-site";
-        bookWebService.create(req);
+        BOCreateBookRequest boCreateBookRequest = new BOCreateBookRequest();
+        boCreateBookRequest.name = request.name;
+        boCreateBookRequest.tagIds = request.tagIds;
+        boCreateBookRequest.description = request.description;
+        boCreateBookRequest.categoryIds = request.categoryIds;
+        boCreateBookRequest.authorIds = request.authorIds;
+        boCreateBookRequest.operator = "book-site";
+        boBookWebService.create(boCreateBookRequest);
     }
 
     public void update(Long id, UpdateBookAJAXRequest request) {
-        BOUpdateBookRequest req = new BOUpdateBookRequest();
-        req.name = request.name;
-        req.tagIds = request.tagIds;
-        req.description = request.description;
-        req.categoryIds = request.categoryIds;
-        req.authorIds = request.authorIds;
-        req.operator = "book-site";
-        bookWebService.update(id, req);
+        BOUpdateBookRequest boUpdateBookRequest = new BOUpdateBookRequest();
+        boUpdateBookRequest.name = request.name;
+        boUpdateBookRequest.tagIds = request.tagIds;
+        boUpdateBookRequest.description = request.description;
+        boUpdateBookRequest.categoryIds = request.categoryIds;
+        boUpdateBookRequest.authorIds = request.authorIds;
+        boUpdateBookRequest.operator = "book-site";
+        boBookWebService.update(id, boUpdateBookRequest);
     }
 
-    private List<Long> distinctAuthorIds(BOSearchBookResponse resp) {
-        return resp.books.stream()
+    private List<Long> distinctAuthorIds(BOSearchBookResponse boSearchBookResponse) {
+        return boSearchBookResponse.books.stream()
             .map(book -> book.authorIds)
             .flatMap(Collection::stream)
             .distinct()
             .collect(Collectors.toList());
     }
 
-    private List<Long> distinctCategoryIds(BOSearchBookResponse resp) {
-        return resp.books.stream()
+    private List<Long> distinctCategoryIds(BOSearchBookResponse boSearchBookResponse) {
+        return boSearchBookResponse.books.stream()
             .map(book -> book.categoryIds)
             .flatMap(Collection::stream)
             .distinct()
             .collect(Collectors.toList());
     }
 
-    private List<Long> distinctTagIds(BOSearchBookResponse resp) {
-        return resp.books.stream()
+    private List<Long> distinctTagIds(BOSearchBookResponse boSearchBookResponse) {
+        return boSearchBookResponse.books.stream()
             .map(book -> book.tagIds)
             .flatMap(Collection::stream)
             .distinct()
@@ -151,7 +151,7 @@ public class BookService {
         boSearchTagRequest.skip = 0;
         boSearchTagRequest.limit = tagIds.size();
         boSearchTagRequest.ids = tagIds;
-        return tagWebService.search(boSearchTagRequest).tags.stream()
+        return boTagWebService.search(boSearchTagRequest).tags.stream()
             .collect(Collectors.toMap(tag -> tag.id, tag -> tag.name));
     }
 
@@ -160,7 +160,7 @@ public class BookService {
         boSearchCategoryRequest.skip = 0;
         boSearchCategoryRequest.limit = categoryIds.size();
         boSearchCategoryRequest.ids = categoryIds;
-        return categoryWebService.search(boSearchCategoryRequest).categories.stream()
+        return boCategoryWebService.search(boSearchCategoryRequest).categories.stream()
             .collect(Collectors.toMap(category -> category.id, category -> category.name));
     }
 
@@ -169,7 +169,7 @@ public class BookService {
         boSearchAuthorRequest.skip = 0;
         boSearchAuthorRequest.limit = authorIds.size();
         boSearchAuthorRequest.ids = authorIds;
-        return authorWebService.search(boSearchAuthorRequest).authors.stream()
+        return boAuthorWebService.search(boSearchAuthorRequest).authors.stream()
             .collect(Collectors.toMap(author -> author.id, author -> author.name));
     }
 }

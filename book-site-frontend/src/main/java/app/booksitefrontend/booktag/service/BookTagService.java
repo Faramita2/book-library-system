@@ -19,14 +19,14 @@ public class BookTagService {
     TagWebService tagWebService;
 
     public SearchBookTagAJAXResponse search(SearchBookTagAJAXRequest request) {
-        SearchTagRequest req = new SearchTagRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        SearchTagResponse resp = tagWebService.search(req);
+        SearchTagRequest searchTagRequest = new SearchTagRequest();
+        searchTagRequest.skip = request.skip;
+        searchTagRequest.limit = request.limit;
+        searchTagRequest.name = request.name;
+        SearchTagResponse searchTagResponse = tagWebService.search(searchTagRequest);
         SearchBookTagAJAXResponse response = new SearchBookTagAJAXResponse();
-        response.total = resp.total;
-        response.tags = resp.tags.stream().map(tag -> {
+        response.total = searchTagResponse.total;
+        response.tags = searchTagResponse.tags.stream().map(tag -> {
             SearchBookTagAJAXResponse.Tag view = new SearchBookTagAJAXResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;

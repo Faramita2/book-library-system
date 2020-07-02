@@ -44,23 +44,23 @@ public class BookService {
     UserWebService userWebService;
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
-        SearchBookRequest req = new SearchBookRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        req.description = request.description;
-        req.tagIds = request.tagIds;
-        req.authorIds = request.authorIds;
-        req.categoryIds = request.categoryIds;
+        SearchBookRequest searchBookRequest = new SearchBookRequest();
+        searchBookRequest.skip = request.skip;
+        searchBookRequest.limit = request.limit;
+        searchBookRequest.name = request.name;
+        searchBookRequest.description = request.description;
+        searchBookRequest.tagIds = request.tagIds;
+        searchBookRequest.authorIds = request.authorIds;
+        searchBookRequest.categoryIds = request.categoryIds;
 
         if (request.status != null) {
-            req.status = BookStatusView.valueOf(request.status.name());
+            searchBookRequest.status = BookStatusView.valueOf(request.status.name());
         }
-        SearchBookResponse resp = bookWebService.search(req);
+        SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
         SearchBookAJAXResponse response = new SearchBookAJAXResponse();
 
-        response.total = resp.total;
-        response.books = resp.books.stream().map(book -> {
+        response.total = searchBookResponse.total;
+        response.books = searchBookResponse.books.stream().map(book -> {
             SearchBookAJAXResponse.Book view = new SearchBookAJAXResponse.Book();
             view.id = book.id;
             view.name = book.name;
@@ -76,38 +76,38 @@ public class BookService {
     }
 
     public GetBookAJAXResponse get(Long id) {
-        GetBookResponse resp = bookWebService.get(id);
+        GetBookResponse getBookResponse = bookWebService.get(id);
         GetBookAJAXResponse response = new GetBookAJAXResponse();
 
-        response.id = resp.id;
-        response.name = resp.name;
-        response.description = resp.description;
-        response.status = BookStatusAJAXView.valueOf(resp.status.name());
-        response.borrowerName = resp.borrowerId != null ? userWebService.get(resp.borrowerId).username : null;
-        response.borrowedAt = resp.borrowedAt;
-        response.returnAt = resp.returnAt;
-        response.tagNames = queryTagNames(resp.tagIds);
-        response.categoryNames = queryCategoryNames(resp.categoryIds);
-        response.authorNames = queryAuthorNames(resp.authorIds);
+        response.id = getBookResponse.id;
+        response.name = getBookResponse.name;
+        response.description = getBookResponse.description;
+        response.status = BookStatusAJAXView.valueOf(getBookResponse.status.name());
+        response.borrowerName = getBookResponse.borrowerId != null ? userWebService.get(getBookResponse.borrowerId).username : null;
+        response.borrowedAt = getBookResponse.borrowedAt;
+        response.returnAt = getBookResponse.returnAt;
+        response.tagNames = queryTagNames(getBookResponse.tagIds);
+        response.categoryNames = queryCategoryNames(getBookResponse.categoryIds);
+        response.authorNames = queryAuthorNames(getBookResponse.authorIds);
 
         return response;
     }
 
     public void borrow(Long id, BorrowBookAJAXRequest request) {
-        BorrowBookRequest req = new BorrowBookRequest();
+        BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
         String userId = getUserId();
-        req.userId = Long.valueOf(userId);
-        req.operator = "book-site-frontend";
-        req.returnAt = request.returnAt;
-        bookWebService.borrow(id, req);
+        borrowBookRequest.userId = Long.valueOf(userId);
+        borrowBookRequest.operator = "book-site-frontend";
+        borrowBookRequest.returnAt = request.returnAt;
+        bookWebService.borrow(id, borrowBookRequest);
     }
 
     public void returnBook(Long id) {
-        ReturnBookRequest req = new ReturnBookRequest();
+        ReturnBookRequest returnBookRequest = new ReturnBookRequest();
         String userId = getUserId();
-        req.userId = Long.valueOf(userId);
-        req.operator = "book-site-frontend";
-        bookWebService.returnBook(id, req);
+        returnBookRequest.userId = Long.valueOf(userId);
+        returnBookRequest.operator = "book-site-frontend";
+        bookWebService.returnBook(id, returnBookRequest);
     }
 
     private String getUserId() {

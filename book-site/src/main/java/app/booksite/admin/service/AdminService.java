@@ -17,10 +17,10 @@ public class AdminService {
     WebContext webContext;
 
     public void login(LoginAdminAJAXRequest request) {
-        BOLoginAdminRequest req = new BOLoginAdminRequest();
-        req.account = request.account;
-        req.password = request.password;
-        BOLoginAdminResponse response = boAdminWebService.login(req);
+        BOLoginAdminRequest boLoginAdminRequest = new BOLoginAdminRequest();
+        boLoginAdminRequest.account = request.account;
+        boLoginAdminRequest.password = request.password;
+        BOLoginAdminResponse response = boAdminWebService.login(boLoginAdminRequest);
         webContext.request().session().set("admin_id", String.valueOf(response.id));
         webContext.request().session().set("admin_account", response.account);
     }

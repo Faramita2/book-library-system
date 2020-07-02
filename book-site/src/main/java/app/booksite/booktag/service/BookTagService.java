@@ -23,14 +23,14 @@ public class BookTagService {
     BOTagWebService boTagWebService;
 
     public SearchBookTagAJAXResponse search(SearchBookTagAJAXRequest request) {
-        BOSearchTagRequest req = new BOSearchTagRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        BOSearchTagResponse resp = boTagWebService.search(req);
+        BOSearchTagRequest boSearchTagRequest = new BOSearchTagRequest();
+        boSearchTagRequest.skip = request.skip;
+        boSearchTagRequest.limit = request.limit;
+        boSearchTagRequest.name = request.name;
+        BOSearchTagResponse boSearchTagResponse = boTagWebService.search(boSearchTagRequest);
         SearchBookTagAJAXResponse response = new SearchBookTagAJAXResponse();
-        response.total = resp.total;
-        response.tags = resp.tags.stream().map(tag -> {
+        response.total = boSearchTagResponse.total;
+        response.tags = boSearchTagResponse.tags.stream().map(tag -> {
             SearchBookTagAJAXResponse.Tag view = new SearchBookTagAJAXResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;
@@ -55,16 +55,16 @@ public class BookTagService {
     }
 
     public void create(CreateBookTagAJAXRequest request) {
-        BOCreateTagRequest req = new BOCreateTagRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boTagWebService.create(req);
+        BOCreateTagRequest boCreateTagRequest = new BOCreateTagRequest();
+        boCreateTagRequest.name = request.name;
+        boCreateTagRequest.operator = "book-site";
+        boTagWebService.create(boCreateTagRequest);
     }
 
     public void update(Long id, UpdateBookTagAJAXRequest request) {
-        BOUpdateTagRequest req = new BOUpdateTagRequest();
-        req.name = request.name;
-        req.operator = "book-site";
-        boTagWebService.update(id, req);
+        BOUpdateTagRequest boUpdateTagRequest = new BOUpdateTagRequest();
+        boUpdateTagRequest.name = request.name;
+        boUpdateTagRequest.operator = "book-site";
+        boTagWebService.update(id, boUpdateTagRequest);
     }
 }

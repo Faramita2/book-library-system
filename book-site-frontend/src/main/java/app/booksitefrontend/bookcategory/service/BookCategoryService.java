@@ -19,14 +19,14 @@ public class BookCategoryService {
     CategoryWebService categoryWebService;
 
     public SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request) {
-        SearchCategoryRequest req = new SearchCategoryRequest();
-        req.skip = request.skip;
-        req.limit = request.limit;
-        req.name = request.name;
-        SearchCategoryResponse resp = categoryWebService.search(req);
+        SearchCategoryRequest searchCategoryRequest = new SearchCategoryRequest();
+        searchCategoryRequest.skip = request.skip;
+        searchCategoryRequest.limit = request.limit;
+        searchCategoryRequest.name = request.name;
+        SearchCategoryResponse searchCategoryResponse = categoryWebService.search(searchCategoryRequest);
         SearchBookCategoryAJAXResponse response = new SearchBookCategoryAJAXResponse();
-        response.total = resp.total;
-        response.categories = resp.categories.stream().map(category -> {
+        response.total = searchCategoryResponse.total;
+        response.categories = searchCategoryResponse.categories.stream().map(category -> {
             SearchBookCategoryAJAXResponse.Category view = new SearchBookCategoryAJAXResponse.Category();
             view.id = category.id;
             view.name = category.name;

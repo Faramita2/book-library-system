@@ -26,19 +26,19 @@ public class BorrowRecordService {
     BOUserWebService userWebService;
 
     public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
-        BOSearchBorrowRecordRequest req = new BOSearchBorrowRecordRequest();
-        req.bookId = request.bookId;
-        req.skip = request.skip;
-        req.limit = request.limit;
+        BOSearchBorrowRecordRequest boSearchBorrowRecordRequest = new BOSearchBorrowRecordRequest();
+        boSearchBorrowRecordRequest.bookId = request.bookId;
+        boSearchBorrowRecordRequest.skip = request.skip;
+        boSearchBorrowRecordRequest.limit = request.limit;
 
-        BOSearchBorrowRecordResponse resp = borrowRecordWebService.search(req);
-        List<BOSearchBorrowRecordResponse.Record> records = resp.records;
+        BOSearchBorrowRecordResponse boSearchBorrowRecordResponse = borrowRecordWebService.search(boSearchBorrowRecordRequest);
+        List<BOSearchBorrowRecordResponse.Record> records = boSearchBorrowRecordResponse.records;
 
         String bookName = bookWebService.get(request.bookId).name;
         Map<Long, String> borrowerNames = queryBorrowerNames(records);
 
         SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
-        response.total = resp.total;
+        response.total = boSearchBorrowRecordResponse.total;
         response.records = records.stream()
             .map(record -> {
                 SearchBorrowRecordAJAXResponse.Record view = new SearchBorrowRecordAJAXResponse.Record();
