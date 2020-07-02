@@ -6,6 +6,7 @@ import app.api.booksite.booktag.SearchBookTagAJAXRequest;
 import app.api.booksite.booktag.SearchBookTagAJAXResponse;
 import app.api.booksite.booktag.UpdateBookTagAJAXRequest;
 import core.framework.api.http.HTTPStatus;
+import core.framework.api.web.service.DELETE;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -32,4 +33,8 @@ public interface BookTagAJAXWebService {
     @PUT
     @Path("/ajax/book-tag/:id")
     void update(@PathParam("id") Long id, UpdateBookTagAJAXRequest request);
+
+    @DELETE
+    @Path("/ajax/book-tag/:id")
+    void delete(@PathParam("id") Long id);
 }

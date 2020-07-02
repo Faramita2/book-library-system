@@ -34,7 +34,13 @@ public class BookAuthorAJAXWebServiceImpl implements BookAuthorAJAXWebService {
 
     @Override
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
-        ActionLogContext.put("author_id", id);
+        ActionLogContext.put("id", id);
         service.update(id, request);
+    }
+
+    @Override
+    public void delete(Long id) {
+        ActionLogContext.put("id", id);
+        service.delete(id);
     }
 }

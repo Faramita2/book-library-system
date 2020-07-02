@@ -67,4 +67,8 @@ public class BookTagService {
         boUpdateTagRequest.operator = "book-site";
         boTagWebService.update(id, boUpdateTagRequest);
     }
+
+    public void delete(Long id) {
+        boTagWebService.delete(id);
+    }
 }

@@ -37,4 +37,10 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
         ActionLogContext.put("id", id);
         service.update(id, request);
     }
+
+    @Override
+    public void delete(Long id) {
+        ActionLogContext.put("id", id);
+        service.delete(id);
+    }
 }

@@ -67,4 +67,8 @@ public class BookCategoryService {
         boUpdateCategoryRequest.operator = "book-site";
         boCategoryWebService.update(id, boUpdateCategoryRequest);
     }
+
+    public void delete(Long id) {
+        boCategoryWebService.delete(id);
+    }
 }

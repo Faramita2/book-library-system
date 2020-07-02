@@ -67,4 +67,8 @@ public class BookAuthorService {
         boUpdateAuthorRequest.operator = "book-site";
         boAuthorWebService.update(id, boUpdateAuthorRequest);
     }
+
+    public void delete(Long id) {
+        boAuthorWebService.delete(id);
+    }
 }
