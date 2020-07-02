@@ -15,10 +15,24 @@ import core.framework.module.Module;
 public class CategoryModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(Category.class);
-        bind(BOCategoryService.class);
-        bind(CategoryService.class);
+        dbs();
+
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BOCategoryWebService.class, bind(BOCategoryWebServiceImpl.class));
         api().service(CategoryWebService.class, bind(CategoryWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOCategoryService.class);
+        bind(CategoryService.class);
+    }
+
+    private void dbs() {
+        db().repository(Category.class);
     }
 }

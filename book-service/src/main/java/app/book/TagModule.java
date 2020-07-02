@@ -15,10 +15,24 @@ import core.framework.module.Module;
 public class TagModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(Tag.class);
-        bind(BOTagService.class);
-        bind(TagService.class);
+        dbs();
+
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BOTagWebService.class, bind(BOTagWebServiceImpl.class));
         api().service(TagWebService.class, bind(TagWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOTagService.class);
+        bind(TagService.class);
+    }
+
+    private void dbs() {
+        db().repository(Tag.class);
     }
 }

@@ -15,10 +15,24 @@ import core.framework.module.Module;
 public class AuthorModule extends Module {
     @Override
     protected void initialize() {
-        db().repository(Author.class);
-        bind(BOAuthorService.class);
-        bind(AuthorService.class);
+        dbs();
+
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
         api().service(BOAuthorWebService.class, bind(BOAuthorWebServiceImpl.class));
         api().service(AuthorWebService.class, bind(AuthorWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOAuthorService.class);
+        bind(AuthorService.class);
+    }
+
+    private void dbs() {
+        db().repository(Author.class);
     }
 }

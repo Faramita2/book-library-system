@@ -13,7 +13,6 @@ import app.book.book.service.BOBookService;
 import app.book.book.service.BookService;
 import app.book.book.web.BOBookWebServiceImpl;
 import app.book.book.web.BookWebServiceImpl;
-import app.borrowrecord.api.BorrowRecordWebService;
 import core.framework.module.Module;
 
 /**
@@ -22,6 +21,24 @@ import core.framework.module.Module;
 public class BookModule extends Module {
     @Override
     protected void initialize() {
+        dbs();
+
+        services();
+
+        apiServices();
+    }
+
+    private void apiServices() {
+        api().service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
+        api().service(BookWebService.class, bind(BookWebServiceImpl.class));
+    }
+
+    private void services() {
+        bind(BOBookService.class);
+        bind(BookService.class);
+    }
+
+    private void dbs() {
         db().repository(Book.class);
         db().view(BookView.class);
         db().view(BookCountView.class);
@@ -29,13 +46,5 @@ public class BookModule extends Module {
         db().view(CategoryIdView.class);
         db().view(AuthorIdView.class);
         db().view(BookIdView.class);
-
-        api().client(BorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
-
-        bind(BOBookService.class);
-        bind(BookService.class);
-
-        api().service(BOBookWebService.class, bind(BOBookWebServiceImpl.class));
-        api().service(BookWebService.class, bind(BookWebServiceImpl.class));
     }
 }
