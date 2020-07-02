@@ -39,7 +39,7 @@ public class NotificationService {
         notification.userId = message.userId;
         String bookName = message.bookName;
         notification.content = Strings.format(
-            "The book 《{}》 you borrowed at {} should be returned tomorrow({}).",
+            "The book '{}' you borrowed at {} should be returned tomorrow({}).",
             bookName,
             message.borrowedAt.format(DateTimeFormatter.ISO_DATE),
             message.returnAt.format(DateTimeFormatter.ISO_DATE)
