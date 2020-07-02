@@ -1,5 +1,6 @@
 package app.book.category.service;
 
+import app.book.api.category.ListCategoryResponse;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.category.SearchCategoryResponse;
 import app.book.category.domain.Category;
@@ -25,8 +26,22 @@ public class CategoryService {
         }
 
         response.total = query.count();
-        response.categories = query.fetch().parallelStream().map(category -> {
+        response.categories = query.fetch().stream().map(category -> {
             SearchCategoryResponse.Category view = new SearchCategoryResponse.Category();
+            view.id = category.id;
+            view.name = category.name;
+            return view;
+        }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    public ListCategoryResponse list() {
+        ListCategoryResponse response = new ListCategoryResponse();
+        Query<Category> query = repository.select();
+        response.total = query.count();
+        response.categories = query.fetch().stream().map(category -> {
+            ListCategoryResponse.Category view = new ListCategoryResponse.Category();
             view.id = category.id;
             view.name = category.name;
             return view;

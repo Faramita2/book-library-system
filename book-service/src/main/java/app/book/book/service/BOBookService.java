@@ -74,7 +74,7 @@ public class BOBookService {
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowerId = book.borrowerId;
         response.borrowedAt = book.borrowedAt;
-        response.returnAt = book.returnAt == null ? null : book.returnAt.toLocalDate();
+        response.returnAt = book.returnAt;
 
         return response;
     }

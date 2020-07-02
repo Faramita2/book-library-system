@@ -1,6 +1,7 @@
 package app.book.category.service;
 
 import app.book.api.category.BOCreateCategoryRequest;
+import app.book.api.category.BOListCategoryResponse;
 import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
 import app.book.api.category.BOUpdateCategoryRequest;
@@ -45,8 +46,22 @@ public class BOCategoryService {
 
         BOSearchCategoryResponse response = new BOSearchCategoryResponse();
         response.total = query.count();
-        response.categories = query.fetch().parallelStream().map(category -> {
+        response.categories = query.fetch().stream().map(category -> {
             BOSearchCategoryResponse.Category view = new BOSearchCategoryResponse.Category();
+            view.id = category.id;
+            view.name = category.name;
+            return view;
+        }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    public BOListCategoryResponse list() {
+        BOListCategoryResponse response = new BOListCategoryResponse();
+        Query<Category> query = repository.select();
+        response.total = query.count();
+        response.categories = query.fetch().stream().map(category -> {
+            BOListCategoryResponse.Category view = new BOListCategoryResponse.Category();
             view.id = category.id;
             view.name = category.name;
             return view;

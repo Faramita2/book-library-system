@@ -2,6 +2,7 @@ package app.book.tag.web;
 
 import app.book.api.BOTagWebService;
 import app.book.api.tag.BOCreateTagRequest;
+import app.book.api.tag.BOListTagResponse;
 import app.book.api.tag.BOSearchTagRequest;
 import app.book.api.tag.BOSearchTagResponse;
 import app.book.api.tag.BOUpdateTagRequest;
@@ -19,6 +20,11 @@ public class BOTagWebServiceImpl implements BOTagWebService {
     @Override
     public BOSearchTagResponse search(BOSearchTagRequest request) {
         return service.search(request);
+    }
+
+    @Override
+    public BOListTagResponse list() {
+        return service.list();
     }
 
     @Override

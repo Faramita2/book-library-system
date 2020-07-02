@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `books` (
     `name` VARCHAR(50) NOT NULL,
     `description` VARCHAR(1024) NOT NULL,
     `status` VARCHAR(50) NOT NULL,
-    `borrower_id` BIGINT NOT NULL DEFAULT 0,
+    `borrower_id` BIGINT,
     `borrowed_at` TIMESTAMP,
     `return_at` TIMESTAMP,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `books` (
     `updated_by` VARCHAR(50) NOT NULL,
 
     INDEX `name_index`(`name` ASC),
-    INDEX `description_index`(`description`(50) ASC),
+    INDEX `description_index`(`description`(255) ASC),
     INDEX `borrower_id_index`(`borrower_id` ASC)
 );
 

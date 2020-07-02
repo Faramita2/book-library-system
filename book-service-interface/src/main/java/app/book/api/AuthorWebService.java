@@ -1,5 +1,6 @@
 package app.book.api;
 
+import app.book.api.author.ListAuthorResponse;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.author.SearchAuthorResponse;
 import core.framework.api.web.service.PUT;
@@ -12,4 +13,8 @@ public interface AuthorWebService {
     @PUT
     @Path("/author")
     SearchAuthorResponse search(SearchAuthorRequest request);
+
+    @PUT
+    @Path("/author")
+    ListAuthorResponse list();
 }

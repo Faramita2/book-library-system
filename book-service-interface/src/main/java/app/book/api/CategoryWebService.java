@@ -1,5 +1,6 @@
 package app.book.api;
 
+import app.book.api.category.ListCategoryResponse;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.category.SearchCategoryResponse;
 import core.framework.api.web.service.PUT;
@@ -12,4 +13,8 @@ public interface CategoryWebService {
     @PUT
     @Path("/category")
     SearchCategoryResponse search(SearchCategoryRequest request);
+
+    @PUT
+    @Path("/category")
+    ListCategoryResponse list();
 }

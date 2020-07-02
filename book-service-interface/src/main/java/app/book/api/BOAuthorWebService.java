@@ -1,6 +1,7 @@
 package app.book.api;
 
 import app.book.api.author.BOCreateAuthorRequest;
+import app.book.api.author.BOListAuthorResponse;
 import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
@@ -19,6 +20,10 @@ public interface BOAuthorWebService {
     @PUT
     @Path("/bo/author")
     BOSearchAuthorResponse search(BOSearchAuthorRequest request);
+
+    @PUT
+    @Path("/bo/author")
+    BOListAuthorResponse list();
 
     @POST
     @Path("/bo/author")

@@ -1,5 +1,6 @@
 package app.book.api;
 
+import app.book.api.tag.ListTagResponse;
 import app.book.api.tag.SearchTagRequest;
 import app.book.api.tag.SearchTagResponse;
 import core.framework.api.web.service.PUT;
@@ -12,4 +13,8 @@ public interface TagWebService {
     @PUT
     @Path("/tag")
     SearchTagResponse search(SearchTagRequest request);
+
+    @PUT
+    @Path("/tag")
+    ListTagResponse list();
 }

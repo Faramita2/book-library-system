@@ -1,6 +1,7 @@
 package app.book.api;
 
 import app.book.api.tag.BOCreateTagRequest;
+import app.book.api.tag.BOListTagResponse;
 import app.book.api.tag.BOSearchTagRequest;
 import app.book.api.tag.BOSearchTagResponse;
 import app.book.api.tag.BOUpdateTagRequest;
@@ -19,6 +20,10 @@ public interface BOTagWebService {
     @PUT
     @Path("/bo/tag")
     BOSearchTagResponse search(BOSearchTagRequest request);
+
+    @PUT
+    @Path("/bo/tag")
+    BOListTagResponse list();
 
     @POST
     @Path("/bo/tag")

@@ -6,6 +6,7 @@ import core.framework.db.Column;
 import core.framework.db.PrimaryKey;
 import core.framework.db.Table;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -38,7 +39,7 @@ public class Book {
     public LocalDateTime borrowedAt;
 
     @Column(name = "return_at")
-    public LocalDateTime returnAt;
+    public LocalDate returnAt;
 
     @Column(name = "created_at")
     @NotNull

@@ -108,7 +108,7 @@ public class BookService {
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowerId = book.borrowerId;
         response.borrowedAt = book.borrowedAt;
-        response.returnAt = book.returnAt == null ? null : book.returnAt.toLocalDate();
+        response.returnAt = book.returnAt;
 
         return response;
     }
@@ -123,7 +123,7 @@ public class BookService {
         book.status = BookStatus.BORROWED;
         book.borrowerId = request.userId;
         book.borrowedAt = now;
-        book.returnAt = request.returnAt.atStartOfDay().plusDays(1).minusSeconds(1);
+        book.returnAt = request.returnAt;
         book.updatedAt = now;
         book.updatedBy = request.operator;
 
@@ -136,18 +136,6 @@ public class BookService {
         }
     }
 
-    private void createBorrowRecord(Book book) {
-        CreateBorrowRecordRequest request = new CreateBorrowRecordRequest();
-        request.bookId = book.id;
-        request.bookName = book.name;
-        request.borrowerId = book.borrowerId;
-        request.borrowedAt = book.borrowedAt;
-        request.returnAt = book.returnAt;
-        request.operator = book.updatedBy;
-
-        borrowRecordWebService.create(request);
-    }
-
     public void returnBook(Long id, ReturnBookRequest request) {
         Book book = repository.selectOne(
             "id = ? AND borrower_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
@@ -155,13 +143,24 @@ public class BookService {
                 new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         book.status = BookStatus.NORMAL;
-        book.borrowerId = 0L;
+        book.borrowerId = null;
         book.returnAt = null;
         book.borrowedAt = null;
         book.updatedAt = LocalDateTime.now();
         book.updatedBy = request.operator;
 
         repository.update(book);
+    }
+
+    private void createBorrowRecord(Book book) {
+        CreateBorrowRecordRequest request = new CreateBorrowRecordRequest();
+        request.bookId = book.id;
+        request.borrowerId = book.borrowerId;
+        request.borrowedAt = book.borrowedAt;
+        request.returnAt = book.returnAt;
+        request.operator = book.updatedBy;
+
+        borrowRecordWebService.create(request);
     }
 
     private List<Long> queryTagIdsByBookId(Long bookId) {
