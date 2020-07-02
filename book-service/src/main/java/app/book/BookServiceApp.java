@@ -15,6 +15,5 @@ public class BookServiceApp extends App {
         load(new AuthorModule());
         load(new CategoryModule());
         load(new TagModule());
-        load(new BorrowedBookModule());
     }
 }

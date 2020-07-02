@@ -35,7 +35,7 @@ public class BOAuthorService {
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
         Query<Author> query = repository.select();
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         query.skip(request.skip);
@@ -55,15 +55,15 @@ public class BOAuthorService {
     }
 
     public void update(Long id, BOUpdateAuthorRequest request) {
-        Author author = repository.get(id).orElseThrow(()
-            -> new NotFoundException(Strings.format("author not found, id = {}", id)));
+        Author author = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         author.name = request.name;
         repository.partialUpdate(author);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(()
-            -> new NotFoundException(Strings.format("author not found, id = {}", id)));
+        repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         repository.delete(id);
     }
 }

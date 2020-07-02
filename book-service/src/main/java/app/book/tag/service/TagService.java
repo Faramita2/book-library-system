@@ -6,6 +6,7 @@ import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.util.Strings;
 
 import java.util.stream.Collectors;
 
@@ -21,16 +22,15 @@ public class TagService {
 
         Query<Tag> query = repository.select();
         if (request.name != null) {
-            query.where("`name` like ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         response.total = query.count();
-        response.tags = query.fetch().parallelStream().map(a -> {
-            SearchTagResponse.Tag tag = new SearchTagResponse.Tag();
-            tag.id = a.id;
-            tag.name = a.name;
-
-            return tag;
+        response.tags = query.fetch().parallelStream().map(tag -> {
+            SearchTagResponse.Tag view = new SearchTagResponse.Tag();
+            view.id = tag.id;
+            view.name = tag.name;
+            return view;
         }).collect(Collectors.toList());
 
         return response;

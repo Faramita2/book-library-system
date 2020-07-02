@@ -37,7 +37,7 @@ public class BOTagService {
         Query<Tag> query = repository.select();
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         query.skip(request.skip);
@@ -57,14 +57,14 @@ public class BOTagService {
 
     public void update(Long id, BOUpdateTagRequest request) {
         Tag tag = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("tag not found, id = {}", id)));
+            new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
         tag.name = request.name;
         repository.partialUpdate(tag);
     }
 
     public void delete(Long id) {
         repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("tag not found, id = {}", id)));
+            new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
         repository.delete(id);
     }
 }

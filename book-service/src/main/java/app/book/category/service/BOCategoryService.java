@@ -37,7 +37,7 @@ public class BOCategoryService {
         Query<Category> query = repository.select();
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         query.skip(request.skip);
@@ -57,14 +57,14 @@ public class BOCategoryService {
 
     public void update(Long id, BOUpdateCategoryRequest request) {
         Category category = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("category not found, id = {}", id)));
+            new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         category.name = request.name;
         repository.partialUpdate(category);
     }
 
     public void delete(Long id) {
         repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("category not found, id = {}", id)));
+            new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         repository.delete(id);
     }
 }

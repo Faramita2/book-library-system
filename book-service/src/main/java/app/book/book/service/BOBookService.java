@@ -60,8 +60,8 @@ public class BOBookService {
     }
 
     public BOGetBookResponse get(Long id) {
-        Book book = repository.get(id).orElseThrow(
-            () -> new NotFoundException(Strings.format("book not found, id = {}", id))
+        Book book = repository.get(id).orElseThrow(() ->
+            new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
         );
 
         BOGetBookResponse response = new BOGetBookResponse();
@@ -86,11 +86,11 @@ public class BOBookService {
         query.limit(request.limit);
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         if (!Strings.isBlank(request.description)) {
-            query.where("description LIKE ?", request.description + "%");
+            query.where("description LIKE ?", Strings.format("{}%", request.description));
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {
@@ -126,7 +126,7 @@ public class BOBookService {
 
     public void update(Long id, BOUpdateBookRequest request) {
         Book book = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("book not found, id = {}", id)));
+            new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.name = request.name;
         book.description = request.description;
         book.updatedAt = LocalDateTime.now();

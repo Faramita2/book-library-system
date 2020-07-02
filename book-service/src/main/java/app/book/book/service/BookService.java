@@ -47,11 +47,11 @@ public class BookService {
         query.limit(request.limit);
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", request.name + "%");
+            query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
 
         if (!Strings.isBlank(request.description)) {
-            query.where("description LIKE ?", request.description + "%");
+            query.where("description LIKE ?", Strings.format("{}%", request.description));
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {
@@ -95,7 +95,7 @@ public class BookService {
 
     public GetBookResponse get(Long id) {
         Book book = repository.get(id).orElseThrow(
-            () -> new NotFoundException(Strings.format("book not found, id = {}", id))
+            () -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
         );
 
         GetBookResponse response = new GetBookResponse();
@@ -116,7 +116,7 @@ public class BookService {
     public void borrow(Long id, BorrowBookRequest request) {
         Book book = repository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
             .orElseThrow(() ->
-                new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id)));
+                new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id), "BOOK_NOT_FOUND"));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -151,7 +151,8 @@ public class BookService {
     public void returnBook(Long id, ReturnBookRequest request) {
         Book book = repository.selectOne(
             "id = ? AND borrower_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
-            .orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
+            .orElseThrow(() ->
+                new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         book.status = BookStatus.NORMAL;
         book.borrowerId = 0L;
