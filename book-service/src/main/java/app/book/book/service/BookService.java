@@ -14,6 +14,9 @@ import app.book.book.domain.CategoryIdView;
 import app.book.book.domain.TagIdView;
 import app.borrowrecord.api.BorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
+import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -24,6 +27,7 @@ import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -149,7 +153,28 @@ public class BookService {
         book.updatedAt = LocalDateTime.now();
         book.updatedBy = request.operator;
 
-        repository.update(book);
+        try (Transaction transaction = database.beginTransaction()) {
+            logger.warn("==== start return book ====");
+            updateBorrowRecord(book);
+            repository.update(book);
+            transaction.commit();
+            logger.warn("==== end borrow book ====");
+        }
+    }
+
+    private void updateBorrowRecord(Book book) {
+        SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
+        searchBorrowRecordRequest.bookId = book.id;
+        searchBorrowRecordRequest.borrowerId = book.borrowerId;
+        searchBorrowRecordRequest.actualReturnAt = null;
+        searchBorrowRecordRequest.skip = 0;
+        searchBorrowRecordRequest.limit = 1;
+        SearchBorrowRecordResponse.Record record = borrowRecordWebService.search(searchBorrowRecordRequest).records.get(0);
+
+        UpdateBorrowRecordRequest updateBorrowRecordRequest = new UpdateBorrowRecordRequest();
+        updateBorrowRecordRequest.actualReturnAt = LocalDate.now();
+
+        borrowRecordWebService.update(record.id, updateBorrowRecordRequest);
     }
 
     private void createBorrowRecord(Book book) {
