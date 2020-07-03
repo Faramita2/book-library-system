@@ -34,6 +34,9 @@ public class BorrowRecord {
     @Field(name = "return_at")
     public LocalDateTime returnAt;
 
+    @Field(name = "actual_return_at")
+    public LocalDateTime actualReturnAt;
+
     @NotNull
     @Field(name = "created_at")
     public LocalDateTime createdAt;

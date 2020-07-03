@@ -45,5 +45,8 @@ public class SearchBorrowRecordAJAXResponse {
         @NotNull
         @Property(name = "return_at")
         public LocalDate returnAt;
+
+        @Property(name = "actual_return_at")
+        public LocalDate actualReturnAt;
     }
 }

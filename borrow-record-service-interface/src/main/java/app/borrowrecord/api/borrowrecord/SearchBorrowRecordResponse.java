@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @author zoo
+ * @author meow
  */
-public class BOSearchBorrowRecordResponse {
+public class SearchBorrowRecordResponse {
     @NotNull
     @Property(name = "total")
     public Long total;
@@ -25,18 +25,11 @@ public class BOSearchBorrowRecordResponse {
         public String id;
 
         @NotNull
-        @Property(name = "borrower_id")
-        public Long borrowerId;
-
-        @NotNull
         @Property(name = "borrowed_at")
         public LocalDateTime borrowedAt;
 
         @NotNull
         @Property(name = "return_at")
         public LocalDate returnAt;
-
-        @Property(name = "actual_return_at")
-        public LocalDate actualReturnAt;
     }
 }

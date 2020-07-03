@@ -48,6 +48,7 @@ public class BorrowRecordService {
                 view.borrowerName = borrowerNames.get(view.borrowerId);
                 view.borrowedAt = record.borrowedAt;
                 view.returnAt = record.returnAt;
+                view.actualReturnAt = record.actualReturnAt;
                 return view;
             })
             .collect(Collectors.toList());
