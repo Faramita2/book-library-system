@@ -22,7 +22,7 @@ public class ReturnBookMessageHandler implements MessageHandler<ReturnBorrowedBo
     public void handle(String key, ReturnBorrowedBookMessage message) {
         service.create(message);
         String content = Strings.format(
-            "The book '{}' you borrowed at {} should be returned tomorrow({}).",
+            "The book '{}' you borrowed at {} should be returned at {}.",
             message.bookName,
             message.borrowedAt.format(DateTimeFormatter.ISO_DATE_TIME),
             message.returnAt.format(DateTimeFormatter.ISO_DATE)

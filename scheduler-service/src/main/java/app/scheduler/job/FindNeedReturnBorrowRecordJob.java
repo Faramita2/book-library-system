@@ -1,6 +1,7 @@
 package app.scheduler.job;
 
 import app.book.api.BookWebService;
+import app.book.api.book.BookStatusView;
 import app.borrowrecord.api.NeedReturnBorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
 import core.framework.inject.Inject;
@@ -24,17 +25,19 @@ public class FindNeedReturnBorrowRecordJob implements Job {
 
     @Override
     public void execute(JobContext context) {
-        needReturnBorrowRecordWebService.list().records.forEach(borrowRecord -> {
-            ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
-            message.bookName = bookWebService.get(borrowRecord.bookId).name;
-            message.userId = borrowRecord.borrowerId;
-            message.borrowedAt = borrowRecord.borrowedAt;
-            message.returnAt = borrowRecord.returnAt;
-            message.operator = "scheduler-service";
+        needReturnBorrowRecordWebService.list().records.stream()
+            .filter(record -> bookWebService.get(record.bookId).status == BookStatusView.NORMAL)
+            .forEach(borrowRecord -> {
+                ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
+                message.bookName = bookWebService.get(borrowRecord.bookId).name;
+                message.userId = borrowRecord.borrowerId;
+                message.borrowedAt = borrowRecord.borrowedAt;
+                message.returnAt = borrowRecord.returnAt;
+                message.operator = "scheduler-service";
 
-            logger.info("send message, book_name = {}, user_id = {}, borrowed_at = {}, return_at = {}, operator = {}",
-                message.bookName, message.userId, message.borrowedAt, message.returnAt, message.operator);
-            publisher.publish("return-borrowed-book", message);
-        });
+                logger.info("send message, book_name = {}, user_id = {}, borrowed_at = {}, return_at = {}, operator = {}",
+                    message.bookName, message.userId, message.borrowedAt, message.returnAt, message.operator);
+                publisher.publish("return-borrowed-book", message);
+            });
     }
 }
