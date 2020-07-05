@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
  */
 @Table(name = "books")
 public class Book {
+    // todo
     @Column(name = "id")
     @PrimaryKey(autoIncrement = true)
     public Long id;

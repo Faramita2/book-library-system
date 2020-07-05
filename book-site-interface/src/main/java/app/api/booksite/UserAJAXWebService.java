@@ -4,7 +4,6 @@ import app.api.booksite.user.CreateUserAJAXRequest;
 import app.api.booksite.user.ResetUserPasswordAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXRequest;
 import app.api.booksite.user.SearchUserAJAXResponse;
-import app.api.booksite.user.UpdateUserAJAXRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
@@ -25,9 +24,14 @@ public interface UserAJAXWebService {
     @Path("/ajax/user")
     SearchUserAJAXResponse search(SearchUserAJAXRequest request);
 
+    //todo
     @PUT
-    @Path("/ajax/user/:id")
-    void update(@PathParam("id") Long id, UpdateUserAJAXRequest request);
+    @Path("/ajax/user/:id/active")
+    void update(@PathParam("id") Long id);
+
+    @PUT
+    @Path("/ajax/user/:id/inactive")
+    void inactive(@PathParam("id") Long id);
 
     @PUT
     @Path("/ajax/user/:id/reset-password")

@@ -23,6 +23,7 @@ public class UserService {
         loginUserRequest.password = request.password;
         LoginUserResponse loginUserResponse = userWebService.login(loginUserRequest);
         Session session = webContext.request().session();
+        // todo logout
         session.set("user_id", String.valueOf(loginUserResponse.id));
         session.set("username", loginUserResponse.username);
         session.set("email", loginUserResponse.email);

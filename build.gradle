@@ -120,7 +120,7 @@ project(':scheduler-service') {
         implementation project(':borrow-record-service-interface')
     }
 }
-
+// todo site name
 project(':book-site') {
     dependencies {
         implementation project(':book-site-interface')

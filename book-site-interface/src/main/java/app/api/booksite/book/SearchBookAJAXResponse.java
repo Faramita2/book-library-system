@@ -37,6 +37,7 @@ public class SearchBookAJAXResponse {
         @Property(name = "description")
         public String description;
 
+        //todo
         @NotNull
         @Property(name = "category_names")
         public List<String> categoryNames;

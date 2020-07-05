@@ -9,3 +9,4 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `updated_by` VARCHAR(50) NOT NULL,
     UNIQUE INDEX `account_index`(`account` ASC)
 );
+// init admin

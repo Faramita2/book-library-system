@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS `notifications` (
     `updated_by` VARCHAR(50) NOT NULL,
 
     INDEX `index_user_id`(`user_id`),
-    INDEX `index_content`(`content`(255))
+    INDEX `index_content`(`content`(255)) // todo
 );

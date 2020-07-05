@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class BookService {
     private final Logger logger = LoggerFactory.getLogger(BookService.class);
     @Inject
-    Repository<Book> repository;
+    Repository<Book> bookRepository;
     @Inject
     Database database;
     @Inject
@@ -46,7 +46,7 @@ public class BookService {
 
     public SearchBookResponse search(SearchBookRequest request) {
         SearchBookResponse response = new SearchBookResponse();
-        Query<Book> query = repository.select();
+        Query<Book> query = bookRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
 
@@ -98,7 +98,7 @@ public class BookService {
     }
 
     public GetBookResponse get(Long id) {
-        Book book = repository.get(id).orElseThrow(
+        Book book = bookRepository.get(id).orElseThrow(
             () -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
         );
 
@@ -118,9 +118,8 @@ public class BookService {
     }
 
     public void borrow(Long id, BorrowBookRequest request) {
-        Book book = repository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
-            .orElseThrow(() ->
-                new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id), "BOOK_NOT_FOUND"));
+        Book book = bookRepository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
+            .orElseThrow(() -> new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id), "BOOK_NOT_FOUND"));
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -132,8 +131,9 @@ public class BookService {
         book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
+            // todo log
             logger.warn("==== start borrow book ====");
-            repository.partialUpdate(book);
+            bookRepository.partialUpdate(book);
             createBorrowRecord(book);
             transaction.commit();
             logger.warn("==== end borrow book ====");
@@ -141,7 +141,9 @@ public class BookService {
     }
 
     public void returnBook(Long id, ReturnBookRequest request) {
-        Book book = repository.selectOne(
+        // todo divide
+        // borrow_user_id
+        Book book = bookRepository.selectOne(
             "id = ? AND borrower_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
             .orElseThrow(() ->
                 new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
@@ -153,16 +155,18 @@ public class BookService {
         book.updatedAt = LocalDateTime.now();
         book.updatedBy = request.operator;
 
+        // todo db transaction!!
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start return book ====");
+            bookRepository.update(book);
             updateBorrowRecord(book);
-            repository.update(book);
             transaction.commit();
             logger.warn("==== end borrow book ====");
         }
     }
 
     private void updateBorrowRecord(Book book) {
+        // todo combine
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
         searchBorrowRecordRequest.bookId = book.id;
         searchBorrowRecordRequest.borrowerId = book.borrowerId;

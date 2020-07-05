@@ -9,7 +9,8 @@ import core.framework.api.web.service.Path;
  * @author meow
  */
 public interface BorrowedBookAJAXWebService {
+    // todo
     @PUT
-    @Path("/ajax/borrowed-book")
+    @Path("/ajax/borrow-book")
     SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request);
 }

@@ -47,6 +47,9 @@ public class BorrowRecordService {
 
     public ListNeedReturnBorrowRecordResponse findNeedReturnRecords() {
         Query query = new Query();
+        LocalDate.of(2020, 7, 5).atStartOfDay();
+        LocalDate.of(2020, 7, 5).atStartOfDay().plusDays(1);
+        // todo combine
         query.filter = or(
             and(
                 gte("return_at", LocalDate.now().atStartOfDay().plusDays(1)),

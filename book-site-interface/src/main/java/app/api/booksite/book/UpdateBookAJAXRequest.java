@@ -9,6 +9,7 @@ import java.util.List;
  * @author zoo
  */
 public class UpdateBookAJAXRequest {
+    //todo
     @Length(max = 50)
     @Property(name = "name")
     public String name;

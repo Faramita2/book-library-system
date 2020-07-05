@@ -106,6 +106,7 @@ public class BookService {
         ReturnBookRequest returnBookRequest = new ReturnBookRequest();
         String userId = getUserId();
         returnBookRequest.userId = Long.valueOf(userId);
+        // todo username
         returnBookRequest.operator = "book-site-frontend";
         bookWebService.returnBook(id, returnBookRequest);
     }

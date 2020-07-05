@@ -1,7 +1,6 @@
 package app.scheduler.job;
 
 import app.book.api.BookWebService;
-import app.book.api.book.BookStatusView;
 import app.borrowrecord.api.NeedReturnBorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
 import core.framework.inject.Inject;
@@ -14,6 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author zoo
  */
+// todo job target
 public class FindNeedReturnBorrowRecordJob implements Job {
     private final Logger logger = LoggerFactory.getLogger(FindNeedReturnBorrowRecordJob.class);
     @Inject
@@ -26,7 +26,8 @@ public class FindNeedReturnBorrowRecordJob implements Job {
     @Override
     public void execute(JobContext context) {
         needReturnBorrowRecordWebService.list().records.stream()
-            .filter(record -> bookWebService.get(record.bookId).status == BookStatusView.NORMAL)
+            // todo
+//            .filter(record -> bookWebService.get(record.bookId).status == BookStatusView.NORMAL)
             .forEach(borrowRecord -> {
                 ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
                 message.bookName = bookWebService.get(borrowRecord.bookId).name;

@@ -18,6 +18,7 @@ import core.framework.api.web.service.ResponseStatus;
  * @author zoo
  */
 public interface BookAuthorAJAXWebService {
+    // todo restful
     @PUT
     @Path("/ajax/book-author")
     SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request);

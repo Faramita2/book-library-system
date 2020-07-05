@@ -183,20 +183,18 @@ public class BOBookService {
             .collect(Collectors.toList());
     }
 
+    // todo
     private List<Long> queryBookIdsByTagIds(BOSearchBookRequest request) {
+        // todo pivot tables domain
         return database.select(
             "SELECT book_id FROM book_tags WHERE tag_id IN(?)", BookIdView.class, request.tagIds)
-            .stream()
-            .map(bookIdView -> bookIdView.bookId)
-            .collect(Collectors.toList());
+            .stream().map(bookIdView -> bookIdView.bookId).collect(Collectors.toList());
     }
 
     private List<Long> queryBookIdsByCategoryIds(BOSearchBookRequest request) {
         return database.select(
             "SELECT book_id FROM book_categories WHERE category_id IN(?)", BookIdView.class, request.categoryIds)
-            .stream()
-            .map(bookIdView -> bookIdView.bookId)
-            .collect(Collectors.toList());
+            .stream().map(bookIdView -> bookIdView.bookId).collect(Collectors.toList());
     }
 
     private List<Long> queryBookIdsByAuthorIds(BOSearchBookRequest request) {

@@ -45,6 +45,7 @@ public class GetBookAJAXResponse {
     @Property(name = "borrower_name")
     public String borrowerName;
 
+    // todo name means
     @Property(name = "borrowed_at")
     public LocalDateTime borrowedAt;
 

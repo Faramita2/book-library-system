@@ -9,6 +9,7 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class ResetUserPasswordAJAXRequest {
+    // todo
     @NotNull
     @NotBlank
     @Property(name = "password")

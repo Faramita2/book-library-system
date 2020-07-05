@@ -12,10 +12,11 @@ import java.time.LocalDateTime;
 /**
  * @author zoo
  */
+// todo
 @Collection(name = "borrow_records")
 public class BorrowRecord {
-    @Field(name = "id")
     @Id
+    @Field(name = "_id") // no effect
     public ObjectId id;
 
     @NotNull

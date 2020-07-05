@@ -23,6 +23,7 @@ public class CreateUserAJAXRequest {
     @Property(name = "email")
     public String email;
 
+    // todo length max
     @NotNull
     @NotBlank
     @Length(min = 6)

@@ -11,6 +11,7 @@ import java.util.List;
  * @author zoo
  */
 public class SearchUserAJAXRequest {
+    // todo
     @Property(name = "ids")
     public List<Long> ids;
 

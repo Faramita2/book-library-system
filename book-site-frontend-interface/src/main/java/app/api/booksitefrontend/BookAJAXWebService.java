@@ -21,6 +21,7 @@ public interface BookAJAXWebService {
     @Path("/ajax/book/:id")
     GetBookAJAXResponse get(@PathParam("id") Long id);
 
+    // todo
     @PUT
     @Path("/ajax/book/:id/borrow")
     void borrow(@PathParam("id") Long id, BorrowBookAJAXRequest request);
