@@ -77,8 +77,8 @@ public class BookService {
             query.where("status = ?", request.status.name());
         }
 
-        if (request.borrowerId != null) {
-            query.where("borrower_id = ?", request.borrowerId);
+        if (request.borrowUserId != null) {
+            query.where("borrow_user_id = ?", request.borrowUserId);
         }
 
         response.total = query.count();
@@ -110,7 +110,7 @@ public class BookService {
         response.categoryIds = queryCategoryIdsByBookId(id);
         response.tagIds = queryTagIdsByBookId(id);
         response.status = BookStatusView.valueOf(book.status.name());
-        response.borrowerId = book.borrowerId;
+        response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
         response.returnDate = book.returnDate;
 
@@ -124,7 +124,7 @@ public class BookService {
         LocalDateTime now = LocalDateTime.now();
 
         book.status = BookStatus.BORROWED;
-        book.borrowerId = request.userId;
+        book.borrowUserId = request.userId;
         book.borrowedTime = now;
         book.returnDate = request.returnDate;
         book.updatedTime = now;
@@ -144,12 +144,12 @@ public class BookService {
         // todo divide
         // borrow_user_id
         Book book = bookRepository.selectOne(
-            "id = ? AND borrower_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
+            "id = ? AND borrow_user_id = ? AND status = ? ", id, request.userId, BookStatus.BORROWED.name())
             .orElseThrow(() ->
                 new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         book.status = BookStatus.AVAILABLE;
-        book.borrowerId = null;
+        book.borrowUserId = null;
         book.returnDate = null;
         book.borrowedTime = null;
         book.updatedTime = LocalDateTime.now();
@@ -169,7 +169,7 @@ public class BookService {
         // todo combine
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
         searchBorrowRecordRequest.bookId = book.id;
-        searchBorrowRecordRequest.borrowerId = book.borrowerId;
+        searchBorrowRecordRequest.borrowUserId = book.borrowUserId;
         searchBorrowRecordRequest.actualReturnDate = null;
         searchBorrowRecordRequest.skip = 0;
         searchBorrowRecordRequest.limit = 1;
@@ -184,7 +184,7 @@ public class BookService {
     private void createBorrowRecord(Book book) {
         CreateBorrowRecordRequest request = new CreateBorrowRecordRequest();
         request.bookId = book.id;
-        request.borrowerId = book.borrowerId;
+        request.borrowUserId = book.borrowUserId;
         request.borrowedTime = book.borrowedTime;
         request.returnDate = book.returnDate;
         request.operator = book.updatedBy;

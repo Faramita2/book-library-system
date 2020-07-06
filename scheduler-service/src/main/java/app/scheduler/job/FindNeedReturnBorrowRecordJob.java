@@ -31,7 +31,7 @@ public class FindNeedReturnBorrowRecordJob implements Job {
             .forEach(borrowRecord -> {
                 ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
                 message.bookName = bookWebService.get(borrowRecord.bookId).name;
-                message.userId = borrowRecord.borrowerId;
+                message.userId = borrowRecord.borrowUserId;
                 message.borrowedTime = borrowRecord.borrowedTime;
                 message.returnDate = borrowRecord.returnDate;
                 message.operator = "scheduler-service";

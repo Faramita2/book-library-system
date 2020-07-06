@@ -27,6 +27,7 @@ public class BorrowRecordService {
 
     public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
         BOSearchBorrowRecordRequest boSearchBorrowRecordRequest = new BOSearchBorrowRecordRequest();
+        boSearchBorrowRecordRequest.userId = request.userId;
         boSearchBorrowRecordRequest.bookId = request.bookId;
         boSearchBorrowRecordRequest.skip = request.skip;
         boSearchBorrowRecordRequest.limit = request.limit;
@@ -35,7 +36,7 @@ public class BorrowRecordService {
         List<BOSearchBorrowRecordResponse.Record> records = boSearchBorrowRecordResponse.records;
 
         String bookName = bookWebService.get(request.bookId).name;
-        Map<Long, String> borrowerNames = queryBorrowerNames(records);
+        Map<Long, String> borrowUserNames = queryBorrowUserNames(records);
 
         SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
         response.total = boSearchBorrowRecordResponse.total;
@@ -44,8 +45,8 @@ public class BorrowRecordService {
                 SearchBorrowRecordAJAXResponse.Record view = new SearchBorrowRecordAJAXResponse.Record();
                 view.id = record.id;
                 view.bookName = bookName;
-                view.borrowerId = record.borrowerId;
-                view.borrowerName = borrowerNames.get(view.borrowerId);
+                view.borrowUserId = record.borrowUserId;
+                view.borrowUsername = borrowUserNames.get(view.borrowUserId);
                 view.borrowedTime = record.borrowedTime;
                 view.returnDate = record.returnDate;
                 view.actualReturnDate = record.actualReturnDate;
@@ -56,15 +57,15 @@ public class BorrowRecordService {
         return response;
     }
 
-    private Map<Long, String> queryBorrowerNames(List<BOSearchBorrowRecordResponse.Record> records) {
-        List<Long> borrowerIds = records.stream()
-            .map(record -> record.borrowerId)
+    private Map<Long, String> queryBorrowUserNames(List<BOSearchBorrowRecordResponse.Record> records) {
+        List<Long> borrowUserIds = records.stream()
+            .map(record -> record.borrowUserId)
             .distinct()
             .collect(Collectors.toList());
         BOSearchUserRequest boSearchUserRequest = new BOSearchUserRequest();
-        boSearchUserRequest.ids = borrowerIds;
+        boSearchUserRequest.ids = borrowUserIds;
         boSearchUserRequest.skip = 0;
-        boSearchUserRequest.limit = borrowerIds.size();
+        boSearchUserRequest.limit = borrowUserIds.size();
         return userWebService.search(boSearchUserRequest).users.stream()
             .collect(Collectors.toMap(user -> user.id, user -> user.username));
     }

@@ -893,7 +893,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"book_id\": 1,\n\t\"borrower_id\": 1,\n\t\"borrowed_time\": \"2020-07-03T00:18:24.068656\",\n\t\"return_date\": \"2020-07-04\",\n\t\"operator\": \"self\"\n}",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"borrow_user_id\": 1,\n\t\"borrowed_time\": \"2020-07-03T00:18:24.068656\",\n\t\"return_date\": \"2020-07-04\",\n\t\"operator\": \"self\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"

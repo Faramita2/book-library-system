@@ -9,7 +9,9 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class SearchBorrowRecordAJAXRequest {
-    // todo user_id
+    @Property(name = "user_id")
+    public Long userId;
+
     @NotNull
     @Property(name = "book_id")
     public Long bookId;

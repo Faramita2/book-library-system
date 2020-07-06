@@ -34,7 +34,7 @@ public class BorrowRecordService {
         BorrowRecord borrowRecord = new BorrowRecord();
         borrowRecord.id = ObjectId.get();
         borrowRecord.bookId = request.bookId;
-        borrowRecord.borrowerId = request.borrowerId;
+        borrowRecord.borrowUserId = request.borrowUserId;
         borrowRecord.borrowedTime = request.borrowedTime;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.returnDate = request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1);
@@ -65,7 +65,7 @@ public class BorrowRecordService {
             ListNeedReturnBorrowRecordResponse.Record view = new ListNeedReturnBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
             view.bookId = borrowRecord.bookId;
-            view.borrowerId = borrowRecord.borrowerId;
+            view.borrowUserId = borrowRecord.borrowUserId;
             view.borrowedTime = borrowRecord.borrowedTime;
             view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
@@ -86,7 +86,7 @@ public class BorrowRecordService {
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {
         Query query = new Query();
         query.filter = and(
-            eq("borrower_id", request.borrowerId),
+            eq("borrow_user_id", request.borrowUserId),
             eq("book_id", request.bookId),
             eq("actual_return_date", request.actualReturnDate)
         );

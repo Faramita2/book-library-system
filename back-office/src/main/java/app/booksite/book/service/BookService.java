@@ -90,7 +90,7 @@ public class BookService {
         response.name = boGetBookResponse.name;
         response.description = boGetBookResponse.description;
         response.status = BookStatusAJAXView.valueOf(boGetBookResponse.status.name());
-        response.borrowerName = boGetBookResponse.borrowerId != 0 ? boUserWebService.get(boGetBookResponse.borrowerId).username : null;
+        response.borrowUsername = boGetBookResponse.borrowUserId != 0 ? boUserWebService.get(boGetBookResponse.borrowUserId).username : null;
         response.authorNames = boGetBookResponse.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
         response.categoryNames = boGetBookResponse.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
         response.tagNames = boGetBookResponse.tagIds.stream().map(tagNames::get).collect(Collectors.toList());

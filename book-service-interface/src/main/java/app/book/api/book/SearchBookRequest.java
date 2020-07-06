@@ -29,8 +29,8 @@ public class SearchBookRequest {
     @Property(name = "status")
     public BookStatusView status;
 
-    @Property(name = "borrower_id")
-    public Long borrowerId;
+    @Property(name = "borrow_user_id")
+    public Long borrowUserId;
 
     @NotNull
     @Property(name = "skip")

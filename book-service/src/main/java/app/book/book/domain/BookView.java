@@ -44,8 +44,8 @@ public class BookView {
     @NotNull
     public BookStatus status;
 
-    @Column(name = "borrower_name")
-    public String borrowerName;
+    @Column(name = "borrow_username")
+    public String borrowUsername;
 
     @Column(name = "borrowed_time")
     public LocalDateTime borrowedTime;

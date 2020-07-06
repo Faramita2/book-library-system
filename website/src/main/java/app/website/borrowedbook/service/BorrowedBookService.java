@@ -44,7 +44,7 @@ public class BorrowedBookService {
         searchBookRequest.authorIds = request.authorIds;
         searchBookRequest.categoryIds = request.categoryIds;
         searchBookRequest.status = BookStatusView.BORROWED;
-        searchBookRequest.borrowerId = Long.valueOf(getUserId());
+        searchBookRequest.borrowUserId = Long.valueOf(getUserId());
 
         SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();

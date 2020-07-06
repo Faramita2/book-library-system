@@ -83,7 +83,7 @@ public class BookService {
         response.name = getBookResponse.name;
         response.description = getBookResponse.description;
         response.status = BookStatusAJAXView.valueOf(getBookResponse.status.name());
-        response.borrowerName = getBookResponse.borrowerId != null ? userWebService.get(getBookResponse.borrowerId).username : null;
+        response.borrowUsername = getBookResponse.borrowUserId != null ? userWebService.get(getBookResponse.borrowUserId).username : null;
         response.borrowedTime = getBookResponse.borrowedTime;
         response.returnDate = getBookResponse.returnDate;
         response.tagNames = queryTagNames(getBookResponse.tagIds);

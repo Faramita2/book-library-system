@@ -71,7 +71,7 @@ public class BOBookService {
         response.categoryIds = queryCategoryIdsByBookId(id);
         response.tagIds = queryTagIdsByBookId(id);
         response.status = BookStatusView.valueOf(book.status.name());
-        response.borrowerId = book.borrowerId;
+        response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
         response.returnDate = book.returnDate;
 

@@ -42,8 +42,8 @@ public class GetBookResponse {
     @Property(name = "status")
     public BookStatusView status;
 
-    @Property(name = "borrower_id")
-    public Long borrowerId;
+    @Property(name = "borrow_user_id")
+    public Long borrowUserId;
 
     @Property(name = "borrowed_time")
     public LocalDateTime borrowedTime;

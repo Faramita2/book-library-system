@@ -33,8 +33,8 @@ public class Book {
     @NotNull
     public BookStatus status;
 
-    @Column(name = "borrower_id")
-    public Long borrowerId;
+    @Column(name = "borrow_user_id")
+    public Long borrowUserId;
 
     @Column(name = "borrowed_time")
     public LocalDateTime borrowedTime;

@@ -24,8 +24,8 @@ public class BorrowRecord {
     public Long bookId;
 
     @NotNull
-    @Field(name = "borrower_id")
-    public Long borrowerId;
+    @Field(name = "borrow_user_id")
+    public Long borrowUserId;
 
     @NotNull
     @Field(name = "borrowed_time")

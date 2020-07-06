@@ -30,13 +30,13 @@ public class SearchBorrowRecordAJAXResponse {
         public String bookName;
 
         @NotNull
-        @Property(name = "borrower_id")
-        public Long borrowerId;
+        @Property(name = "borrow_user_id")
+        public Long borrowUserId;
 
         @NotNull
         @NotBlank
-        @Property(name = "borrower_name")
-        public String borrowerName;
+        @Property(name = "borrow_username")
+        public String borrowUsername;
 
         @NotNull
         @Property(name = "borrowed_time")
