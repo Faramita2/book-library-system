@@ -1,7 +1,6 @@
 package app.book.author.service;
 
 import app.book.api.author.BOCreateAuthorRequest;
-import app.book.api.author.BOListAuthorResponse;
 import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
@@ -49,20 +48,6 @@ public class BOAuthorService {
             view.id = author.id;
             view.name = author.name;
 
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public BOListAuthorResponse list() {
-        BOListAuthorResponse response = new BOListAuthorResponse();
-        Query<Author> query = repository.select();
-        response.total = query.count();
-        response.authors = query.fetch().stream().map(author -> {
-            BOListAuthorResponse.Author view = new BOListAuthorResponse.Author();
-            view.id = author.id;
-            view.name = author.name;
             return view;
         }).collect(Collectors.toList());
 

@@ -2,7 +2,6 @@ package app.booksite.bookauthor.web;
 
 import app.api.backoffice.BookAuthorAJAXWebService;
 import app.api.backoffice.bookauthor.CreateBookAuthorAJAXRequest;
-import app.api.backoffice.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.backoffice.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.backoffice.bookauthor.SearchBookAuthorAJAXResponse;
 import app.api.backoffice.bookauthor.UpdateBookAuthorAJAXRequest;
@@ -20,11 +19,6 @@ public class BookAuthorAJAXWebServiceImpl implements BookAuthorAJAXWebService {
     @Override
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
         return service.search(request);
-    }
-
-    @Override
-    public ListBookAuthorAJAXResponse list() {
-        return service.list();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package app.api.backoffice;
 
 import app.api.backoffice.user.CreateUserAJAXRequest;
-import app.api.backoffice.user.ResetUserPasswordAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
 import core.framework.api.http.HTTPStatus;

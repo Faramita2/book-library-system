@@ -1,13 +1,11 @@
 package app.api.backoffice;
 
 import app.api.backoffice.booktag.CreateBookTagAJAXRequest;
-import app.api.backoffice.booktag.ListBookTagAJAXResponse;
 import app.api.backoffice.booktag.SearchBookTagAJAXRequest;
 import app.api.backoffice.booktag.SearchBookTagAJAXResponse;
 import app.api.backoffice.booktag.UpdateBookTagAJAXRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
-import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,10 +19,6 @@ public interface BookTagAJAXWebService {
     @PUT
     @Path("/ajax/book-tag")
     SearchBookTagAJAXResponse search(SearchBookTagAJAXRequest request);
-
-    @GET
-    @Path("/ajax/book-tag")
-    ListBookTagAJAXResponse list();
 
     @POST
     @Path("/ajax/book-tag")

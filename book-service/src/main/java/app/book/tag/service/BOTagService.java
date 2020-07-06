@@ -4,7 +4,6 @@ import app.book.api.tag.BOCreateTagRequest;
 import app.book.api.tag.BOSearchTagRequest;
 import app.book.api.tag.BOSearchTagResponse;
 import app.book.api.tag.BOUpdateTagRequest;
-import app.book.api.tag.BOListTagResponse;
 import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -48,20 +47,6 @@ public class BOTagService {
         response.total = query.count();
         response.tags = query.fetch().stream().map(tag -> {
             BOSearchTagResponse.Tag view = new BOSearchTagResponse.Tag();
-            view.id = tag.id;
-            view.name = tag.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public BOListTagResponse list() {
-        BOListTagResponse response = new BOListTagResponse();
-        Query<Tag> query = repository.select();
-        response.total = query.count();
-        response.tags = query.fetch().stream().map(tag -> {
-            BOListTagResponse.Tag view = new BOListTagResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;
             return view;

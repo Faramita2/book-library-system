@@ -4,7 +4,6 @@ import app.api.website.booktag.ListBookTagAJAXResponse;
 import app.api.website.booktag.SearchBookTagAJAXRequest;
 import app.api.website.booktag.SearchBookTagAJAXResponse;
 import app.book.api.TagWebService;
-import app.book.api.tag.ListTagResponse;
 import app.book.api.tag.SearchTagRequest;
 import app.book.api.tag.SearchTagResponse;
 import core.framework.inject.Inject;

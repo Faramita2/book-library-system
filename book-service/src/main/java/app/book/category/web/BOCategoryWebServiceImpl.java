@@ -2,7 +2,6 @@ package app.book.category.web;
 
 import app.book.api.BOCategoryWebService;
 import app.book.api.category.BOCreateCategoryRequest;
-import app.book.api.category.BOListCategoryResponse;
 import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
 import app.book.api.category.BOUpdateCategoryRequest;

@@ -1,6 +1,5 @@
 package app.book.tag.service;
 
-import app.book.api.tag.ListTagResponse;
 import app.book.api.tag.SearchTagRequest;
 import app.book.api.tag.SearchTagResponse;
 import app.book.tag.domain.Tag;
@@ -29,20 +28,6 @@ public class TagService {
         response.total = query.count();
         response.tags = query.fetch().stream().map(tag -> {
             SearchTagResponse.Tag view = new SearchTagResponse.Tag();
-            view.id = tag.id;
-            view.name = tag.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public ListTagResponse list() {
-        ListTagResponse response = new ListTagResponse();
-        Query<Tag> query = repository.select();
-        response.total = query.count();
-        response.tags = query.fetch().stream().map(tag -> {
-            ListTagResponse.Tag view = new ListTagResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;
             return view;

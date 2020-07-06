@@ -1,6 +1,5 @@
 package app.book.author.service;
 
-import app.book.api.author.ListAuthorResponse;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.author.SearchAuthorResponse;
 import app.book.author.domain.Author;
@@ -33,20 +32,6 @@ public class AuthorService {
             view.name = author.name;
             return view;
         }).collect(Collectors.toList());
-        return response;
-    }
-
-    public ListAuthorResponse list() {
-        ListAuthorResponse response = new ListAuthorResponse();
-        Query<Author> query = repository.select();
-        response.total = query.count();
-        response.authors = query.fetch().stream().map(author -> {
-            ListAuthorResponse.Author view = new ListAuthorResponse.Author();
-            view.id = author.id;
-            view.name = author.name;
-            return view;
-        }).collect(Collectors.toList());
-
         return response;
     }
 }
