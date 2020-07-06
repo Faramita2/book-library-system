@@ -55,8 +55,8 @@ public class UserService {
             view.email = user.email;
             view.username = user.username;
             view.status = UserStatusAJAXView.valueOf(user.status.name());
-            view.createdAt = user.createdAt;
-            view.updatedAt = user.updatedAt;
+            view.createdTime = user.createdTime;
+            view.updatedTime = user.updatedTime;
             return view;
         }).collect(Collectors.toList());
 

@@ -20,6 +20,6 @@ public class GetNotificationResponse {
     public String content;
 
     @NotNull
-    @Property(name = "created_at")
-    public LocalDateTime createdAt;
+    @Property(name = "created_time")
+    public LocalDateTime createdTime;
 }

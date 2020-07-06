@@ -38,12 +38,12 @@ public class BOSearchUserResponse {
         @NotNull
         public UserStatusView status;
 
-        @Property(name = "created_at")
+        @Property(name = "created_time")
         @NotNull
-        public LocalDateTime createdAt;
+        public LocalDateTime createdTime;
 
-        @Property(name = "updated_at")
+        @Property(name = "updated_time")
         @NotNull
-        public LocalDateTime updatedAt;
+        public LocalDateTime updatedTime;
     }
 }

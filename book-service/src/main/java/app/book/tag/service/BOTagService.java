@@ -26,8 +26,8 @@ public class BOTagService {
         Tag tag = new Tag();
         tag.name = request.name;
         LocalDateTime now = LocalDateTime.now();
-        tag.createdAt = now;
-        tag.updatedAt = now;
+        tag.createdTime = now;
+        tag.updatedTime = now;
         tag.createdBy = request.operator;
         tag.updatedBy = request.operator;
 

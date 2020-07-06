@@ -38,8 +38,8 @@ public class BorrowRecordService {
         borrowRecord.borrowedAt = request.borrowedAt;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.returnAt = request.returnAt.atStartOfDay().plusDays(1).minusSeconds(1);
-        borrowRecord.createdAt = now;
-        borrowRecord.updatedAt = now;
+        borrowRecord.createdTime = now;
+        borrowRecord.updatedTime = now;
         borrowRecord.createdBy = request.operator;
         borrowRecord.updatedBy = request.operator;
         collection.insert(borrowRecord);

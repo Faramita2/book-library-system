@@ -42,8 +42,8 @@ public class BOBookService {
         book.description = request.description;
         book.status = BookStatus.AVAILABLE;
         LocalDateTime now = LocalDateTime.now();
-        book.createdAt = now;
-        book.updatedAt = now;
+        book.createdTime = now;
+        book.updatedTime = now;
         book.createdBy = request.operator;
         book.updatedBy = request.operator;
 
@@ -128,7 +128,7 @@ public class BOBookService {
             new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.name = request.name;
         book.description = request.description;
-        book.updatedAt = LocalDateTime.now();
+        book.updatedTime = LocalDateTime.now();
         book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {

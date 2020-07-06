@@ -39,12 +39,12 @@ public class BorrowRecord {
     public LocalDateTime actualReturnAt;
 
     @NotNull
-    @Field(name = "created_at")
-    public LocalDateTime createdAt;
+    @Field(name = "created_time")
+    public LocalDateTime createdTime;
 
     @NotNull
-    @Field(name = "updated_at")
-    public LocalDateTime updatedAt;
+    @Field(name = "updated_time")
+    public LocalDateTime updatedTime;
 
     @NotNull
     @NotBlank

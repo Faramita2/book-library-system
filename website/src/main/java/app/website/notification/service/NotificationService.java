@@ -40,7 +40,7 @@ public class NotificationService {
             SearchNotificationAJAXResponse.Notification view = new SearchNotificationAJAXResponse.Notification();
             view.id = notification.id;
             view.content = notification.content;
-            view.createdAt = notification.createdAt;
+            view.createdTime = notification.createdTime;
             return view;
         }).collect(Collectors.toList());
 
@@ -52,7 +52,7 @@ public class NotificationService {
         GetNotificationAJAXResponse response = new GetNotificationAJAXResponse();
         response.id = getNotificationResponse.id;
         response.content = getNotificationResponse.content;
-        response.createdAt = getNotificationResponse.createdAt;
+        response.createdTime = getNotificationResponse.createdTime;
 
         return response;
     }

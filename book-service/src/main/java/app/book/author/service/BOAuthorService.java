@@ -25,8 +25,8 @@ public class BOAuthorService {
     public void create(BOCreateAuthorRequest request) {
         Author author = new Author();
         author.name = request.name;
-        author.createdAt = LocalDateTime.now();
-        author.updatedAt = LocalDateTime.now();
+        author.createdTime = LocalDateTime.now();
+        author.updatedTime = LocalDateTime.now();
         author.createdBy = request.operator;
         author.updatedBy = request.operator;
 

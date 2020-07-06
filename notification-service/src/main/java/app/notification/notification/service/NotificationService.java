@@ -35,8 +35,8 @@ public class NotificationService {
             message.returnAt.format(DateTimeFormatter.ISO_DATE)
         );
         LocalDateTime now = LocalDateTime.now();
-        notification.createdAt = now;
-        notification.updatedAt = now;
+        notification.createdTime = now;
+        notification.updatedTime = now;
         notification.createdBy = message.operator;
         notification.updatedBy = message.operator;
 
@@ -48,7 +48,7 @@ public class NotificationService {
 
         query.skip(request.skip);
         query.limit(request.limit);
-        query.orderBy("created_at DESC");
+        query.orderBy("created_time DESC");
         query.where("user_id = ?", request.userId);
 
         if (!Strings.isBlank(request.content)) {
@@ -61,7 +61,7 @@ public class NotificationService {
             SearchNotificationResponse.Notification view = new SearchNotificationResponse.Notification();
             view.id = notification.id;
             view.content = Strings.truncate(notification.content, 50);
-            view.createdAt = notification.createdAt;
+            view.createdTime = notification.createdTime;
             return view;
         }).collect(Collectors.toList());
 
@@ -74,7 +74,7 @@ public class NotificationService {
         GetNotificationResponse response = new GetNotificationResponse();
         response.id = notification.id;
         response.content = notification.content;
-        response.createdAt = notification.createdAt;
+        response.createdTime = notification.createdTime;
 
         return response;
     }

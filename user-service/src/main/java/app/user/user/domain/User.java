@@ -42,12 +42,12 @@ public class User {
     public UserStatus status;
 
     @NotNull
-    @Column(name = "created_at")
-    public LocalDateTime createdAt;
+    @Column(name = "created_time")
+    public LocalDateTime createdTime;
 
     @NotNull
-    @Column(name = "updated_at")
-    public LocalDateTime updatedAt;
+    @Column(name = "updated_time")
+    public LocalDateTime updatedTime;
 
     @NotNull
     @NotBlank

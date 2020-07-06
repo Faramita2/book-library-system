@@ -45,8 +45,8 @@ public class BOAdminService {
         Admin admin = new Admin();
         admin.account = request.account;
         LocalDateTime now = LocalDateTime.now();
-        admin.createdAt = now;
-        admin.updatedAt = now;
+        admin.createdTime = now;
+        admin.updatedTime = now;
         admin.createdBy = request.operator;
         admin.updatedBy = request.operator;
 
@@ -75,8 +75,8 @@ public class BOAdminService {
             BOSearchAdminResponse.Admin view = new BOSearchAdminResponse.Admin();
             view.id = user.id;
             view.account = user.account;
-            view.createdAt = user.createdAt;
-            view.updatedAt = user.updatedAt;
+            view.createdTime = user.createdTime;
+            view.updatedTime = user.updatedTime;
             return view;
         }).collect(Collectors.toList());
 

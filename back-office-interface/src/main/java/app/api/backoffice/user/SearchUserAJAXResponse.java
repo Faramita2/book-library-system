@@ -39,11 +39,11 @@ public class SearchUserAJAXResponse {
         public UserStatusAJAXView status;
 
         @NotNull
-        @Property(name = "created_at")
-        public LocalDateTime createdAt;
+        @Property(name = "created_time")
+        public LocalDateTime createdTime;
 
         @NotNull
-        @Property(name = "updated_at")
-        public LocalDateTime updatedAt;
+        @Property(name = "updated_time")
+        public LocalDateTime updatedTime;
     }
 }

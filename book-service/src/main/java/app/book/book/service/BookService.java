@@ -127,7 +127,7 @@ public class BookService {
         book.borrowerId = request.userId;
         book.borrowedAt = now;
         book.returnAt = request.returnAt;
-        book.updatedAt = now;
+        book.updatedTime = now;
         book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
@@ -152,7 +152,7 @@ public class BookService {
         book.borrowerId = null;
         book.returnAt = null;
         book.borrowedAt = null;
-        book.updatedAt = LocalDateTime.now();
+        book.updatedTime = LocalDateTime.now();
         book.updatedBy = request.operator;
 
         // todo db transaction!!

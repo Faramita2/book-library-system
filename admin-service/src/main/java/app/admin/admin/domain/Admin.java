@@ -32,13 +32,13 @@ public class Admin {
     @NotBlank
     public String salt;
 
-    @Column(name = "created_at")
+    @Column(name = "created_time")
     @NotNull
-    public LocalDateTime createdAt;
+    public LocalDateTime createdTime;
 
-    @Column(name = "updated_at")
+    @Column(name = "updated_time")
     @NotNull
-    public LocalDateTime updatedAt;
+    public LocalDateTime updatedTime;
 
     @Column(name = "created_by")
     @NotNull

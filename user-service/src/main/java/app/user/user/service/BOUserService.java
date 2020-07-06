@@ -55,8 +55,8 @@ public class BOUserService {
         user.email = request.email;
         user.status = UserStatus.valueOf(request.status.name());
         LocalDateTime now = LocalDateTime.now();
-        user.createdAt = now;
-        user.updatedAt = now;
+        user.createdTime = now;
+        user.updatedTime = now;
         user.createdBy = request.operator;
         user.updatedBy = request.operator;
 
@@ -101,8 +101,8 @@ public class BOUserService {
             view.status = UserStatusView.valueOf(user.status.name());
             view.username = user.username;
             view.email = user.email;
-            view.createdAt = user.createdAt;
-            view.updatedAt = user.updatedAt;
+            view.createdTime = user.createdTime;
+            view.updatedTime = user.updatedTime;
             return view;
         }).collect(Collectors.toList());
 
@@ -113,7 +113,7 @@ public class BOUserService {
         User user = repository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
-        user.updatedAt = LocalDateTime.now();
+        user.updatedTime = LocalDateTime.now();
         user.updatedBy = request.operator;
 
         repository.partialUpdate(user);
@@ -146,7 +146,7 @@ public class BOUserService {
             throw new BadRequestException("Please make sure both passwords match.", "USER_PASSWORD_INCORRECT");
         }
 
-        user.updatedAt = LocalDateTime.now();
+        user.updatedTime = LocalDateTime.now();
         user.updatedBy = request.operator;
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start reset user password ====");

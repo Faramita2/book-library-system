@@ -26,8 +26,8 @@ public class BOCategoryService {
         Category category = new Category();
         category.name = request.name;
         LocalDateTime now = LocalDateTime.now();
-        category.createdAt = now;
-        category.updatedAt = now;
+        category.createdTime = now;
+        category.updatedTime = now;
         category.createdBy = request.operator;
         category.updatedBy = request.operator;
 
