@@ -8,6 +8,7 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOUpdateUserRequest {
+    @NotNull
     @Property(name = "status")
     public UserStatusView status;
 

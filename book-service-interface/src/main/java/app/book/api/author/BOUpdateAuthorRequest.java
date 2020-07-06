@@ -9,6 +9,8 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class BOUpdateAuthorRequest {
+    @NotNull
+    @NotBlank
     @Length(max = 50)
     @Property(name = "name")
     public String name;

@@ -29,8 +29,6 @@ public class CreateBookAJAXRequest {
     @Property(name = "description")
     public String description;
 
-    // todo think deep
-    // size
     @NotNull
     @Size(min = 1)
     @Property(name = "category_ids")
