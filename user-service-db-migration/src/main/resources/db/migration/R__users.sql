@@ -14,28 +14,30 @@ CREATE TABLE IF NOT EXISTS `users` (
     INDEX `status_index`(`status` ASC)
 );
 
--- add column `email` if not exists.
+---- rename columns `created_at`, `updated_at`
+
 set @columnExisting := (
-    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email'
+    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'created_at'
 );
 
 set @sqlStmt := if(
-    @columnExisting = 0,
-	"ALTER TABLE `users` ADD COLUMN `email` VARCHAR(50) NOT NULL",
-    "SELECT 'INFO: Column exists.'"
+    @columnExisting > 0,
+    'ALTER TABLE users RENAME COLUMN created_at TO created_time;',
+    "SELECT 'INFO: Column NOT exists.'"
 );
 
 PREPARE stmt FROM @sqlStmt;
 EXECUTE stmt;
 
--- add index `email` if not exists.
-set @indexExist := (
-    select count(*) from information_schema.STATISTICS where table_name = 'users' and index_name = 'email_index' and table_schema = database()
+set @columnExisting := (
+    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'updated_at'
 );
+
 set @sqlStmt := if(
-    @indexExist = 0,
-    "ALTER TABLE `users` ADD INDEX `email_index` (`email` ASC);",
-    "select 'INFO: Index exists.'"
+    @columnExisting > 0,
+    'ALTER TABLE users RENAME COLUMN updated_at TO updated_time;',
+    "SELECT 'INFO: Column NOT exists.'"
 );
+
 PREPARE stmt FROM @sqlStmt;
 EXECUTE stmt;
