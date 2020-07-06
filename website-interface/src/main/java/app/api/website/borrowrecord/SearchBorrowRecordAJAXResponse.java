@@ -1,15 +1,16 @@
-package app.api.website.borrowedbook;
+package app.api.website.borrowrecord;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * @author meow
  */
-public class SearchBorrowedBookAJAXResponse {
+public class SearchBorrowRecordAJAXResponse {
     @NotNull
     @Property(name = "total")
     public Long total;
@@ -44,5 +45,13 @@ public class SearchBorrowedBookAJAXResponse {
         @NotNull
         @Property(name = "author_names")
         public List<String> authorNames;
+
+        @NotNull
+        @Property(name = "return_date")
+        public LocalDate returnDate;
+
+        @NotNull
+        @Property(name = "actual_return_date")
+        public LocalDate actualReturnDate;
     }
 }

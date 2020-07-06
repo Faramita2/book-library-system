@@ -1,4 +1,4 @@
-package app.api.website.borrowedbook;
+package app.api.website.borrowrecord;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.Length;
@@ -6,12 +6,13 @@ import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * @author meow
  */
-public class SearchBorrowedBookAJAXRequest {
+public class SearchBorrowRecordAJAXRequest {
     @Length(max = 50)
     @Property(name = "name")
     public String name;
@@ -27,6 +28,14 @@ public class SearchBorrowedBookAJAXRequest {
 
     @Property(name = "author_ids")
     public List<Long> authorIds;
+
+    @NotNull
+    @Property(name = "return_date")
+    public LocalDate returnDate;
+
+    @NotNull
+    @Property(name = "actual_return_date")
+    public LocalDate actualReturnDate;
 
     @NotNull
     @Property(name = "skip")

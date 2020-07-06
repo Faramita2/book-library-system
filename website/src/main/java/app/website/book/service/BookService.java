@@ -1,7 +1,6 @@
 package app.website.book.service;
 
 import app.api.website.book.BookStatusAJAXView;
-import app.api.website.book.BorrowBookAJAXRequest;
 import app.api.website.book.GetBookAJAXResponse;
 import app.api.website.book.SearchBookAJAXRequest;
 import app.api.website.book.SearchBookAJAXResponse;
@@ -93,7 +92,7 @@ public class BookService {
         return response;
     }
 
-    public void borrow(Long id, BorrowBookAJAXRequest request) {
+    public void borrow(Long id, SearchBorrowRecordAJAXRequest request) {
         BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
         String userId = getUserId();
         borrowBookRequest.userId = Long.valueOf(userId);

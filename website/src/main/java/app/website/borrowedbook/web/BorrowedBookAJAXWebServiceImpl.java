@@ -1,20 +1,20 @@
 package app.website.borrowedbook.web;
 
-import app.api.website.BorrowedBookAJAXWebService;
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXRequest;
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXResponse;
-import app.website.borrowedbook.service.BorrowedBookService;
+import app.api.website.BorrowRecordAJAXWebService;
+import app.api.website.borrowrecord.SearchBorrowRecordAJAXRequest;
+import app.api.website.borrowrecord.SearchBorrowRecordAJAXResponse;
+import app.website.borrowedbook.service.BorrowRecordService;
 import core.framework.inject.Inject;
 
 /**
  * @author meow
  */
-public class BorrowedBookAJAXWebServiceImpl implements BorrowedBookAJAXWebService {
+public class BorrowedBookAJAXWebServiceImpl implements BorrowRecordAJAXWebService {
     @Inject
-    BorrowedBookService service;
+    BorrowRecordService service;
 
     @Override
-    public SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request) {
+    public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
         return service.search(request);
     }
 }

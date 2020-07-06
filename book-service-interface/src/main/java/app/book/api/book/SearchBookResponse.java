@@ -4,6 +4,7 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -48,5 +49,11 @@ public class SearchBookResponse {
         @NotNull
         @Property(name = "status")
         public BookStatusView status;
+
+        @Property(name = "return_date")
+        public LocalDate returnDate;
+
+        @Property(name = "actual_return_date")
+        public LocalDate actualReturnDate;
     }
 }

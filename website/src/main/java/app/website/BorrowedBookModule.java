@@ -1,7 +1,7 @@
 package app.website;
 
-import app.api.website.BorrowedBookAJAXWebService;
-import app.website.borrowedbook.service.BorrowedBookService;
+import app.api.website.BorrowRecordAJAXWebService;
+import app.website.borrowedbook.service.BorrowRecordService;
 import app.website.borrowedbook.web.BorrowedBookAJAXWebServiceImpl;
 import core.framework.module.Module;
 
@@ -17,10 +17,10 @@ public class BorrowedBookModule extends Module {
     }
 
     private void apiServices() {
-        api().service(BorrowedBookAJAXWebService.class, bind(BorrowedBookAJAXWebServiceImpl.class));
+        api().service(BorrowRecordAJAXWebService.class, bind(BorrowedBookAJAXWebServiceImpl.class));
     }
 
     private void services() {
-        bind(BorrowedBookService.class);
+        bind(BorrowRecordService.class);
     }
 }

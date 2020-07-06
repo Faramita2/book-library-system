@@ -1,6 +1,5 @@
 package app.api.website;
 
-import app.api.website.book.BorrowBookAJAXRequest;
 import app.api.website.book.GetBookAJAXResponse;
 import app.api.website.book.SearchBookAJAXRequest;
 import app.api.website.book.SearchBookAJAXResponse;
@@ -20,11 +19,6 @@ public interface BookAJAXWebService {
     @GET
     @Path("/ajax/book/:id")
     GetBookAJAXResponse get(@PathParam("id") Long id);
-
-    // todo
-    @PUT
-    @Path("/ajax/book/:id/borrow")
-    void borrow(@PathParam("id") Long id, BorrowBookAJAXRequest request);
 
     @PUT
     @Path("/ajax/book/:id/return")

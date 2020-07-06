@@ -1,7 +1,6 @@
 package app.website.book.web;
 
 import app.api.website.BookAJAXWebService;
-import app.api.website.book.BorrowBookAJAXRequest;
 import app.api.website.book.GetBookAJAXResponse;
 import app.api.website.book.SearchBookAJAXRequest;
 import app.api.website.book.SearchBookAJAXResponse;
@@ -30,7 +29,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     }
 
     @Override
-    public void borrow(Long id, BorrowBookAJAXRequest request) {
+    public void borrow(Long id, SearchBorrowRecordAJAXRequest request) {
         ActionLogContext.put("id", id);
         service.borrow(id, request);
     }

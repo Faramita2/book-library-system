@@ -17,7 +17,7 @@ public interface UserWebService {
     @Path("/user/:id")
     GetUserResponse get(@PathParam("id") Long id);
 
-    @PUT
+    @GET
     @Path("/user")
     GetUserByUsernameResponse getUserByUsername(GetUserByUsernameRequest request);
 

@@ -1,7 +1,7 @@
 package app.website.borrowedbook.service;
 
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXRequest;
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXResponse;
+import app.api.website.borrowrecord.SearchBorrowRecordAJAXRequest;
+import app.api.website.borrowrecord.SearchBorrowRecordAJAXResponse;
 import app.book.api.AuthorWebService;
 import app.book.api.BookWebService;
 import app.book.api.CategoryWebService;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * @author meow
  */
-public class BorrowedBookService {
+public class BorrowRecordService {
     @Inject
     BookWebService bookWebService;
     @Inject
@@ -34,7 +34,7 @@ public class BorrowedBookService {
     @Inject
     CategoryWebService categoryWebService;
 
-    public SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request) {
+    public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
         SearchBookRequest searchBookRequest = new SearchBookRequest();
         searchBookRequest.skip = request.skip;
         searchBookRequest.limit = request.limit;
@@ -45,19 +45,23 @@ public class BorrowedBookService {
         searchBookRequest.categoryIds = request.categoryIds;
         searchBookRequest.status = BookStatusView.BORROWED;
         searchBookRequest.borrowUserId = Long.valueOf(getUserId());
+        searchBookRequest.returnDate = request.returnDate;
+        searchBookRequest.actualReturnDate = request.actualReturnDate;
 
         SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
-        SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
+        SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
 
         response.total = searchBookResponse.total;
         response.books = searchBookResponse.books.stream().map(book -> {
-            SearchBorrowedBookAJAXResponse.Book view = new SearchBorrowedBookAJAXResponse.Book();
+            SearchBorrowRecordAJAXResponse.Book view = new SearchBorrowRecordAJAXResponse.Book();
             view.id = book.id;
             view.name = book.name;
             view.tagNames = queryTagNames(book.tagIds);
             view.description = book.description;
             view.categoryNames = queryCategoryNames(book.categoryIds);
             view.authorNames = queryAuthorNames(book.authorIds);
+            view.returnDate = book.returnDate;
+            view.actualReturnDate = book.actualReturnDate;
             return view;
         }).collect(Collectors.toList());
 

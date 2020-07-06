@@ -6,6 +6,7 @@ import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -34,6 +35,12 @@ public class SearchBookRequest {
 
     @Property(name = "borrow_user_id")
     public Long borrowUserId;
+
+    @Property(name = "return_date")
+    public LocalDate returnDate;
+
+    @Property(name = "actual_return_date")
+    public LocalDate actualReturnDate;
 
     @NotNull
     @Property(name = "skip")
