@@ -3,15 +3,14 @@ package app.website.borrowedbook.service;
 import app.api.website.borrowedbook.SearchBorrowedBookAJAXRequest;
 import app.api.website.borrowedbook.SearchBorrowedBookAJAXResponse;
 import app.book.api.AuthorWebService;
-import app.book.api.BookWebService;
 import app.book.api.CategoryWebService;
 import app.book.api.TagWebService;
 import app.book.api.author.SearchAuthorRequest;
-import app.book.api.book.BookStatusView;
-import app.book.api.book.SearchBookRequest;
-import app.book.api.book.SearchBookResponse;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.tag.SearchTagRequest;
+import app.borrowrecord.api.BorrowRecordWebService;
+import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import core.framework.inject.Inject;
 import core.framework.web.WebContext;
 import core.framework.web.exception.UnauthorizedException;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
  */
 public class BorrowedBookService {
     @Inject
-    BookWebService bookWebService;
+    BorrowRecordWebService borrowRecordWebService;
     @Inject
     WebContext webContext;
     @Inject
@@ -35,29 +34,48 @@ public class BorrowedBookService {
     CategoryWebService categoryWebService;
 
     public SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request) {
-        SearchBookRequest searchBookRequest = new SearchBookRequest();
-        searchBookRequest.skip = request.skip;
-        searchBookRequest.limit = request.limit;
-        searchBookRequest.name = request.name;
-        searchBookRequest.description = request.description;
-        searchBookRequest.tagIds = request.tagIds;
-        searchBookRequest.authorIds = request.authorIds;
-        searchBookRequest.categoryIds = request.categoryIds;
-        searchBookRequest.status = BookStatusView.BORROWED;
-        searchBookRequest.borrowUserId = Long.valueOf(getUserId());
+        SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
+        searchBorrowRecordRequest.skip = request.skip;
+        searchBorrowRecordRequest.limit = request.limit;
+        searchBorrowRecordRequest.bookName = request.name;
+        searchBorrowRecordRequest.bookDescription = request.description;
+        searchBorrowRecordRequest.tagIds = request.tagIds;
+        searchBorrowRecordRequest.authorIds = request.authorIds;
+        searchBorrowRecordRequest.categoryIds = request.categoryIds;
+        searchBorrowRecordRequest.borrowUserId = Long.valueOf(getUserId());
+        searchBorrowRecordRequest.borrowedDate = request.borrowedDate;
+        searchBorrowRecordRequest.returnDate = request.returnDate;
+        searchBorrowRecordRequest.actualReturnDate = request.actualReturnDate;
+        SearchBorrowRecordResponse searchBorrowRecordResponse = borrowRecordWebService.search(searchBorrowRecordRequest);
 
-        SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
-
-        response.total = searchBookResponse.total;
-        response.books = searchBookResponse.books.stream().map(book -> {
+        response.total = searchBorrowRecordResponse.total;
+        response.books = searchBorrowRecordResponse.records.stream().map(record -> {
             SearchBorrowedBookAJAXResponse.Book view = new SearchBorrowedBookAJAXResponse.Book();
-            view.id = book.id;
-            view.name = book.name;
-            view.tagNames = queryTagNames(book.tagIds);
-            view.description = book.description;
-            view.categoryNames = queryCategoryNames(book.categoryIds);
-            view.authorNames = queryAuthorNames(book.authorIds);
+            view.id = record.book.id;
+            view.name = record.book.name;
+            view.description = record.book.description;
+            view.authors = record.book.authors.stream().map(author -> {
+                SearchBorrowedBookAJAXResponse.Author authorView = new SearchBorrowedBookAJAXResponse.Author();
+                authorView.id = author.id;
+                authorView.name = author.name;
+                return authorView;
+            }).collect(Collectors.toList());
+            view.categories = record.book.categories.stream().map(category -> {
+                SearchBorrowedBookAJAXResponse.Category categoryView = new SearchBorrowedBookAJAXResponse.Category();
+                categoryView.id = category.id;
+                categoryView.name = category.name;
+                return categoryView;
+            }).collect(Collectors.toList());
+            view.tags = record.book.tags.stream().map(tag -> {
+                SearchBorrowedBookAJAXResponse.Tag tagView = new SearchBorrowedBookAJAXResponse.Tag();
+                tagView.id = tag.id;
+                tagView.name = tag.name;
+                return tagView;
+            }).collect(Collectors.toList());
+            view.borrowedTime = record.borrowedTime;
+            view.returnDate = record.returnDate;
+            view.actualReturnDate = record.actualReturnDate;
             return view;
         }).collect(Collectors.toList());
 

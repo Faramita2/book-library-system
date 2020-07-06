@@ -4,6 +4,8 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,20 +31,64 @@ public class SearchBorrowedBookAJAXResponse {
         public String name;
 
         @NotNull
-        @Property(name = "tag_names")
-        public List<String> tagNames;
-
-        @NotNull
         @NotBlank
         @Property(name = "description")
         public String description;
 
         @NotNull
-        @Property(name = "category_names")
-        public List<String> categoryNames;
+        @Property(name = "authors")
+        public List<Author> authors;
 
         @NotNull
-        @Property(name = "author_names")
-        public List<String> authorNames;
+        @Property(name = "categories")
+        public List<Category> categories;
+
+        @NotNull
+        @Property(name = "tags")
+        public List<Tag> tags;
+
+        @NotNull
+        @Property(name = "borrowed_time")
+        public LocalDateTime borrowedTime;
+
+        @NotNull
+        @Property(name = "return_date")
+        public LocalDate returnDate;
+
+        @Property(name = "actual_return_date")
+        public LocalDate actualReturnDate;
+    }
+
+    public static class Author {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Category {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Tag {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
     }
 }

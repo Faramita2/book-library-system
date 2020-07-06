@@ -145,6 +145,7 @@ project(':website') {
     dependencies {
         implementation project(':website-interface')
         implementation project(':book-service-interface')
+        implementation project(':borrow-record-service-interface')
         implementation project(':notification-service-interface')
         implementation project(':authentication-service-interface')
     }

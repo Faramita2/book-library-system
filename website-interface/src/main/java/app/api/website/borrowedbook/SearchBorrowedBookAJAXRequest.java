@@ -6,6 +6,7 @@ import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -16,17 +17,27 @@ public class SearchBorrowedBookAJAXRequest {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "tag_ids")
-    public List<Long> tagIds;
-
+    @Length(max = 255)
     @Property(name = "description")
     public String description;
+
+    @Property(name = "author_ids")
+    public List<Long> authorIds;
+
+    @Property(name = "tag_ids")
+    public List<Long> tagIds;
 
     @Property(name = "category_ids")
     public List<Long> categoryIds;
 
-    @Property(name = "author_ids")
-    public List<Long> authorIds;
+    @Property(name = "borrow_date")
+    public LocalDate borrowedDate;
+
+    @Property(name = "return_date")
+    public LocalDate returnDate;
+
+    @Property(name = "actual_return_date")
+    public LocalDate actualReturnDate;
 
     @NotNull
     @Property(name = "skip")

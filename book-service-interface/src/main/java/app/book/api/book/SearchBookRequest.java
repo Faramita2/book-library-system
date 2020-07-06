@@ -19,7 +19,7 @@ public class SearchBookRequest {
     @Property(name = "tag_ids")
     public List<Long> tagIds;
 
-    @Length(max = 50)
+    @Length(max = 255)
     @Property(name = "description")
     public String description;
 
@@ -31,9 +31,6 @@ public class SearchBookRequest {
 
     @Property(name = "status")
     public BookStatusView status;
-
-    @Property(name = "borrow_user_id")
-    public Long borrowUserId;
 
     @NotNull
     @Property(name = "skip")

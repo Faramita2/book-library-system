@@ -8,20 +8,20 @@ import core.framework.mongo.Id;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author zoo
  */
-// todo
 @Collection(name = "borrow_records")
 public class BorrowRecord {
     @Id
-    @Field(name = "_id") // no effect
+    @Field(name = "_id")
     public ObjectId id;
 
     @NotNull
-    @Field(name = "book_id")
-    public Long bookId;
+    @Field(name = "book")
+    public Book book;
 
     @NotNull
     @Field(name = "borrow_user_id")
@@ -55,4 +55,65 @@ public class BorrowRecord {
     @NotBlank
     @Field(name = "updated_by")
     public String updatedBy;
+
+    public static class Book {
+        @NotNull
+        @Field(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "name")
+        public String name;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "description")
+        public String description;
+
+        @NotNull
+        @Field(name = "authors")
+        public List<Author> authors;
+
+        @NotNull
+        @Field(name = "categories")
+        public List<Category> categories;
+
+        @NotNull
+        @Field(name = "tags")
+        public List<Tag> tags;
+    }
+
+    public static class Author {
+        @NotNull
+        @Field(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "name")
+        public String name;
+    }
+
+    public static class Category {
+        @NotNull
+        @Field(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "name")
+        public String name;
+    }
+
+    public static class Tag {
+        @NotNull
+        @Field(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "name")
+        public String name;
+    }
 }

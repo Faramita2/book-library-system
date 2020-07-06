@@ -45,7 +45,6 @@ public class BookService {
     BorrowRecordWebService borrowRecordWebService;
 
     public SearchBookResponse search(SearchBookRequest request) {
-        SearchBookResponse response = new SearchBookResponse();
         Query<Book> query = bookRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
@@ -77,10 +76,7 @@ public class BookService {
             query.where("status = ?", request.status.name());
         }
 
-        if (request.borrowUserId != null) {
-            query.where("borrow_user_id = ?", request.borrowUserId);
-        }
-
+        SearchBookResponse response = new SearchBookResponse();
         response.total = query.count();
         response.books = query.fetch().stream().map(book -> {
             SearchBookResponse.Book view = new SearchBookResponse.Book();
