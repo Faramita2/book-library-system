@@ -15,12 +15,9 @@ public class AuthInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Invocation invocation) throws Exception {
-        AdminPass pass = invocation.annotation(AdminPass.class);
-
+        SkipLogin pass = invocation.annotation(SkipLogin.class);
         if (pass == null) {
-            invocation.context().request().session().get("admin_id").orElseThrow(()
-                -> new UnauthorizedException("You need login first."));
-
+            invocation.context().request().session().get("admin_id").orElseThrow(() -> new UnauthorizedException("You need login first."));
             logger.info("pass authorize");
         }
 

@@ -1,4 +1,4 @@
-package app.api.admin.admin;
+package app.api.authentication.authentication;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -7,14 +7,13 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class BOLoginAdminRequest {
-    @Property(name = "account")
+public class BOLoginResponse {
     @NotNull
-    @NotBlank
-    public String account;
+    @Property(name = "id")
+    public Long id;
 
-    @Property(name = "password")
     @NotNull
     @NotBlank
-    public String password;
+    @Property(name = "account")
+    public String account;
 }

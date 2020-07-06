@@ -2,7 +2,6 @@ package app.user.api;
 
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOGetUserResponse;
-import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
@@ -34,8 +33,4 @@ public interface BOUserWebService {
     @PUT
     @Path("/bo/user/:id")
     void update(@PathParam("id") Long id, BOUpdateUserRequest request);
-
-    @PUT
-    @Path("/bo/user/:id/reset-password")
-    void resetPassword(@PathParam("id") Long id, BOResetUserPasswordRequest request);
 }

@@ -1,9 +1,9 @@
 package app.website;
 
 import app.api.website.UserAJAXWebService;
-import app.website.user.service.UserService;
+import app.website.user.service.AuthenticationService;
 import app.website.user.web.AuthInterceptor;
-import app.website.user.web.UserAJAXWebServiceImpl;
+import app.website.user.web.AuthenticationAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**
@@ -19,10 +19,10 @@ public class UserModule extends Module {
 
     private void apiServices() {
         http().intercept(bind(AuthInterceptor.class));
-        api().service(UserAJAXWebService.class, bind(UserAJAXWebServiceImpl.class));
+        api().service(UserAJAXWebService.class, bind(AuthenticationAJAXWebServiceImpl.class));
     }
 
     private void services() {
-        bind(UserService.class);
+        bind(AuthenticationService.class);
     }
 }

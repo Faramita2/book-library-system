@@ -1,7 +1,7 @@
 package app.booksite.admin.web;
 
 import app.api.backoffice.AdminAJAXWebService;
-import app.api.backoffice.admin.LoginAdminAJAXRequest;
+import app.api.backoffice.admin.LoginAJAXRequest;
 import app.booksite.admin.service.AdminService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -13,9 +13,9 @@ public class AdminAJAXWebServiceImpl implements AdminAJAXWebService {
     @Inject
     AdminService service;
 
-    @AdminPass
+    @SkipLogin
     @Override
-    public void login(LoginAdminAJAXRequest request) {
+    public void login(LoginAJAXRequest request) {
         ActionLogContext.put("account", request.account);
         service.login(request);
     }

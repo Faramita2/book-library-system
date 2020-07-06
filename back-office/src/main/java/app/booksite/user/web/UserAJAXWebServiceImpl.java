@@ -28,14 +28,18 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     }
 
     @Override
-    public void update(Long id, UpdateUserAJAXRequest request) {
-        ActionLogContext.put("id", id);
-        service.update(id, request);
+    public void active(Long id) {
+
     }
 
     @Override
-    public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
+    public void inactive(Long id) {
+
+    }
+
+    @Override
+    public void resetPassword(Long id) {
         ActionLogContext.put("id", id);
-        service.resetPassword(id, request);
+        service.resetPassword(id);
     }
 }

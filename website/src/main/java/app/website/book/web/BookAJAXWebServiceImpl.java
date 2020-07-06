@@ -6,7 +6,7 @@ import app.api.website.book.GetBookAJAXResponse;
 import app.api.website.book.SearchBookAJAXRequest;
 import app.api.website.book.SearchBookAJAXResponse;
 import app.website.book.service.BookService;
-import app.website.user.web.UserPass;
+import app.website.user.web.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 
@@ -17,13 +17,13 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Inject
     BookService service;
 
-    @UserPass
+    @SkipLogin
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         return service.search(request);
     }
 
-    @UserPass
+    @SkipLogin
     @Override
     public GetBookAJAXResponse get(Long id) {
         return service.get(id);

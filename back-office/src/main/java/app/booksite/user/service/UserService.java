@@ -1,31 +1,39 @@
 package app.booksite.user.service;
 
 import app.api.backoffice.user.CreateUserAJAXRequest;
-import app.api.backoffice.user.ResetUserPasswordAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
 import app.api.backoffice.user.UpdateUserAJAXRequest;
 import app.api.backoffice.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
-import app.user.api.user.BOResetUserPasswordRequest;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.redis.Redis;
+import core.framework.util.Randoms;
+import core.framework.util.Strings;
 import core.framework.web.WebContext;
+import core.framework.web.exception.TooManyRequestsException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.stream.Collectors;
 
 /**
  * @author meow
  */
 public class UserService {
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
     BOUserWebService userWebService;
     @Inject
     WebContext webContext;
+    @Inject
+    Redis redis;
 
     public void create(CreateUserAJAXRequest request) {
         BOCreateUserRequest boCreateUserRequest = new BOCreateUserRequest();
@@ -75,11 +83,22 @@ public class UserService {
         }
     }
 
-    public void resetPassword(Long id, ResetUserPasswordAJAXRequest request) {
-        BOResetUserPasswordRequest boResetUserPasswordRequest = new BOResetUserPasswordRequest();
-        boResetUserPasswordRequest.password = request.password;
-        boResetUserPasswordRequest.passwordConfirm = request.passwordConfirm;
-        boResetUserPasswordRequest.operator = "book-site";
-        userWebService.resetPassword(id, boResetUserPasswordRequest);
+    public void resetPassword(Long id) {
+        String userRequestTimesKey = Strings.format("user:{}:resetPassword", id);
+        String currentRequestTimes = redis.get(userRequestTimesKey);
+
+        if (Strings.isBlank(currentRequestTimes)) {
+            redis.set(userRequestTimesKey, "1", Duration.ofHours(1));
+        } else if (Long.parseLong(currentRequestTimes) == 5) {
+            throw new TooManyRequestsException("too many request for resetting password");
+        } else {
+            redis.increaseBy(userRequestTimesKey, 1);
+        }
+
+        String token = Randoms.alphaNumeric(32);
+        redis.set(token, String.valueOf(id), Duration.ofMinutes(30));
+
+        String hostName = webContext.request().hostName();
+        logger.info("send email to user(id = {}) with reset password url: {}/user/reset-password?token={}?requested_by=email", id, hostName, token);
     }
 }

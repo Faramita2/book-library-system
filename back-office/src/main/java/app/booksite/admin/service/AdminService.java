@@ -1,9 +1,9 @@
 package app.booksite.admin.service;
 
-import app.api.admin.BOAdminWebService;
-import app.api.admin.admin.BOLoginAdminRequest;
-import app.api.admin.admin.BOLoginAdminResponse;
-import app.api.backoffice.admin.LoginAdminAJAXRequest;
+import app.api.authentication.BOAuthenticationWebService;
+import app.api.authentication.authentication.BOLoginRequest;
+import app.api.authentication.authentication.BOLoginResponse;
+import app.api.backoffice.admin.LoginAJAXRequest;
 import core.framework.inject.Inject;
 import core.framework.web.WebContext;
 
@@ -12,16 +12,17 @@ import core.framework.web.WebContext;
  */
 public class AdminService {
     @Inject
-    BOAdminWebService boAdminWebService;
+    BOAuthenticationWebService boAuthenticationWebService;
     @Inject
     WebContext webContext;
 
-    public void login(LoginAdminAJAXRequest request) {
-        BOLoginAdminRequest boLoginAdminRequest = new BOLoginAdminRequest();
-        boLoginAdminRequest.account = request.account;
-        boLoginAdminRequest.password = request.password;
-        BOLoginAdminResponse response = boAdminWebService.login(boLoginAdminRequest);
-        webContext.request().session().set("admin_id", String.valueOf(response.id));
-        webContext.request().session().set("admin_account", response.account);
+    public void login(LoginAJAXRequest request) {
+        BOLoginRequest boLoginRequest = new BOLoginRequest();
+        boLoginRequest.account = request.account;
+        boLoginRequest.password = request.password;
+        BOLoginResponse boLoginResponse = boAuthenticationWebService.login(boLoginRequest);
+
+        webContext.request().session().set("admin_id", String.valueOf(boLoginResponse.id));
+        webContext.request().session().set("admin_account", boLoginResponse.account);
     }
 }

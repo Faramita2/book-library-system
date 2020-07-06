@@ -56,6 +56,7 @@ configure([
         project(':notification-service'),
         project(':scheduler-service'),
         project(':user-service'),
+        project(':authentication-service'),
 ]) {
     dependencies {
         implementation "core.framework:core-ng:${coreNGVersion}"
@@ -121,6 +122,14 @@ project(':scheduler-service') {
     }
 }
 
+project(':authentication-service') {
+    dependencies {
+        implementation project(':authentication-service-interface')
+        implementation project(':user-service-interface')
+        implementation project(':admin-service-interface')
+    }
+}
+
 project(':back-office') {
     dependencies {
         implementation project(':back-office-interface')
@@ -128,6 +137,7 @@ project(':back-office') {
         implementation project(':book-service-interface')
         implementation project(':borrow-record-service-interface')
         implementation project(':user-service-interface')
+        implementation project(':authentication-service-interface')
     }
 }
 
@@ -136,6 +146,6 @@ project(':website') {
         implementation project(':website-interface')
         implementation project(':book-service-interface')
         implementation project(':notification-service-interface')
-        implementation project(':user-service-interface')
+        implementation project(':authentication-service-interface')
     }
 }

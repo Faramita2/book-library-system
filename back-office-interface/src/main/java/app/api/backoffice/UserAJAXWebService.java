@@ -24,16 +24,15 @@ public interface UserAJAXWebService {
     @Path("/ajax/user")
     SearchUserAJAXResponse search(SearchUserAJAXRequest request);
 
-    //todo
     @PUT
     @Path("/ajax/user/:id/active")
-    void update(@PathParam("id") Long id);
+    void active(@PathParam("id") Long id);
 
     @PUT
     @Path("/ajax/user/:id/inactive")
     void inactive(@PathParam("id") Long id);
 
-    @PUT
+    @POST
     @Path("/ajax/user/:id/reset-password")
-    void resetPassword(@PathParam("id") Long id, ResetUserPasswordAJAXRequest request);
+    void resetPassword(@PathParam("id") Long id);
 }

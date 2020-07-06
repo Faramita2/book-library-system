@@ -1,6 +1,6 @@
 package app.api.backoffice;
 
-import app.api.backoffice.admin.LoginAdminAJAXRequest;
+import app.api.backoffice.admin.LoginAJAXRequest;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 
@@ -9,6 +9,6 @@ import core.framework.api.web.service.Path;
  */
 public interface AdminAJAXWebService {
     @PUT
-    @Path("/ajax/admin/login")
-    void login(LoginAdminAJAXRequest request);
+    @Path("/ajax/login")
+    void login(LoginAJAXRequest request);
 }

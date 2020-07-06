@@ -1,4 +1,4 @@
-package app.user.api.user;
+package app.api.authentication.authentication;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -7,11 +7,11 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class LoginUserRequest {
+public class BOLoginRequest {
     @NotNull
     @NotBlank
     @Property(name = "username")
-    public String username;
+    public String account;
 
     @NotNull
     @NotBlank

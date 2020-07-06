@@ -7,7 +7,7 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class BOLoginAdminResponse {
+public class BOGetAdminByAccountResponse {
     @NotNull
     @Property(name = "id")
     public Long id;
@@ -16,4 +16,14 @@ public class BOLoginAdminResponse {
     @NotBlank
     @Property(name = "account")
     public String account;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "salt")
+    public String salt;
+
+    @NotNull
+    @NotBlank
+    @Property(name = "password")
+    public String password;
 }

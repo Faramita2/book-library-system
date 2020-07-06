@@ -5,7 +5,7 @@ import app.api.website.bookcategory.ListBookCategoryAJAXResponse;
 import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
 import app.website.bookcategory.service.BookCategoryService;
-import app.website.user.web.UserPass;
+import app.website.user.web.SkipLogin;
 import core.framework.inject.Inject;
 
 
@@ -16,7 +16,7 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
     @Inject
     BookCategoryService service;
 
-    @UserPass
+    @SkipLogin
     @Override
     public SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request) {
         return service.search(request);
