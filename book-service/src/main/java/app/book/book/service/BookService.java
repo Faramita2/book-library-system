@@ -82,10 +82,10 @@ public class BookService {
             SearchBookResponse.Book view = new SearchBookResponse.Book();
             view.id = book.id;
             view.name = book.name;
-            view.tagIds = queryTagIdsByBookId(book.id);
+            view.tagIds = queryTagsByBookId(book.id);
             view.description = book.description;
-            view.categoryIds = queryCategoryIdsByBookId(book.id);
-            view.authorIds = queryAuthorIdsByBookId(book.id);
+            view.categoryIds = queryCategoriesByBookId(book.id);
+            view.authorIds = queryAuthorsByBookId(book.id);
             view.status = BookStatusView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
@@ -102,9 +102,9 @@ public class BookService {
         response.id = book.id;
         response.name = book.name;
         response.description = book.description;
-        response.authorIds = queryAuthorIdsByBookId(id);
-        response.categoryIds = queryCategoryIdsByBookId(id);
-        response.tagIds = queryTagIdsByBookId(id);
+        response.authors = queryAuthorsByBookId(id);
+        response.categories = queryCategoriesByBookId(id);
+        response.tags = queryTagsByBookId(id);
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
@@ -164,7 +164,6 @@ public class BookService {
     private void updateBorrowRecord(Book book) {
         // todo combine
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
-        searchBorrowRecordRequest.bookId = book.id;
         searchBorrowRecordRequest.borrowUserId = book.borrowUserId;
         searchBorrowRecordRequest.actualReturnDate = null;
         searchBorrowRecordRequest.skip = 0;
@@ -188,7 +187,7 @@ public class BookService {
         borrowRecordWebService.create(request);
     }
 
-    private List<Long> queryTagIdsByBookId(Long bookId) {
+    private List<Long> queryTagsByBookId(Long bookId) {
         return database.select(
             "SELECT tag_id FROM book_tags WHERE book_id = ?", TagIdView.class, bookId)
             .stream()
@@ -196,7 +195,7 @@ public class BookService {
             .collect(Collectors.toList());
     }
 
-    private List<Long> queryCategoryIdsByBookId(Long bookId) {
+    private List<Long> queryCategoriesByBookId(Long bookId) {
         return database.select(
             "SELECT category_id FROM book_categories WHERE book_id = ?", CategoryIdView.class, bookId)
             .stream()
@@ -204,7 +203,7 @@ public class BookService {
             .collect(Collectors.toList());
     }
 
-    private List<Long> queryAuthorIdsByBookId(Long bookId) {
+    private List<Long> queryAuthorsByBookId(Long bookId) {
         return database.select(
             "SELECT author_id FROM book_authors WHERE book_id = ?", AuthorIdView.class, bookId)
             .stream()

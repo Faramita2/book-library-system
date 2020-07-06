@@ -2,7 +2,6 @@ package app.book.tag.web;
 
 import app.book.api.BOTagWebService;
 import app.book.api.tag.BOCreateTagRequest;
-import app.book.api.tag.BOListTagResponse;
 import app.book.api.tag.BOSearchTagRequest;
 import app.book.api.tag.BOSearchTagResponse;
 import app.book.api.tag.BOUpdateTagRequest;

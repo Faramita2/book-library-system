@@ -1,7 +1,6 @@
 package app.website.book.service;
 
 import app.api.website.book.BookStatusAJAXView;
-import app.api.website.book.BorrowBookAJAXRequest;
 import app.api.website.book.GetBookAJAXResponse;
 import app.api.website.book.SearchBookAJAXRequest;
 import app.api.website.book.SearchBookAJAXResponse;
@@ -11,17 +10,13 @@ import app.book.api.CategoryWebService;
 import app.book.api.TagWebService;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.book.BookStatusView;
-import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.tag.SearchTagRequest;
 import app.user.api.UserWebService;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,8 +33,6 @@ public class BookService {
     CategoryWebService categoryWebService;
     @Inject
     AuthorWebService authorWebService;
-    @Inject
-    WebContext webContext;
     @Inject
     UserWebService userWebService;
 
@@ -86,34 +79,11 @@ public class BookService {
         response.borrowUsername = getBookResponse.borrowUserId != null ? userWebService.get(getBookResponse.borrowUserId).username : null;
         response.borrowedTime = getBookResponse.borrowedTime;
         response.returnDate = getBookResponse.returnDate;
-        response.tagNames = queryTagNames(getBookResponse.tagIds);
-        response.categoryNames = queryCategoryNames(getBookResponse.categoryIds);
-        response.authorNames = queryAuthorNames(getBookResponse.authorIds);
+        response.tagNames = queryTagNames(getBookResponse.tags);
+        response.categoryNames = queryCategoryNames(getBookResponse.categories);
+        response.authorNames = queryAuthorNames(getBookResponse.authors);
 
         return response;
-    }
-
-    public void borrow(Long id, BorrowBookAJAXRequest request) {
-        BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
-        String userId = getUserId();
-        borrowBookRequest.userId = Long.valueOf(userId);
-        borrowBookRequest.operator = "book-site-frontend";
-        borrowBookRequest.returnDate = request.returnDate;
-        bookWebService.borrow(id, borrowBookRequest);
-    }
-
-    public void returnBook(Long id) {
-        ReturnBookRequest returnBookRequest = new ReturnBookRequest();
-        String userId = getUserId();
-        returnBookRequest.userId = Long.valueOf(userId);
-        // todo username
-        returnBookRequest.operator = "book-site-frontend";
-        bookWebService.returnBook(id, returnBookRequest);
-    }
-
-    private String getUserId() {
-        return webContext.request().session().get("user_id").orElseThrow(() ->
-            new UnauthorizedException("please login first."));
     }
 
     private List<String> queryTagNames(List<Long> tagIds) {

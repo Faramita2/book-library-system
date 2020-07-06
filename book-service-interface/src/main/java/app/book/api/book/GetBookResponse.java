@@ -22,21 +22,21 @@ public class GetBookResponse {
     public String name;
 
     @NotNull
-    @Property(name = "tag_ids")
-    public List<Long> tagIds;
-
-    @NotNull
     @NotBlank
     @Property(name = "description")
     public String description;
 
     @NotNull
-    @Property(name = "category_ids")
-    public List<Long> categoryIds;
+    @Property(name = "authors")
+    public List<Author> authors;
 
     @NotNull
-    @Property(name = "author_ids")
-    public List<Long> authorIds;
+    @Property(name = "categories")
+    public List<Category> categories;
+
+    @NotNull
+    @Property(name = "tags")
+    public List<Tag> tags;
 
     @NotNull
     @Property(name = "status")
@@ -50,4 +50,37 @@ public class GetBookResponse {
 
     @Property(name = "return_date")
     public LocalDate returnDate;
+
+    public static class Author {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Category {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Tag {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
 }

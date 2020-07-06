@@ -1,13 +1,11 @@
 package app.booksite.bookauthor.service;
 
 import app.api.backoffice.bookauthor.CreateBookAuthorAJAXRequest;
-import app.api.backoffice.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.backoffice.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.backoffice.bookauthor.SearchBookAuthorAJAXResponse;
 import app.api.backoffice.bookauthor.UpdateBookAuthorAJAXRequest;
 import app.book.api.BOAuthorWebService;
 import app.book.api.author.BOCreateAuthorRequest;
-import app.book.api.author.BOListAuthorResponse;
 import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
@@ -33,20 +31,6 @@ public class BookAuthorService {
         response.total = boSearchAuthorResponse.total;
         response.authors = boSearchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();
-            view.id = author.id;
-            view.name = author.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public ListBookAuthorAJAXResponse list() {
-        BOListAuthorResponse listAuthorResponse = boAuthorWebService.list();
-        ListBookAuthorAJAXResponse response = new ListBookAuthorAJAXResponse();
-        response.total = listAuthorResponse.total;
-        response.authors = listAuthorResponse.authors.stream().map(author -> {
-            ListBookAuthorAJAXResponse.Author view = new ListBookAuthorAJAXResponse.Author();
             view.id = author.id;
             view.name = author.name;
             return view;

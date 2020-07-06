@@ -87,13 +87,13 @@ configure([
 project(':book-service') {
     dependencies {
         implementation project(':book-service-interface')
-        implementation project(':borrow-record-service-interface')
     }
 }
 
 project(':borrow-record-service') {
     dependencies {
         implementation project(':borrow-record-service-interface')
+        implementation project(':book-service-interface')
     }
 }
 
@@ -134,19 +134,20 @@ project(':back-office') {
     dependencies {
         implementation project(':back-office-interface')
         implementation project(':admin-service-interface')
+        implementation project(':authentication-service-interface')
         implementation project(':book-service-interface')
         implementation project(':borrow-record-service-interface')
         implementation project(':user-service-interface')
-        implementation project(':authentication-service-interface')
     }
 }
 
 project(':website') {
     dependencies {
         implementation project(':website-interface')
+        implementation project(':authentication-service-interface')
         implementation project(':book-service-interface')
         implementation project(':borrow-record-service-interface')
         implementation project(':notification-service-interface')
-        implementation project(':authentication-service-interface')
+        implementation project(':user-service-interface')
     }
 }

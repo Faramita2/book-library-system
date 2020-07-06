@@ -1,13 +1,11 @@
 package app.book.api;
 
 import app.book.api.tag.BOCreateTagRequest;
-import app.book.api.tag.BOListTagResponse;
 import app.book.api.tag.BOSearchTagRequest;
 import app.book.api.tag.BOSearchTagResponse;
 import app.book.api.tag.BOUpdateTagRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.DELETE;
-import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -21,10 +19,6 @@ public interface BOTagWebService {
     @PUT
     @Path("/bo/tag")
     BOSearchTagResponse search(BOSearchTagRequest request);
-
-    @GET
-    @Path("/bo/tag")
-    BOListTagResponse list();
 
     @POST
     @Path("/bo/tag")

@@ -2,10 +2,8 @@ package app.booksite.user.web;
 
 import app.api.backoffice.UserAJAXWebService;
 import app.api.backoffice.user.CreateUserAJAXRequest;
-import app.api.backoffice.user.ResetUserPasswordAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
-import app.api.backoffice.user.UpdateUserAJAXRequest;
 import app.booksite.user.service.UserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;

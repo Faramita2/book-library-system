@@ -4,7 +4,6 @@ import app.api.website.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.website.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.website.bookauthor.SearchBookAuthorAJAXResponse;
 import app.book.api.AuthorWebService;
-import app.book.api.author.ListAuthorResponse;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.author.SearchAuthorResponse;
 import core.framework.inject.Inject;

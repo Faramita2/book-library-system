@@ -1,5 +1,7 @@
 package app.borrowrecord.borrowrecord.service;
 
+import app.book.api.BookWebService;
+import app.book.api.book.GetBookResponse;
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.ListNeedReturnBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
@@ -7,6 +9,7 @@ import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
 import com.mongodb.client.model.Filters;
+import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
@@ -35,8 +38,29 @@ import static com.mongodb.client.model.Filters.or;
 public class BorrowRecordService {
     @Inject
     MongoCollection<BorrowRecord> collection;
+    @Inject
+    BookWebService bookWebService;
 
     public void create(CreateBorrowRecordRequest request) {
+        GetBookResponse getBookResponse = bookWebService.get(request.bookId);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        book.status = BookStatus.BORROWED;
+        book.borrowUserId = request.userId;
+        book.borrowedTime = now;
+        book.returnDate = request.returnDate;
+        book.updatedTime = now;
+        book.updatedBy = request.operator;
+
+        try (Transaction transaction = database.beginTransaction()) {
+            // todo log
+            logger.warn("==== start borrow book ====");
+            bookRepository.partialUpdate(book);
+            createBorrowRecord(book);
+            transaction.commit();
+            logger.warn("==== end borrow book ====");
+        }
         BorrowRecord.Book book = new BorrowRecord.Book();
         book.id = request.bookId;
         book.name = request.bookName;

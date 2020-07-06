@@ -4,7 +4,6 @@ import app.api.website.bookcategory.ListBookCategoryAJAXResponse;
 import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
 import app.book.api.CategoryWebService;
-import app.book.api.category.ListCategoryResponse;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.category.SearchCategoryResponse;
 import core.framework.inject.Inject;

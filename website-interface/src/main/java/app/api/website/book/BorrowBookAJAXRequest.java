@@ -9,7 +9,10 @@ import java.time.LocalDate;
  * @author meow
  */
 public class BorrowBookAJAXRequest {
-    // todo
+    @NotNull
+    @Property(name = "book_id")
+    public Long bookId;
+
     @NotNull
     @Property(name = "return_date")
     public LocalDate returnDate;
