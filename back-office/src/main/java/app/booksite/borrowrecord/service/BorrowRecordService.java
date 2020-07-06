@@ -46,9 +46,9 @@ public class BorrowRecordService {
                 view.bookName = bookName;
                 view.borrowerId = record.borrowerId;
                 view.borrowerName = borrowerNames.get(view.borrowerId);
-                view.borrowedAt = record.borrowedAt;
-                view.returnAt = record.returnAt;
-                view.actualReturnAt = record.actualReturnAt;
+                view.borrowedTime = record.borrowedTime;
+                view.returnDate = record.returnDate;
+                view.actualReturnDate = record.actualReturnDate;
                 return view;
             })
             .collect(Collectors.toList());

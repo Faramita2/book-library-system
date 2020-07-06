@@ -11,6 +11,6 @@ import java.time.LocalDate;
 public class BorrowBookAJAXRequest {
     // todo
     @NotNull
-    @Property(name = "return_at")
-    public LocalDate returnAt;
+    @Property(name = "return_date")
+    public LocalDate returnDate;
 }

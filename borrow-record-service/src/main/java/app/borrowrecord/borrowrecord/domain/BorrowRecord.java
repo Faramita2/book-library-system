@@ -28,15 +28,15 @@ public class BorrowRecord {
     public Long borrowerId;
 
     @NotNull
-    @Field(name = "borrowed_at")
-    public LocalDateTime borrowedAt;
+    @Field(name = "borrowed_time")
+    public LocalDateTime borrowedTime;
 
     @NotNull
-    @Field(name = "return_at")
-    public LocalDateTime returnAt;
+    @Field(name = "return_date")
+    public LocalDateTime returnDate;
 
-    @Field(name = "actual_return_at")
-    public LocalDateTime actualReturnAt;
+    @Field(name = "actual_return_date")
+    public LocalDateTime actualReturnDate;
 
     @NotNull
     @Field(name = "created_time")

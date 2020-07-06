@@ -19,8 +19,8 @@ public class SearchBorrowRecordRequest {
     @Property(name = "book_id")
     public Long bookId;
 
-    @Property(name = "actual_return_at")
-    public LocalDate actualReturnAt;
+    @Property(name = "actual_return_date")
+    public LocalDate actualReturnDate;
 
     @NotNull
     @Property(name = "skip")

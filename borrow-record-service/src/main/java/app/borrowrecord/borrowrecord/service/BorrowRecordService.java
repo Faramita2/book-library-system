@@ -35,9 +35,9 @@ public class BorrowRecordService {
         borrowRecord.id = ObjectId.get();
         borrowRecord.bookId = request.bookId;
         borrowRecord.borrowerId = request.borrowerId;
-        borrowRecord.borrowedAt = request.borrowedAt;
+        borrowRecord.borrowedTime = request.borrowedTime;
         LocalDateTime now = LocalDateTime.now();
-        borrowRecord.returnAt = request.returnAt.atStartOfDay().plusDays(1).minusSeconds(1);
+        borrowRecord.returnDate = request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         borrowRecord.createdTime = now;
         borrowRecord.updatedTime = now;
         borrowRecord.createdBy = request.operator;
@@ -52,11 +52,11 @@ public class BorrowRecordService {
         // todo combine
         query.filter = or(
             and(
-                gte("return_at", LocalDate.now().atStartOfDay().plusDays(1)),
-                lt("return_at", LocalDate.now().atStartOfDay().plusDays(2)),
-                eq("actual_return_at", null)
+                gte("return_date", LocalDate.now().atStartOfDay().plusDays(1)),
+                lt("return_date", LocalDate.now().atStartOfDay().plusDays(2)),
+                eq("actual_return_date", null)
             ),
-            lt("return_at", LocalDate.now().atStartOfDay())
+            lt("return_date", LocalDate.now().atStartOfDay())
         );
 
         ListNeedReturnBorrowRecordResponse response = new ListNeedReturnBorrowRecordResponse();
@@ -66,8 +66,8 @@ public class BorrowRecordService {
             view.id = borrowRecord.id.toString();
             view.bookId = borrowRecord.bookId;
             view.borrowerId = borrowRecord.borrowerId;
-            view.borrowedAt = borrowRecord.borrowedAt;
-            view.returnAt = borrowRecord.returnAt.toLocalDate();
+            view.borrowedTime = borrowRecord.borrowedTime;
+            view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
         }).collect(Collectors.toList());
 
@@ -77,8 +77,8 @@ public class BorrowRecordService {
     public void update(String id, UpdateBorrowRecordRequest request) {
         BorrowRecord borrowRecord = collection.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
-        if (request.actualReturnAt != null) {
-            borrowRecord.actualReturnAt = request.actualReturnAt.atStartOfDay().plusDays(1).minusSeconds(1);
+        if (request.actualReturnDate != null) {
+            borrowRecord.actualReturnDate = request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         }
         collection.replace(borrowRecord);
     }
@@ -88,7 +88,7 @@ public class BorrowRecordService {
         query.filter = and(
             eq("borrower_id", request.borrowerId),
             eq("book_id", request.bookId),
-            eq("actual_return_at", request.actualReturnAt)
+            eq("actual_return_date", request.actualReturnDate)
         );
         query.skip = request.skip;
         query.limit = request.limit;
@@ -98,8 +98,8 @@ public class BorrowRecordService {
         response.records = collection.find(query).stream().map(borrowRecord -> {
             SearchBorrowRecordResponse.Record view = new SearchBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
-            view.borrowedAt = borrowRecord.borrowedAt;
-            view.returnAt = borrowRecord.returnAt.toLocalDate();
+            view.borrowedTime = borrowRecord.borrowedTime;
+            view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
         }).collect(Collectors.toList());
 

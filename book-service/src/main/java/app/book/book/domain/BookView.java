@@ -47,9 +47,9 @@ public class BookView {
     @Column(name = "borrower_name")
     public String borrowerName;
 
-    @Column(name = "borrowed_at")
-    public LocalDateTime borrowedAt;
+    @Column(name = "borrowed_time")
+    public LocalDateTime borrowedTime;
 
-    @Column(name = "return_at")
-    public LocalDate returnAt;
+    @Column(name = "return_date")
+    public LocalDate returnDate;
 }

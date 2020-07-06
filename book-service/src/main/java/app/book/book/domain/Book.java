@@ -36,11 +36,11 @@ public class Book {
     @Column(name = "borrower_id")
     public Long borrowerId;
 
-    @Column(name = "borrowed_at")
-    public LocalDateTime borrowedAt;
+    @Column(name = "borrowed_time")
+    public LocalDateTime borrowedTime;
 
-    @Column(name = "return_at")
-    public LocalDate returnAt;
+    @Column(name = "return_date")
+    public LocalDate returnDate;
 
     @Column(name = "created_time")
     @NotNull

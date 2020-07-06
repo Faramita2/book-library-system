@@ -14,9 +14,9 @@ public class BorrowBookRequest {
     @NotNull
     public Long userId;
 
-    @Property(name = "return_at")
+    @Property(name = "return_date")
     @NotNull
-    public LocalDate returnAt;
+    public LocalDate returnDate;
 
     @Property(name = "operator")
     @NotNull

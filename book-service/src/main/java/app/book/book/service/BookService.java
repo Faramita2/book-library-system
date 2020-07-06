@@ -111,8 +111,8 @@ public class BookService {
         response.tagIds = queryTagIdsByBookId(id);
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowerId = book.borrowerId;
-        response.borrowedAt = book.borrowedAt;
-        response.returnAt = book.returnAt;
+        response.borrowedTime = book.borrowedTime;
+        response.returnDate = book.returnDate;
 
         return response;
     }
@@ -125,8 +125,8 @@ public class BookService {
 
         book.status = BookStatus.BORROWED;
         book.borrowerId = request.userId;
-        book.borrowedAt = now;
-        book.returnAt = request.returnAt;
+        book.borrowedTime = now;
+        book.returnDate = request.returnDate;
         book.updatedTime = now;
         book.updatedBy = request.operator;
 
@@ -150,8 +150,8 @@ public class BookService {
 
         book.status = BookStatus.AVAILABLE;
         book.borrowerId = null;
-        book.returnAt = null;
-        book.borrowedAt = null;
+        book.returnDate = null;
+        book.borrowedTime = null;
         book.updatedTime = LocalDateTime.now();
         book.updatedBy = request.operator;
 
@@ -170,13 +170,13 @@ public class BookService {
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
         searchBorrowRecordRequest.bookId = book.id;
         searchBorrowRecordRequest.borrowerId = book.borrowerId;
-        searchBorrowRecordRequest.actualReturnAt = null;
+        searchBorrowRecordRequest.actualReturnDate = null;
         searchBorrowRecordRequest.skip = 0;
         searchBorrowRecordRequest.limit = 1;
         SearchBorrowRecordResponse.Record record = borrowRecordWebService.search(searchBorrowRecordRequest).records.get(0);
 
         UpdateBorrowRecordRequest updateBorrowRecordRequest = new UpdateBorrowRecordRequest();
-        updateBorrowRecordRequest.actualReturnAt = LocalDate.now();
+        updateBorrowRecordRequest.actualReturnDate = LocalDate.now();
 
         borrowRecordWebService.update(record.id, updateBorrowRecordRequest);
     }
@@ -185,8 +185,8 @@ public class BookService {
         CreateBorrowRecordRequest request = new CreateBorrowRecordRequest();
         request.bookId = book.id;
         request.borrowerId = book.borrowerId;
-        request.borrowedAt = book.borrowedAt;
-        request.returnAt = book.returnAt;
+        request.borrowedTime = book.borrowedTime;
+        request.returnDate = book.returnDate;
         request.operator = book.updatedBy;
 
         borrowRecordWebService.create(request);

@@ -29,14 +29,14 @@ public class BOSearchBorrowRecordResponse {
         public Long borrowerId;
 
         @NotNull
-        @Property(name = "borrowed_at")
-        public LocalDateTime borrowedAt;
+        @Property(name = "borrowed_time")
+        public LocalDateTime borrowedTime;
 
         @NotNull
-        @Property(name = "return_at")
-        public LocalDate returnAt;
+        @Property(name = "return_date")
+        public LocalDate returnDate;
 
-        @Property(name = "actual_return_at")
-        public LocalDate actualReturnAt;
+        @Property(name = "actual_return_date")
+        public LocalDate actualReturnDate;
     }
 }

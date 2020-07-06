@@ -94,8 +94,8 @@ public class BookService {
         response.authorNames = boGetBookResponse.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
         response.categoryNames = boGetBookResponse.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
         response.tagNames = boGetBookResponse.tagIds.stream().map(tagNames::get).collect(Collectors.toList());
-        response.borrowedAt = boGetBookResponse.borrowedAt;
-        response.returnAt = boGetBookResponse.returnAt;
+        response.borrowedTime = boGetBookResponse.borrowedTime;
+        response.returnDate = boGetBookResponse.returnDate;
 
         return response;
     }

@@ -32,12 +32,12 @@ public class FindNeedReturnBorrowRecordJob implements Job {
                 ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
                 message.bookName = bookWebService.get(borrowRecord.bookId).name;
                 message.userId = borrowRecord.borrowerId;
-                message.borrowedAt = borrowRecord.borrowedAt;
-                message.returnAt = borrowRecord.returnAt;
+                message.borrowedTime = borrowRecord.borrowedTime;
+                message.returnDate = borrowRecord.returnDate;
                 message.operator = "scheduler-service";
 
-                logger.info("send message, book_name = {}, user_id = {}, borrowed_at = {}, return_at = {}, operator = {}",
-                    message.bookName, message.userId, message.borrowedAt, message.returnAt, message.operator);
+                logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, operator = {}",
+                    message.bookName, message.userId, message.borrowedTime, message.returnDate, message.operator);
                 publisher.publish("return-borrowed-book", message);
             });
     }

@@ -24,8 +24,8 @@ public class ReturnBookMessageHandler implements MessageHandler<ReturnBorrowedBo
         String content = Strings.format(
             "The book '{}' you borrowed at {} should be returned at {}.",
             message.bookName,
-            message.borrowedAt.format(DateTimeFormatter.ISO_DATE_TIME),
-            message.returnAt.format(DateTimeFormatter.ISO_DATE)
+            message.borrowedTime.format(DateTimeFormatter.ISO_DATE_TIME),
+            message.returnDate.format(DateTimeFormatter.ISO_DATE)
         );
         logger.info("[mock] send email to user(id = {}): {}", message.userId, content);
     }

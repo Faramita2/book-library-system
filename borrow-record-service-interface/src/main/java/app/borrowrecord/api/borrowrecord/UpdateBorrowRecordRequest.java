@@ -8,6 +8,6 @@ import java.time.LocalDate;
  * @author meow
  */
 public class UpdateBorrowRecordRequest {
-    @Property(name = "actual_return_at")
-    public LocalDate actualReturnAt;
+    @Property(name = "actual_return_date")
+    public LocalDate actualReturnDate;
 }

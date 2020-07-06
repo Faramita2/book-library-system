@@ -30,8 +30,8 @@ public class BOBorrowRecordService {
             BOSearchBorrowRecordResponse.Record view = new BOSearchBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
             view.borrowerId = borrowRecord.borrowerId;
-            view.borrowedAt = borrowRecord.borrowedAt;
-            view.returnAt = borrowRecord.returnAt.toLocalDate();
+            view.borrowedTime = borrowRecord.borrowedTime;
+            view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
         }).collect(Collectors.toList());
 

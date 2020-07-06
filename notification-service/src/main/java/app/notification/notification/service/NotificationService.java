@@ -31,8 +31,8 @@ public class NotificationService {
         notification.content = Strings.format(
             "The book '{}' you borrowed at {} should be returned at {}.",
             message.bookName,
-            message.borrowedAt.format(DateTimeFormatter.ISO_DATE_TIME),
-            message.returnAt.format(DateTimeFormatter.ISO_DATE)
+            message.borrowedTime.format(DateTimeFormatter.ISO_DATE_TIME),
+            message.returnDate.format(DateTimeFormatter.ISO_DATE)
         );
         LocalDateTime now = LocalDateTime.now();
         notification.createdTime = now;

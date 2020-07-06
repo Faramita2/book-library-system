@@ -84,8 +84,8 @@ public class BookService {
         response.description = getBookResponse.description;
         response.status = BookStatusAJAXView.valueOf(getBookResponse.status.name());
         response.borrowerName = getBookResponse.borrowerId != null ? userWebService.get(getBookResponse.borrowerId).username : null;
-        response.borrowedAt = getBookResponse.borrowedAt;
-        response.returnAt = getBookResponse.returnAt;
+        response.borrowedTime = getBookResponse.borrowedTime;
+        response.returnDate = getBookResponse.returnDate;
         response.tagNames = queryTagNames(getBookResponse.tagIds);
         response.categoryNames = queryCategoryNames(getBookResponse.categoryIds);
         response.authorNames = queryAuthorNames(getBookResponse.authorIds);
@@ -98,7 +98,7 @@ public class BookService {
         String userId = getUserId();
         borrowBookRequest.userId = Long.valueOf(userId);
         borrowBookRequest.operator = "book-site-frontend";
-        borrowBookRequest.returnAt = request.returnAt;
+        borrowBookRequest.returnDate = request.returnDate;
         bookWebService.borrow(id, borrowBookRequest);
     }
 

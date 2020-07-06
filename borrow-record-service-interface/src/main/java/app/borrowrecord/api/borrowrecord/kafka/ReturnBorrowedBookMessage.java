@@ -20,12 +20,12 @@ public class ReturnBorrowedBookMessage {
     public Long userId;
 
     @NotNull
-    @Property(name = "borrowed_at")
-    public LocalDateTime borrowedAt;
+    @Property(name = "borrowed_time")
+    public LocalDateTime borrowedTime;
 
     @NotNull
-    @Property(name = "return_at")
-    public LocalDate returnAt;
+    @Property(name = "return_date")
+    public LocalDate returnDate;
 
     @NotNull
     @NotBlank
