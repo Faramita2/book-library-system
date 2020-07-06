@@ -4,6 +4,7 @@ import core.framework.api.json.Property;
 import core.framework.api.validate.Length;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
+import core.framework.api.validate.Size;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class CreateBookAJAXRequest {
     public String name;
 
     @NotNull
+    @Size(min = 1)
     @Property(name = "tag_ids")
     public List<Long> tagIds;
 
@@ -30,10 +32,12 @@ public class CreateBookAJAXRequest {
     // todo think deep
     // size
     @NotNull
+    @Size(min = 1)
     @Property(name = "category_ids")
     public List<Long> categoryIds;
 
     @NotNull
+    @Size(min = 1)
     @Property(name = "author_ids")
     public List<Long> authorIds;
 }
