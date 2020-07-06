@@ -6,16 +6,11 @@ import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
-import java.util.List;
 
 /**
  * @author zoo
  */
 public class SearchUserAJAXRequest {
-    // todo
-    @Property(name = "ids")
-    public List<Long> ids;
-
     @Length(max = 50)
     @Property(name = "username")
     public String username;
