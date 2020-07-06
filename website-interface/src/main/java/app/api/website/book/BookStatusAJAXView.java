@@ -6,8 +6,8 @@ import core.framework.api.json.Property;
  * @author meow
  */
 public enum BookStatusAJAXView {
-    @Property(name = "NORMAL")
-    NORMAL,
+    @Property(name = "AVAILABLE")
+    AVAILABLE,
     @Property(name = "BORROWED")
     BORROWED
 }

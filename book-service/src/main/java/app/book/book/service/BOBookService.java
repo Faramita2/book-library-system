@@ -40,7 +40,7 @@ public class BOBookService {
         Book book = new Book();
         book.name = request.name;
         book.description = request.description;
-        book.status = BookStatus.NORMAL;
+        book.status = BookStatus.AVAILABLE;
         LocalDateTime now = LocalDateTime.now();
         book.createdAt = now;
         book.updatedAt = now;

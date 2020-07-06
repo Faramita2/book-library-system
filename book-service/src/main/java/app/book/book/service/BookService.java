@@ -118,7 +118,7 @@ public class BookService {
     }
 
     public void borrow(Long id, BorrowBookRequest request) {
-        Book book = bookRepository.selectOne("id = ? AND status = ?", id, BookStatus.NORMAL.name())
+        Book book = bookRepository.selectOne("id = ? AND status = ?", id, BookStatus.AVAILABLE.name())
             .orElseThrow(() -> new NotFoundException(Strings.format("book not found or it has been borrowed, id = {}", id), "BOOK_NOT_FOUND"));
 
         LocalDateTime now = LocalDateTime.now();
@@ -148,7 +148,7 @@ public class BookService {
             .orElseThrow(() ->
                 new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
-        book.status = BookStatus.NORMAL;
+        book.status = BookStatus.AVAILABLE;
         book.borrowerId = null;
         book.returnAt = null;
         book.borrowedAt = null;

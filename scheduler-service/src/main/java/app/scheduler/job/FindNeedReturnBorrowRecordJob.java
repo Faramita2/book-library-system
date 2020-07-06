@@ -27,7 +27,7 @@ public class FindNeedReturnBorrowRecordJob implements Job {
     public void execute(JobContext context) {
         needReturnBorrowRecordWebService.list().records.stream()
             // todo
-//            .filter(record -> bookWebService.get(record.bookId).status == BookStatusView.NORMAL)
+//            .filter(record -> bookWebService.get(record.bookId).status == BookStatusView.AVAILABLE)
             .forEach(borrowRecord -> {
                 ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
                 message.bookName = bookWebService.get(borrowRecord.bookId).name;

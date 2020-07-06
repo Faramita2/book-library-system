@@ -7,8 +7,8 @@ import core.framework.api.json.Property;
  */
 public enum BookStatusAJAXView {
     // todo
-    @Property(name = "NORMAL")
-    NORMAL,
+    @Property(name = "AVAILABLE")
+    AVAILABLE,
     @Property(name = "BORROWED")
     BORROWED
 }
