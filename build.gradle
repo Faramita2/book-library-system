@@ -51,8 +51,8 @@ configure([
         project(':admin-service'),
         project(':borrow-record-service'),
         project(':book-service'),
-        project(':book-site'),
-        project(':book-site-frontend'),
+        project(':back-office'),
+        project(':website'),
         project(':notification-service'),
         project(':scheduler-service'),
         project(':user-service'),
@@ -120,10 +120,10 @@ project(':scheduler-service') {
         implementation project(':borrow-record-service-interface')
     }
 }
-// todo site name
-project(':book-site') {
+
+project(':back-office') {
     dependencies {
-        implementation project(':book-site-interface')
+        implementation project(':back-office-interface')
         implementation project(':admin-service-interface')
         implementation project(':book-service-interface')
         implementation project(':borrow-record-service-interface')
@@ -131,9 +131,9 @@ project(':book-site') {
     }
 }
 
-project(':book-site-frontend') {
+project(':website') {
     dependencies {
-        implementation project(':book-site-frontend-interface')
+        implementation project(':website-interface')
         implementation project(':book-service-interface')
         implementation project(':notification-service-interface')
         implementation project(':user-service-interface')
