@@ -1,6 +1,7 @@
 package app.api.website.borrowedbook;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.Length;
 import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author meow
  */
 public class SearchBorrowedBookAJAXRequest {
+    @Length(max = 50)
     @Property(name = "name")
     public String name;
 

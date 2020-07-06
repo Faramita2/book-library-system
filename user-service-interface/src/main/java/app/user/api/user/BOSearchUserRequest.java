@@ -1,6 +1,7 @@
 package app.user.api.user;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.Length;
 import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
@@ -14,9 +15,11 @@ public class BOSearchUserRequest {
     @Property(name = "ids")
     public List<Long> ids;
 
+    @Length(max = 50)
     @Property(name = "username")
     public String username;
 
+    @Length(max = 255)
     @Property(name = "email")
     public String email;
 
