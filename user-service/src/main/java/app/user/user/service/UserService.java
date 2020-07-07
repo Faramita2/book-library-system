@@ -49,7 +49,6 @@ public class UserService {
 
         GetUserByUsernameResponse response = new GetUserByUsernameResponse();
         response.id = user.id;
-        response.username = user.username;
         response.email = user.email;
         response.salt = user.salt;
         response.password = user.password;
