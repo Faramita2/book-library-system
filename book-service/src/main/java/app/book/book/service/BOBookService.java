@@ -65,13 +65,11 @@ public class BOBookService {
         book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
-            logger.warn("==== start create book ====");
             Long id = bookRepository.insert(book).orElseThrow();
             insertBookAuthors(id, request.authorIds);
             insertBookTags(id, request.tagIds);
             insertBookCategories(id, request.categoryIds);
             transaction.commit();
-            logger.warn("==== end create book ====");
         }
     }
 
@@ -149,8 +147,6 @@ public class BOBookService {
         book.updatedBy = request.operator;
 
         try (Transaction transaction = database.beginTransaction()) {
-            logger.warn("==== start update book ====");
-            logger.warn("update book name = {}, description = {}", request.name, request.description);
             bookRepository.partialUpdate(book);
 
             List<Long> authorIds = request.authorIds;
@@ -172,7 +168,6 @@ public class BOBookService {
             }
 
             transaction.commit();
-            logger.warn("==== end update book====");
         }
     }
 

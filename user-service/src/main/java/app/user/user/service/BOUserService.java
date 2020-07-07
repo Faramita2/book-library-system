@@ -5,17 +5,13 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.ResetUserPasswordRequest;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
 import app.user.user.domain.UserStatus;
-import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
-import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
-import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -38,8 +34,6 @@ public class BOUserService {
     private final Logger logger = LoggerFactory.getLogger(BOUserService.class);
     @Inject
     Repository<User> repository;
-    @Inject
-    Database database;
 
     public void create(BOCreateUserRequest request) {
         repository.selectOne("username = ?", request.username).ifPresent(user -> {
@@ -60,15 +54,8 @@ public class BOUserService {
         user.createdBy = request.operator;
         user.updatedBy = request.operator;
 
-        try (Transaction transaction = database.beginTransaction()) {
-            logger.warn("==== start create user ====");
-            hashPassword(user, request.password);
-            repository.insert(user).orElseThrow();
-            transaction.commit();
-            logger.warn("==== end create user ====");
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("create user failed: {}", e.getMessage());
-        }
+        hashPassword(user, request.password);
+        repository.insert(user);
     }
 
     public BOSearchUserResponse search(BOSearchUserRequest request) {
@@ -119,50 +106,8 @@ public class BOUserService {
         repository.partialUpdate(user);
     }
 
-    private byte[] generateSalt() {
-        byte[] salt = new byte[16];
-        SecureRandom random = new SecureRandom();
-        random.nextBytes(salt);
-
-        return salt;
-    }
-
-    private void hashPassword(User user, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        byte[] salt = generateSalt();
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = f.generateSecret(spec).getEncoded();
-        Base64.Encoder enc = Base64.getEncoder();
-
-        user.password = enc.encodeToString(hash);
-        user.salt = enc.encodeToString(salt);
-    }
-
-    public void resetPassword(Long id, ResetUserPasswordRequest request) {
-        User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
-
-        if (!request.password.equals(request.passwordConfirm)) {
-            throw new BadRequestException("Please make sure both passwords match.", "USER_PASSWORD_INCORRECT");
-        }
-
-        user.updatedTime = LocalDateTime.now();
-        user.updatedBy = request.operator;
-        try (Transaction transaction = database.beginTransaction()) {
-            logger.warn("==== start reset user password ====");
-            hashPassword(user, request.password);
-            repository.partialUpdate(user);
-            transaction.commit();
-            logger.warn("==== end reset user password ====");
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("reset user password failed: {}", e.getMessage());
-        }
-
-    }
-
     public BOGetUserResponse get(Long id) {
-        User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;
@@ -171,5 +116,27 @@ public class BOUserService {
         response.status = UserStatusView.valueOf(user.status.name());
 
         return response;
+    }
+
+    private byte[] generateSalt() {
+        byte[] salt = new byte[16];
+        SecureRandom random = new SecureRandom();
+        random.nextBytes(salt);
+
+        return salt;
+    }
+
+    private void hashPassword(User user, String password) {
+        byte[] salt = generateSalt();
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        try {
+            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            byte[] hash = f.generateSecret(spec).getEncoded();
+            Base64.Encoder enc = Base64.getEncoder();
+            user.password = enc.encodeToString(hash);
+            user.salt = enc.encodeToString(salt);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            logger.error("hash user password failed: {}", e.getMessage());
+        }
     }
 }

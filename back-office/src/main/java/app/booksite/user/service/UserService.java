@@ -3,7 +3,6 @@ package app.booksite.user.service;
 import app.api.backoffice.user.CreateUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
-import app.api.backoffice.user.UpdateUserAJAXRequest;
 import app.api.backoffice.user.UserStatusAJAXView;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
@@ -17,6 +16,7 @@ import core.framework.util.Randoms;
 import core.framework.util.Strings;
 import core.framework.web.WebContext;
 import core.framework.web.exception.TooManyRequestsException;
+import core.framework.web.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +41,7 @@ public class UserService {
         boCreateUserRequest.username = request.username;
         boCreateUserRequest.password = request.password;
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
-        boCreateUserRequest.operator = "book-site";
+        boCreateUserRequest.operator = getAdminAccount();
         userWebService.create(boCreateUserRequest);
     }
 
@@ -51,7 +51,6 @@ public class UserService {
         boSearchUserRequest.limit = request.limit;
         boSearchUserRequest.email = request.email;
         boSearchUserRequest.username = request.username;
-        boSearchUserRequest.ids = request.ids;
         boSearchUserRequest.status = request.status != null ? UserStatusView.valueOf(request.status.name()) : null;
         BOSearchUserResponse boSearchUserResponse = userWebService.search(boSearchUserRequest);
 
@@ -71,18 +70,6 @@ public class UserService {
         return response;
     }
 
-    public void update(Long id, UpdateUserAJAXRequest request) {
-        BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
-        if (request.status != null) {
-            boUpdateUserRequest.status = UserStatusView.valueOf(request.status.name());
-        }
-        boUpdateUserRequest.operator = "book-site";
-        userWebService.update(id, boUpdateUserRequest);
-        if (request.status != null) {
-            webContext.request().session().set("user_status", request.status.name());
-        }
-    }
-
     public void resetPassword(Long id) {
         String userRequestTimesKey = Strings.format("user:{}:resetPassword", id);
         String currentRequestTimes = redis.get(userRequestTimesKey);
@@ -100,5 +87,25 @@ public class UserService {
 
         String hostName = webContext.request().hostName();
         logger.info("send email to user(id = {}) with reset password url: {}/user/reset-password?token={}?requested_by=email", id, hostName, token);
+    }
+
+    public void active(Long id) {
+        BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
+        boUpdateUserRequest.status = UserStatusView.ACTIVE;
+        boUpdateUserRequest.operator = getAdminAccount();
+        userWebService.update(id, boUpdateUserRequest);
+        redis.set(Strings.format("users:{}:status", id), UserStatusView.ACTIVE.name());
+    }
+
+    public void inactive(Long id) {
+        BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
+        boUpdateUserRequest.status = UserStatusView.INACTIVE;
+        boUpdateUserRequest.operator = getAdminAccount();
+        userWebService.update(id, boUpdateUserRequest);
+        redis.set(Strings.format("users:{}:status", id), UserStatusView.INACTIVE.name());
+    }
+
+    private String getAdminAccount() {
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("You need login first."));
     }
 }

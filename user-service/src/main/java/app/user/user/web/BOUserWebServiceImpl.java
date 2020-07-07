@@ -6,7 +6,6 @@ import app.user.api.user.BOGetUserResponse;
 import app.user.api.user.BOSearchUserRequest;
 import app.user.api.user.BOSearchUserResponse;
 import app.user.api.user.BOUpdateUserRequest;
-import app.user.api.user.ResetUserPasswordRequest;
 import app.user.user.service.BOUserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -37,11 +36,5 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     public void update(Long id, BOUpdateUserRequest request) {
         ActionLogContext.put("id", id);
         service.update(id, request);
-    }
-
-    @Override
-    public void resetPassword(Long id, ResetUserPasswordRequest request) {
-        ActionLogContext.put("id", id);
-        service.resetPassword(id, request);
     }
 }

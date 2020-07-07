@@ -27,12 +27,14 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
 
     @Override
     public void active(Long id) {
-
+        ActionLogContext.put("id", id);
+        service.active(id);
     }
 
     @Override
     public void inactive(Long id) {
-
+        ActionLogContext.put("id", id);
+        service.inactive(id);
     }
 
     @Override
