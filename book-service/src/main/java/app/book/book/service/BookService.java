@@ -84,9 +84,9 @@ public class BookService {
             view.id = book.id;
             view.name = book.name;
             view.description = book.description;
-            view.authors = queryAuthorsByBookId(book.id).stream().map(this::getAuthorView).collect(Collectors.toList());
-            view.categories = queryCategoriesByBookId(book.id).stream().map(this::getCategoryView).collect(Collectors.toList());
-            view.tags = queryTagsByBookId(book.id).stream().map(this::getTagView).collect(Collectors.toList());
+            view.authors = queryAuthorsByBookId(book.id).stream().map(this::authorView).collect(Collectors.toList());
+            view.categories = queryCategoriesByBookId(book.id).stream().map(this::categoryView).collect(Collectors.toList());
+            view.tags = queryTagsByBookId(book.id).stream().map(this::tagView).collect(Collectors.toList());
             view.status = BookStatusView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
@@ -103,9 +103,9 @@ public class BookService {
         response.id = book.id;
         response.name = book.name;
         response.description = book.description;
-        response.authors = queryAuthorsByBookId(id).stream().map(this::getAuthorView).collect(Collectors.toList());
-        response.categories = queryCategoriesByBookId(id).stream().map(this::getCategoryView).collect(Collectors.toList());
-        response.tags = queryTagsByBookId(id).stream().map(this::getTagView).collect(Collectors.toList());
+        response.authors = queryAuthorsByBookId(id).stream().map(this::authorView).collect(Collectors.toList());
+        response.categories = queryCategoriesByBookId(id).stream().map(this::categoryView).collect(Collectors.toList());
+        response.tags = queryTagsByBookId(id).stream().map(this::tagView).collect(Collectors.toList());
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
@@ -166,21 +166,21 @@ public class BookService {
         return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
     }
 
-    private AuthorView getAuthorView(Author author) {
+    private AuthorView authorView(Author author) {
         AuthorView authorView = new AuthorView();
         authorView.id = author.id;
         authorView.name = author.name;
         return authorView;
     }
 
-    private CategoryView getCategoryView(Category category) {
+    private CategoryView categoryView(Category category) {
         CategoryView categoryView = new CategoryView();
         categoryView.id = category.id;
         categoryView.name = category.name;
         return categoryView;
     }
 
-    private TagView getTagView(Tag tag) {
+    private TagView tagView(Tag tag) {
         TagView tagView = new TagView();
         tagView.id = tag.id;
         tagView.name = tag.name;
