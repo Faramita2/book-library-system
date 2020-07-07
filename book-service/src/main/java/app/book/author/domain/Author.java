@@ -13,30 +13,30 @@ import java.time.LocalDateTime;
  */
 @Table(name = "authors")
 public class Author {
-    @Column(name = "id")
     @PrimaryKey(autoIncrement = true)
+    @Column(name = "id")
     public Long id;
 
-    @Column(name = "name")
     @NotNull
     @NotBlank
+    @Column(name = "name")
     public String name;
 
-    @Column(name = "created_time")
     @NotNull
+    @Column(name = "created_time")
     public LocalDateTime createdTime;
 
-    @Column(name = "updated_time")
     @NotNull
+    @Column(name = "updated_time")
     public LocalDateTime updatedTime;
 
-    @Column(name = "created_by")
     @NotNull
     @NotBlank
+    @Column(name = "created_by")
     public String createdBy;
 
-    @Column(name = "updated_by")
     @NotNull
     @NotBlank
+    @Column(name = "updated_by")
     public String updatedBy;
 }

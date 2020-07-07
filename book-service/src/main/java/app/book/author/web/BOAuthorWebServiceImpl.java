@@ -22,11 +22,6 @@ public class BOAuthorWebServiceImpl implements BOAuthorWebService {
     }
 
     @Override
-    public BOListAuthorResponse list() {
-        return service.list();
-    }
-
-    @Override
     public void create(BOCreateAuthorRequest request) {
         service.create(request);
     }

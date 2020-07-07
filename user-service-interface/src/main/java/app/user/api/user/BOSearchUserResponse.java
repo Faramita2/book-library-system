@@ -11,39 +11,39 @@ import java.util.List;
  * @author zoo
  */
 public class BOSearchUserResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
-    @Property(name = "users")
     @NotNull
+    @Property(name = "users")
     public List<User> users;
 
     public static class User {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "username")
         @NotNull
         @NotBlank
+        @Property(name = "username")
         public String username;
 
-        @Property(name = "email")
         @NotNull
         @NotBlank
+        @Property(name = "email")
         public String email;
 
-        @Property(name = "status")
         @NotNull
+        @Property(name = "status")
         public UserStatusView status;
 
-        @Property(name = "created_time")
         @NotNull
+        @Property(name = "created_time")
         public LocalDateTime createdTime;
 
-        @Property(name = "updated_time")
         @NotNull
+        @Property(name = "updated_time")
         public LocalDateTime updatedTime;
     }
 }

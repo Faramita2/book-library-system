@@ -27,12 +27,12 @@ public class BOSearchUserRequest {
     public UserStatusView status;
 
     @NotNull
-    @Property(name = "skip")
     @Min(0)
+    @Property(name = "skip")
     public Integer skip;
 
     @NotNull
-    @Property(name = "limit")
     @Max(1000)
+    @Property(name = "limit")
     public Integer limit;
 }

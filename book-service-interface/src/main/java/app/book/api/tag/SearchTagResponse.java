@@ -14,6 +14,7 @@ public class SearchTagResponse {
     @NotNull
     public Long total;
 
+    @NotNull
     @Property(name = "tags")
     public List<Tag> tags;
 

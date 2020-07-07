@@ -17,9 +17,4 @@ public class CategoryWebServiceImpl implements CategoryWebService {
     public SearchCategoryResponse search(SearchCategoryRequest request) {
         return service.search(request);
     }
-
-    @Override
-    public ListCategoryResponse list() {
-        return service.list();
-    }
 }

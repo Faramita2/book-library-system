@@ -10,21 +10,22 @@ import java.util.List;
  * @author zoo
  */
 public class BOSearchCategoryResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
+    @NotNull
     @Property(name = "categories")
     public List<Category> categories;
 
     public static class Category {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "name")
         @NotNull
         @NotBlank
+        @Property(name = "name")
         public String name;
     }
 }

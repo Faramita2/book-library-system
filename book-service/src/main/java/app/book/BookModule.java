@@ -2,8 +2,8 @@ package app.book;
 
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
-import app.book.book.domain.BookAuthor;
 import app.book.book.domain.Book;
+import app.book.book.domain.BookAuthor;
 import app.book.book.domain.BookCategory;
 import app.book.book.domain.BookTag;
 import app.book.book.service.BOBookService;
@@ -37,8 +37,8 @@ public class BookModule extends Module {
 
     private void dbs() {
         db().repository(Book.class);
-        db().view(BookTag.class);
-        db().view(BookCategory.class);
-        db().view(BookAuthor.class);
+        db().repository(BookTag.class);
+        db().repository(BookCategory.class);
+        db().repository(BookAuthor.class);
     }
 }

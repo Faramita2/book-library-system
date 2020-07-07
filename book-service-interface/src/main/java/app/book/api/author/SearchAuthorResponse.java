@@ -10,21 +10,22 @@ import java.util.List;
  * @author zoo
  */
 public class SearchAuthorResponse {
-    @Property(name = "total")
     @NotNull
+    @Property(name = "total")
     public Long total;
 
+    @NotNull
     @Property(name = "authors")
     public List<Author> authors;
 
     public static class Author {
-        @Property(name = "id")
         @NotNull
+        @Property(name = "id")
         public Long id;
 
-        @Property(name = "name")
         @NotNull
         @NotBlank
+        @Property(name = "name")
         public String name;
     }
 }

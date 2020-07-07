@@ -22,11 +22,6 @@ public class BOTagWebServiceImpl implements BOTagWebService {
     }
 
     @Override
-    public BOListTagResponse list() {
-        return service.list();
-    }
-
-    @Override
     public void create(BOCreateTagRequest request) {
         service.create(request);
     }

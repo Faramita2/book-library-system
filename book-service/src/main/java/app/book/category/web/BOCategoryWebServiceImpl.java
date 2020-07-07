@@ -22,11 +22,6 @@ public class BOCategoryWebServiceImpl implements BOCategoryWebService {
     }
 
     @Override
-    public BOListCategoryResponse list() {
-        return service.list();
-    }
-
-    @Override
     public void create(BOCreateCategoryRequest request) {
         service.create(request);
     }

@@ -14,6 +14,7 @@ public class BOSearchTagResponse {
     @NotNull
     public Long total;
 
+    @NotNull
     @Property(name = "tags")
     public List<Tag> tags;
 

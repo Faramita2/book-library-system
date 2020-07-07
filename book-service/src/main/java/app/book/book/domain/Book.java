@@ -14,23 +14,22 @@ import java.time.LocalDateTime;
  */
 @Table(name = "books")
 public class Book {
-    // todo
-    @Column(name = "id")
     @PrimaryKey(autoIncrement = true)
+    @Column(name = "id")
     public Long id;
 
-    @Column(name = "name")
     @NotNull
     @NotBlank
+    @Column(name = "name")
     public String name;
 
-    @Column(name = "description")
     @NotNull
     @NotBlank
+    @Column(name = "description")
     public String description;
 
-    @Column(name = "status")
     @NotNull
+    @Column(name = "status")
     public BookStatus status;
 
     @Column(name = "borrow_user_id")
@@ -42,21 +41,21 @@ public class Book {
     @Column(name = "return_date")
     public LocalDate returnDate;
 
-    @Column(name = "created_time")
     @NotNull
+    @Column(name = "created_time")
     public LocalDateTime createdTime;
 
-    @Column(name = "updated_time")
     @NotNull
+    @Column(name = "updated_time")
     public LocalDateTime updatedTime;
 
-    @Column(name = "created_by")
     @NotNull
     @NotBlank
+    @Column(name = "created_by")
     public String createdBy;
 
-    @Column(name = "updated_by")
     @NotNull
     @NotBlank
+    @Column(name = "updated_by")
     public String updatedBy;
 }

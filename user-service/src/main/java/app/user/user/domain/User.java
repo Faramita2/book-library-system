@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 @Table(name = "users")
 public class User {
-    @Column(name = "id")
     @PrimaryKey(autoIncrement = true)
+    @Column(name = "id")
     public Long id;
 
     @NotNull

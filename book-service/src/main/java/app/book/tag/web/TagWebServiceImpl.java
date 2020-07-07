@@ -17,9 +17,4 @@ public class TagWebServiceImpl implements TagWebService {
     public SearchTagResponse search(SearchTagRequest request) {
         return service.search(request);
     }
-
-    @Override
-    public ListTagResponse list() {
-        return service.list();
-    }
 }

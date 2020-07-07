@@ -18,9 +18,9 @@ public class AuthInterceptor implements Interceptor {
         SkipLogin pass = invocation.annotation(SkipLogin.class);
         if (pass == null) {
             invocation.context().request().session().get("admin_id").orElseThrow(() -> new UnauthorizedException("You need login first."));
-            logger.info("pass authorize");
         }
 
+        logger.info("pass authorize");
         return invocation.proceed();
     }
 }
