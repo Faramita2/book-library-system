@@ -42,8 +42,7 @@ public class BorrowRecordService {
         createBorrowRecordRequest.tags = getBookResponse.tags.stream().map(this::getTagView).collect(Collectors.toList());
         createBorrowRecordRequest.borrowUserId = userId();
         createBorrowRecordRequest.borrowUsername = username();
-        createBorrowRecordRequest.borrowedTime = getBookResponse.borrowedTime;
-        createBorrowRecordRequest.returnDate = getBookResponse.returnDate;
+        createBorrowRecordRequest.returnDate = request.returnDate;
         createBorrowRecordRequest.requestedBy = username();
         borrowRecordWebService.create(createBorrowRecordRequest);
 

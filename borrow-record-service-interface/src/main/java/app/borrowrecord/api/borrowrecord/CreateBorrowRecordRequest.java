@@ -51,10 +51,6 @@ public class CreateBorrowRecordRequest {
     public String borrowUsername;
 
     @NotNull
-    @Property(name = "borrowed_time")
-    public LocalDateTime borrowedTime;
-
-    @NotNull
     @Property(name = "return_date")
     public LocalDate returnDate;
 

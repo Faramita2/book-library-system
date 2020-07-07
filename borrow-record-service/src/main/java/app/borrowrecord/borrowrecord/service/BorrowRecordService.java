@@ -69,8 +69,8 @@ public class BorrowRecordService {
         borrowRecord.id = ObjectId.get();
         borrowRecord.user = user;
         borrowRecord.book = book;
-        borrowRecord.borrowedTime = request.borrowedTime;
         LocalDateTime now = LocalDateTime.now();
+        borrowRecord.borrowedTime = now;
         borrowRecord.returnDate = request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         borrowRecord.createdTime = now;
         borrowRecord.updatedTime = now;
@@ -81,7 +81,7 @@ public class BorrowRecordService {
     }
 
     public GetBorrowRecordResponse get(String id) {
-        BorrowRecord borrowRecord = collection.get(id).orElseThrow(() ->
+        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() ->
             new NotFoundException(Strings.format("borrow record not found, id = {}", id)));
         GetBorrowRecordResponse response = new GetBorrowRecordResponse();
         response.id = borrowRecord.id.toString();
@@ -89,7 +89,7 @@ public class BorrowRecordService {
         response.borrowUserId = borrowRecord.user.id;
         response.borrowedTime = borrowRecord.borrowedTime;
         response.returnDate = borrowRecord.returnDate.toLocalDate();
-        response.actualReturnDate = borrowRecord.actualReturnDate.toLocalDate();
+        response.actualReturnDate = borrowRecord.actualReturnDate != null ? borrowRecord.actualReturnDate.toLocalDate() : null;
 
         return response;
     }
@@ -122,7 +122,7 @@ public class BorrowRecordService {
     }
 
     public void update(String id, UpdateBorrowRecordRequest request) {
-        BorrowRecord borrowRecord = collection.get(id).orElseThrow(() -> new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
+        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
         borrowRecord.actualReturnDate = request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         borrowRecord.updatedBy = request.requestedBy;
         borrowRecord.updatedTime = LocalDateTime.now();
@@ -171,7 +171,7 @@ public class BorrowRecordService {
             view.book = bookView;
             view.borrowedTime = borrowRecord.borrowedTime;
             view.returnDate = borrowRecord.returnDate.toLocalDate();
-            view.actualReturnDate = borrowRecord.actualReturnDate.toLocalDate();
+            view.actualReturnDate = borrowRecord.actualReturnDate != null ? borrowRecord.actualReturnDate.toLocalDate() : null;
             return view;
         }).collect(Collectors.toList());
 

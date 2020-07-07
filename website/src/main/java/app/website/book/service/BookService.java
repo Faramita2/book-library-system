@@ -110,6 +110,7 @@ public class BookService {
         response.books = searchBorrowRecordResponse.records.stream().map(record -> {
             SearchBorrowedBookAJAXResponse.Book view = new SearchBorrowedBookAJAXResponse.Book();
             view.id = record.book.id;
+            view.recordId = record.id;
             view.name = record.book.name;
             view.description = record.book.description;
             view.authors = record.book.authors.stream().map(author -> {

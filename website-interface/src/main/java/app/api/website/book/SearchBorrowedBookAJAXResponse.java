@@ -29,6 +29,10 @@ public class SearchBorrowedBookAJAXResponse {
         public Long id;
 
         @NotNull
+        @Property(name = "record_id")
+        public String recordId;
+
+        @NotNull
         @NotBlank
         @Property(name = "name")
         public String name;

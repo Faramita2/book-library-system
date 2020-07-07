@@ -55,7 +55,7 @@ public class BOBorrowRecordService {
             view.book = bookView;
             view.borrowedTime = borrowRecord.borrowedTime;
             view.returnDate = borrowRecord.returnDate.toLocalDate();
-            view.actualReturnDate = borrowRecord.actualReturnDate.toLocalDate();
+            view.actualReturnDate = borrowRecord.actualReturnDate != null ? borrowRecord.actualReturnDate.toLocalDate() : null;
             return view;
         }).collect(Collectors.toList());
 
