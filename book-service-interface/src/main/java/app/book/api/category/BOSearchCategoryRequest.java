@@ -6,8 +6,6 @@ import core.framework.api.validate.Max;
 import core.framework.api.validate.Min;
 import core.framework.api.validate.NotNull;
 
-import java.util.List;
-
 /**
  * @author zoo
  */

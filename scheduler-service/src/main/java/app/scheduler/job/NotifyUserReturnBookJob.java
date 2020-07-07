@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author zoo
  */
-// todo job target
 public class NotifyUserReturnBookJob implements Job {
     private final Logger logger = LoggerFactory.getLogger(NotifyUserReturnBookJob.class);
     @Inject
@@ -26,16 +25,16 @@ public class NotifyUserReturnBookJob implements Job {
     @Override
     public void execute(JobContext context) {
         schedulerBorrowRecordWebService.list().records.forEach(borrowRecord -> {
-                ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
-                message.bookName = bookWebService.get(borrowRecord.bookId).name;
-                message.userId = borrowRecord.borrowUserId;
-                message.borrowedTime = borrowRecord.borrowedTime;
-                message.returnDate = borrowRecord.returnDate;
-                message.requestedBy = "scheduler-service";
+            ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
+            message.bookName = bookWebService.get(borrowRecord.bookId).name;
+            message.userId = borrowRecord.borrowUserId;
+            message.borrowedTime = borrowRecord.borrowedTime;
+            message.returnDate = borrowRecord.returnDate;
+            message.requestedBy = "scheduler-service";
 
-                logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, requested_by = {}",
-                    message.bookName, message.userId, message.borrowedTime, message.returnDate, message.requestedBy);
-                publisher.publish("return-borrowed-book", message);
-            });
+            logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, requested_by = {}",
+                message.bookName, message.userId, message.borrowedTime, message.returnDate, message.requestedBy);
+            publisher.publish("return-borrowed-book", message);
+        });
     }
 }

@@ -13,7 +13,6 @@ import core.framework.inject.Inject;
 import core.framework.util.Strings;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

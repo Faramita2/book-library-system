@@ -63,7 +63,7 @@ public class AuthenticationService {
         resetUserPasswordRequest.password = request.password;
         resetUserPasswordRequest.requestedBy = request.requestedBy;
 
-        userWebService.resetPassword(Long.parseLong(userId), resetUserPasswordRequest);
+        userWebService.resetPassword(Long.valueOf(userId), resetUserPasswordRequest);
     }
 
     private String getPasswordHash(String password, String salt) {

@@ -26,12 +26,12 @@ public class AuthInterceptor implements Interceptor {
         if (pass == null) {
             Session session = invocation.context().request().session();
             String userId = session.get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-            String isLogin = redis.get(Strings.format("users:{}:login", userId));
+            String login = redis.get(Strings.format("users:{}:login", userId));
             String userStatus = redis.get(Strings.format("users:{}:status", userId));
-            if (userStatus == null || !userStatus.equals(UserStatusAJAXView.ACTIVE.name())) {
+            if (!UserStatusAJAXView.ACTIVE.name().equals(userStatus)) {
                 throw new UnauthorizedException("Your account is inactive.");
             }
-            if (isLogin == null || !isLogin.equals("TRUE")) {
+            if (!String.valueOf(true).equals(login)) {
                 throw new UnauthorizedException("please login first.");
             }
         }

@@ -6,7 +6,6 @@ import core.framework.api.validate.NotNull;
 import core.framework.api.validate.Size;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

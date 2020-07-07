@@ -1,4 +1,4 @@
-import app.booksite.BackOfficeApp;
+import app.backoffice.BackOfficeApp;
 
 /**
  * @author zoo

@@ -26,7 +26,7 @@ public class UserService {
         LoginResponse loginResponse = authenticationWebService.login(loginRequest);
 
         redis.set(Strings.format("users:{}:status", loginResponse.id), loginResponse.status.name());
-        redis.set(Strings.format("users:{}:login", loginResponse.id), "TRUE");
+        redis.set(Strings.format("users:{}:login", loginResponse.id), String.valueOf(true));
 
         return loginResponse;
     }
