@@ -17,6 +17,6 @@ public class BOUpdateAuthorRequest {
 
     @NotNull
     @NotBlank
-    @Property(name = "operator")
-    public String operator;
+    @Property(name = "requested_by")
+    public String requestedBy;
 }

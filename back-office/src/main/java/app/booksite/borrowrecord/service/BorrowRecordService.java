@@ -1,17 +1,15 @@
 package app.booksite.borrowrecord.service;
 
+import app.api.backoffice.bookauthor.BookAuthorAJAXView;
+import app.api.backoffice.bookcategory.BookCategoryAJAXView;
+import app.api.backoffice.booktag.BookTagAJAXView;
 import app.api.backoffice.borrowrecord.SearchBorrowRecordAJAXRequest;
 import app.api.backoffice.borrowrecord.SearchBorrowRecordAJAXResponse;
-import app.book.api.BOBookWebService;
 import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
-import app.user.api.BOUserWebService;
-import app.user.api.user.BOSearchUserRequest;
 import core.framework.inject.Inject;
 
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -20,10 +18,6 @@ import java.util.stream.Collectors;
 public class BorrowRecordService {
     @Inject
     BOBorrowRecordWebService borrowRecordWebService;
-    @Inject
-    BOBookWebService bookWebService;
-    @Inject
-    BOUserWebService userWebService;
 
     public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
         BOSearchBorrowRecordRequest boSearchBorrowRecordRequest = new BOSearchBorrowRecordRequest();
@@ -33,40 +27,51 @@ public class BorrowRecordService {
         boSearchBorrowRecordRequest.limit = request.limit;
 
         BOSearchBorrowRecordResponse boSearchBorrowRecordResponse = borrowRecordWebService.search(boSearchBorrowRecordRequest);
-        List<BOSearchBorrowRecordResponse.Record> records = boSearchBorrowRecordResponse.records;
-
-        String bookName = bookWebService.get(request.bookId).name;
-        Map<Long, String> borrowUserNames = queryBorrowUserNames(records);
-
         SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
         response.total = boSearchBorrowRecordResponse.total;
-        response.records = records.stream()
-            .map(record -> {
-                SearchBorrowRecordAJAXResponse.Record view = new SearchBorrowRecordAJAXResponse.Record();
-                view.id = record.id;
-                view.bookName = bookName;
-                view.borrowUserId = record.borrowUserId;
-                view.borrowUsername = borrowUserNames.get(view.borrowUserId);
-                view.borrowedTime = record.borrowedTime;
-                view.returnDate = record.returnDate;
-                view.actualReturnDate = record.actualReturnDate;
-                return view;
-            })
-            .collect(Collectors.toList());
+        response.records = boSearchBorrowRecordResponse.records.stream().map(record -> {
+            SearchBorrowRecordAJAXResponse.User userView = new SearchBorrowRecordAJAXResponse.User();
+            userView.id = record.user.id;
+            userView.username = record.user.username;
 
+            SearchBorrowRecordAJAXResponse.Book bookView = new SearchBorrowRecordAJAXResponse.Book();
+            bookView.id = record.book.id;
+            bookView.name = record.book.name;
+            bookView.description = record.book.description;
+            bookView.authors = record.book.authors.stream().map(this::bookAuthorAJAXView).collect(Collectors.toList());
+            bookView.categories = record.book.categories.stream().map(this::bookCategoryAJAXView).collect(Collectors.toList());
+            bookView.tags = record.book.tags.stream().map(this::bookTagAJAXView).collect(Collectors.toList());
+
+            SearchBorrowRecordAJAXResponse.Record recordView = new SearchBorrowRecordAJAXResponse.Record();
+            recordView.id = record.id;
+            recordView.user = userView;
+            recordView.book = bookView;
+            recordView.borrowedTime = record.borrowedTime;
+            recordView.returnDate = record.returnDate;
+            recordView.actualReturnDate = record.actualReturnDate;
+            return recordView;
+        }).collect(Collectors.toList());
         return response;
     }
 
-    private Map<Long, String> queryBorrowUserNames(List<BOSearchBorrowRecordResponse.Record> records) {
-        List<Long> borrowUserIds = records.stream()
-            .map(record -> record.borrowUserId)
-            .distinct()
-            .collect(Collectors.toList());
-        BOSearchUserRequest boSearchUserRequest = new BOSearchUserRequest();
-        boSearchUserRequest.ids = borrowUserIds;
-        boSearchUserRequest.skip = 0;
-        boSearchUserRequest.limit = borrowUserIds.size();
-        return userWebService.search(boSearchUserRequest).users.stream()
-            .collect(Collectors.toMap(user -> user.id, user -> user.username));
+    private BookTagAJAXView bookTagAJAXView(BOSearchBorrowRecordResponse.Tag tag) {
+        BookTagAJAXView bookTagAJAXView = new BookTagAJAXView();
+        bookTagAJAXView.id = tag.id;
+        bookTagAJAXView.name = tag.name;
+        return bookTagAJAXView;
+    }
+
+    private BookCategoryAJAXView bookCategoryAJAXView(BOSearchBorrowRecordResponse.Category category) {
+        BookCategoryAJAXView bookCategoryAJAXView = new BookCategoryAJAXView();
+        bookCategoryAJAXView.id = category.id;
+        bookCategoryAJAXView.name = category.name;
+        return bookCategoryAJAXView;
+    }
+
+    private BookAuthorAJAXView bookAuthorAJAXView(BOSearchBorrowRecordResponse.Author author) {
+        BookAuthorAJAXView bookAuthorAJAXView = new BookAuthorAJAXView();
+        bookAuthorAJAXView.id = author.id;
+        bookAuthorAJAXView.name = author.name;
+        return bookAuthorAJAXView;
     }
 }

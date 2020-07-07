@@ -34,10 +34,10 @@ public class FindNeedReturnBorrowRecordJob implements Job {
                 message.userId = borrowRecord.borrowUserId;
                 message.borrowedTime = borrowRecord.borrowedTime;
                 message.returnDate = borrowRecord.returnDate;
-                message.operator = "scheduler-service";
+                message.requestedBy = "scheduler-service";
 
-                logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, operator = {}",
-                    message.bookName, message.userId, message.borrowedTime, message.returnDate, message.operator);
+                logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, requested_by = {}",
+                    message.bookName, message.userId, message.borrowedTime, message.returnDate, message.requestedBy);
                 publisher.publish("return-borrowed-book", message);
             });
     }

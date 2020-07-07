@@ -51,10 +51,10 @@ public class BOUserService {
         LocalDateTime now = LocalDateTime.now();
         user.createdTime = now;
         user.updatedTime = now;
-        user.createdBy = request.operator;
-        user.updatedBy = request.operator;
-
+        user.createdBy = request.requestedBy;
+        user.updatedBy = request.requestedBy;
         hashPassword(user, request.password);
+
         repository.insert(user);
     }
 
@@ -100,8 +100,8 @@ public class BOUserService {
         User user = repository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
+        user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
-        user.updatedBy = request.operator;
 
         repository.partialUpdate(user);
     }

@@ -20,12 +20,12 @@ public class BorrowRecord {
     public ObjectId id;
 
     @NotNull
-    @Field(name = "book")
-    public Book book;
+    @Field(name = "user")
+    public User user;
 
     @NotNull
-    @Field(name = "borrow_user_id")
-    public Long borrowUserId;
+    @Field(name = "book")
+    public Book book;
 
     @NotNull
     @Field(name = "borrowed_time")
@@ -55,6 +55,17 @@ public class BorrowRecord {
     @NotBlank
     @Field(name = "updated_by")
     public String updatedBy;
+
+    public static class User {
+        @NotNull
+        @Field(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Field(name = "username")
+        public String username;
+    }
 
     public static class Book {
         @NotNull

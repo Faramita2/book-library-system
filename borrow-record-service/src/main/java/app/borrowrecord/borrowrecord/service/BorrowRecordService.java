@@ -38,6 +38,10 @@ public class BorrowRecordService {
     MongoCollection<BorrowRecord> collection;
 
     public void create(CreateBorrowRecordRequest request) {
+        BorrowRecord.User user = new BorrowRecord.User();
+        user.id = request.borrowUserId;
+        user.username = request.borrowUsername;
+
         BorrowRecord.Book book = new BorrowRecord.Book();
         book.id = request.bookId;
         book.name = request.bookName;
@@ -63,15 +67,15 @@ public class BorrowRecordService {
 
         BorrowRecord borrowRecord = new BorrowRecord();
         borrowRecord.id = ObjectId.get();
+        borrowRecord.user = user;
         borrowRecord.book = book;
-        borrowRecord.borrowUserId = request.borrowUserId;
         borrowRecord.borrowedTime = request.borrowedTime;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.returnDate = request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         borrowRecord.createdTime = now;
         borrowRecord.updatedTime = now;
-        borrowRecord.createdBy = request.operator;
-        borrowRecord.updatedBy = request.operator;
+        borrowRecord.createdBy = request.requestedBy;
+        borrowRecord.updatedBy = request.requestedBy;
 
         collection.insert(borrowRecord);
     }
@@ -82,7 +86,7 @@ public class BorrowRecordService {
         GetBorrowRecordResponse response = new GetBorrowRecordResponse();
         response.id = borrowRecord.id.toString();
         response.bookId = borrowRecord.book.id;
-        response.borrowUserId = borrowRecord.borrowUserId;
+        response.borrowUserId = borrowRecord.user.id;
         response.borrowedTime = borrowRecord.borrowedTime;
         response.returnDate = borrowRecord.returnDate.toLocalDate();
         response.actualReturnDate = borrowRecord.actualReturnDate.toLocalDate();
@@ -110,7 +114,7 @@ public class BorrowRecordService {
             ListNeedReturnBorrowRecordResponse.Record view = new ListNeedReturnBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
             view.bookId = borrowRecord.book.id;
-            view.borrowUserId = borrowRecord.borrowUserId;
+            view.borrowUserId = borrowRecord.user.id;
             view.borrowedTime = borrowRecord.borrowedTime;
             view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
@@ -120,9 +124,11 @@ public class BorrowRecordService {
     }
 
     public void update(String id, UpdateBorrowRecordRequest request) {
-        BorrowRecord borrowRecord = collection.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
+        BorrowRecord borrowRecord = collection.get(id).orElseThrow(() -> new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
         borrowRecord.actualReturnDate = request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1);
+        borrowRecord.updatedBy = request.requestedBy;
+        borrowRecord.updatedTime = LocalDateTime.now();
+
         collection.replace(borrowRecord);
     }
 

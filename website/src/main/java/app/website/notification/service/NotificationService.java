@@ -30,8 +30,7 @@ public class NotificationService {
         searchNotificationRequest.skip = request.skip;
         searchNotificationRequest.limit = request.limit;
         searchNotificationRequest.content = request.content;
-        searchNotificationRequest.userId = Long.valueOf(webContext.request().session().get("user_id").orElseThrow(() ->
-            new UnauthorizedException("please login first.")));
+        searchNotificationRequest.userId = userId();
         SearchNotificationResponse searchNotificationResponse = notificationWebService.search(searchNotificationRequest);
 
         SearchNotificationAJAXResponse response = new SearchNotificationAJAXResponse();
@@ -59,17 +58,26 @@ public class NotificationService {
 
     public void delete(Long id) {
         DeleteNotificationRequest deleteNotificationRequest = new DeleteNotificationRequest();
-        String userId = webContext.request().session().get("user_id").orElseThrow(() ->
-            new UnauthorizedException("please login first."));
-        deleteNotificationRequest.userId = Long.valueOf(userId);
-        deleteNotificationRequest.operator = "book-site-frontend";
+        deleteNotificationRequest.userId = userId();
+        deleteNotificationRequest.requestedBy = username();
+
         notificationWebService.delete(id, deleteNotificationRequest);
     }
 
     public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
         DeleteBatchNotificationRequest deleteBatchNotificationRequest = new DeleteBatchNotificationRequest();
         deleteBatchNotificationRequest.ids = request.ids;
-        deleteBatchNotificationRequest.operator = "book-site-frontend";
+        deleteBatchNotificationRequest.requestedBy = username();
+
         notificationWebService.deleteBatch(deleteBatchNotificationRequest);
+    }
+
+    private Long userId() {
+        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
+        return Long.parseLong(userId);
+    }
+
+    private String username() {
+        return webContext.request().session().get("username").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

@@ -10,6 +10,8 @@ import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
 import core.framework.inject.Inject;
+import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 import java.util.stream.Collectors;
 
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
 public class BookAuthorService {
     @Inject
     BOAuthorWebService boAuthorWebService;
+    @Inject
+    WebContext webContext;
 
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
         BOSearchAuthorRequest boSearchAuthorRequest = new BOSearchAuthorRequest();
@@ -42,18 +46,22 @@ public class BookAuthorService {
     public void create(CreateBookAuthorAJAXRequest request) {
         BOCreateAuthorRequest boCreateAuthorRequest = new BOCreateAuthorRequest();
         boCreateAuthorRequest.name = request.name;
-        boCreateAuthorRequest.operator = "book-site";
+        boCreateAuthorRequest.requestedBy = adminAccount();
         boAuthorWebService.create(boCreateAuthorRequest);
     }
 
     public void update(Long id, UpdateBookAuthorAJAXRequest request) {
         BOUpdateAuthorRequest boUpdateAuthorRequest = new BOUpdateAuthorRequest();
         boUpdateAuthorRequest.name = request.name;
-        boUpdateAuthorRequest.operator = "book-site";
+        boUpdateAuthorRequest.requestedBy = adminAccount();
         boAuthorWebService.update(id, boUpdateAuthorRequest);
     }
 
     public void delete(Long id) {
         boAuthorWebService.delete(id);
+    }
+
+    private String adminAccount() {
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

@@ -1,5 +1,8 @@
 package app.api.backoffice.borrowrecord;
 
+import app.api.backoffice.bookauthor.BookAuthorAJAXView;
+import app.api.backoffice.bookcategory.BookCategoryAJAXView;
+import app.api.backoffice.booktag.BookTagAJAXView;
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
@@ -26,17 +29,12 @@ public class SearchBorrowRecordAJAXResponse {
         public String id;
 
         @NotNull
-        @Property(name = "book_name")
-        public String bookName;
+        @Property(name = "book")
+        public Book book;
 
         @NotNull
-        @Property(name = "borrow_user_id")
-        public Long borrowUserId;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "borrow_username")
-        public String borrowUsername;
+        @Property(name = "user")
+        public User user;
 
         @NotNull
         @Property(name = "borrowed_time")
@@ -48,5 +46,44 @@ public class SearchBorrowRecordAJAXResponse {
 
         @Property(name = "actual_return_date")
         public LocalDate actualReturnDate;
+    }
+
+    public static class User {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "username")
+        public String username;
+    }
+
+    public static class Book {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "description")
+        public String description;
+
+        @NotNull
+        @Property(name = "authors")
+        public List<BookAuthorAJAXView> authors;
+
+        @NotNull
+        @Property(name = "categories")
+        public List<BookCategoryAJAXView> categories;
+
+        @NotNull
+        @Property(name = "tags")
+        public List<BookTagAJAXView> tags;
     }
 }

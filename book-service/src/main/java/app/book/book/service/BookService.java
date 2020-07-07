@@ -95,9 +95,7 @@ public class BookService {
     }
 
     public GetBookResponse get(Long id) {
-        Book book = bookRepository.get(id).orElseThrow(
-            () -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
-        );
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         GetBookResponse response = new GetBookResponse();
         response.id = book.id;

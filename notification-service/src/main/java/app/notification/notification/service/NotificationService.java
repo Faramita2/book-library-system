@@ -37,8 +37,8 @@ public class NotificationService {
         LocalDateTime now = LocalDateTime.now();
         notification.createdTime = now;
         notification.updatedTime = now;
-        notification.createdBy = message.operator;
-        notification.updatedBy = message.operator;
+        notification.createdBy = message.requestedBy;
+        notification.updatedBy = message.requestedBy;
 
         repository.insert(notification);
     }

@@ -36,11 +36,11 @@ public class BookSiteApp extends App {
     private void apiClients() {
         api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
         api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
         api().client(BOCategoryWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
-        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
     }
 
     private void sys() {

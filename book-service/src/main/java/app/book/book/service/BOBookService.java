@@ -24,8 +24,6 @@ import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,7 +33,6 @@ import java.util.stream.Collectors;
  * @author zoo
  */
 public class BOBookService {
-    private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
     Repository<Book> bookRepository;
     @Inject
@@ -61,8 +58,8 @@ public class BOBookService {
         LocalDateTime now = LocalDateTime.now();
         book.createdTime = now;
         book.updatedTime = now;
-        book.createdBy = request.operator;
-        book.updatedBy = request.operator;
+        book.createdBy = request.requestedBy;
+        book.updatedBy = request.requestedBy;
 
         try (Transaction transaction = database.beginTransaction()) {
             Long id = bookRepository.insert(book).orElseThrow();
@@ -74,17 +71,15 @@ public class BOBookService {
     }
 
     public BOGetBookResponse get(Long id) {
-        Book book = bookRepository.get(id).orElseThrow(
-            () -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
-        );
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         BOGetBookResponse response = new BOGetBookResponse();
         response.id = book.id;
         response.name = book.name;
         response.description = book.description;
-        response.authors = queryAuthorsByBookId(id).stream().map(this::getAuthorView).collect(Collectors.toList());
-        response.categories = queryCategoriesByBookId(id).stream().map(this::getCategoryView).collect(Collectors.toList());
-        response.tags = queryTagsByBookId(id).stream().map(this::getTagView).collect(Collectors.toList());
+        response.authors = queryAuthorsByBookId(id).stream().map(this::authorView).collect(Collectors.toList());
+        response.categories = queryCategoriesByBookId(id).stream().map(this::categoryView).collect(Collectors.toList());
+        response.tags = queryTagsByBookId(id).stream().map(this::tagView).collect(Collectors.toList());
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
@@ -128,9 +123,9 @@ public class BOBookService {
             view.id = book.id;
             view.name = book.name;
             view.description = book.description;
-            view.authors = queryAuthorsByBookId(book.id).stream().map(this::getAuthorView).collect(Collectors.toList());
-            view.categories = queryCategoriesByBookId(book.id).stream().map(this::getCategoryView).collect(Collectors.toList());
-            view.tags = queryTagsByBookId(book.id).stream().map(this::getTagView).collect(Collectors.toList());
+            view.authors = queryAuthorsByBookId(book.id).stream().map(this::authorView).collect(Collectors.toList());
+            view.categories = queryCategoriesByBookId(book.id).stream().map(this::categoryView).collect(Collectors.toList());
+            view.tags = queryTagsByBookId(book.id).stream().map(this::tagView).collect(Collectors.toList());
             view.status = BookStatusView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
@@ -139,31 +134,31 @@ public class BOBookService {
     }
 
     public void update(Long id, BOUpdateBookRequest request) {
-        Book book = bookRepository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.name = request.name;
         book.description = request.description;
         book.updatedTime = LocalDateTime.now();
-        book.updatedBy = request.operator;
+        book.updatedBy = request.requestedBy;
+
+        List<Long> authorIds = request.authorIds;
+        List<Long> tagIds = request.tagIds;
+        List<Long> categoryIds = request.categoryIds;
 
         try (Transaction transaction = database.beginTransaction()) {
             bookRepository.partialUpdate(book);
 
-            List<Long> authorIds = request.authorIds;
             if (authorIds != null && !authorIds.isEmpty()) {
-                database.execute("DELETE FROM `book_authors` WHERE `book_id` = ?", id);
+                database.execute("DELETE FROM book_authors WHERE book_id = ?", id);
                 insertBookAuthors(id, authorIds);
             }
 
-            List<Long> tagIds = request.tagIds;
             if (tagIds != null && !tagIds.isEmpty()) {
-                database.execute("DELETE FROM `book_tags` WHERE `book_id` = ?", id);
+                database.execute("DELETE FROM book_tags WHERE book_id = ?", id);
                 insertBookTags(id, tagIds);
             }
 
-            List<Long> categoryIds = request.categoryIds;
             if (categoryIds != null && !categoryIds.isEmpty()) {
-                database.execute("DELETE FROM `book_categories` WHERE `book_id` = ?", id);
+                database.execute("DELETE FROM book_categories WHERE book_id = ?", id);
                 insertBookCategories(id, categoryIds);
             }
 
@@ -210,63 +205,54 @@ public class BOBookService {
         return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
     }
 
-    private AuthorView getAuthorView(Author author) {
+    private void insertBookAuthors(Long bookId, List<Long> authorIds) {
+        List<BookAuthor> bookAuthors = authorIds.stream().map(authorId -> {
+            BookAuthor bookAuthor = new BookAuthor();
+            bookAuthor.authorId = authorId;
+            bookAuthor.bookId = bookId;
+            return bookAuthor;
+        }).collect(Collectors.toList());
+        bookAuthorRepository.batchInsert(bookAuthors);
+    }
+
+    private void insertBookCategories(Long bookId, List<Long> categoryIds) {
+        List<BookCategory> bookCategories = categoryIds.stream().map(tagId -> {
+            BookCategory bookAuthor = new BookCategory();
+            bookAuthor.categoryId = tagId;
+            bookAuthor.bookId = bookId;
+            return bookAuthor;
+        }).collect(Collectors.toList());
+        bookCategoryRepository.batchInsert(bookCategories);
+    }
+
+    private void insertBookTags(Long bookId, List<Long> tagIds) {
+        List<BookTag> bookTags = tagIds.stream().map(tagId -> {
+            BookTag bookAuthor = new BookTag();
+            bookAuthor.tagId = tagId;
+            bookAuthor.bookId = bookId;
+            return bookAuthor;
+        }).collect(Collectors.toList());
+        bookTagRepository.batchInsert(bookTags);
+    }
+
+    private AuthorView authorView(Author author) {
         AuthorView authorView = new AuthorView();
         authorView.id = author.id;
         authorView.name = author.name;
         return authorView;
     }
 
-    private CategoryView getCategoryView(Category category) {
+    private CategoryView categoryView(Category category) {
         CategoryView categoryView = new CategoryView();
         categoryView.id = category.id;
         categoryView.name = category.name;
         return categoryView;
     }
 
-    private TagView getTagView(Tag tag) {
+    private TagView tagView(Tag tag) {
         TagView tagView = new TagView();
         tagView.id = tag.id;
         tagView.name = tag.name;
         return tagView;
-    }
-
-    private void insertBookAuthors(Long id, List<Long> authorIds) {
-        StringBuilder sql = new StringBuilder("INSERT INTO `book_authors` (`book_id`, `author_id`) VALUES");
-
-        String[] values = new String[authorIds.size()];
-        for (int i = 0; i < authorIds.size(); i++) {
-            values[i] = Strings.format("({}, ?)", id);
-        }
-
-        sql.append(String.join(",", values));
-        logger.info("sql info: {}", sql);
-        database.execute(sql.toString(), authorIds.toArray());
-    }
-
-    private void insertBookTags(Long id, List<Long> tagIds) {
-        StringBuilder sql = new StringBuilder("INSERT INTO `book_tags` (`book_id`, `tag_id`) VALUES");
-
-        String[] values = new String[tagIds.size()];
-        for (int i = 0; i < tagIds.size(); i++) {
-            values[i] = Strings.format("({}, ?)", id);
-        }
-
-        sql.append(String.join(",", values));
-        logger.info("sql info: {}", sql);
-        database.execute(sql.toString(), tagIds.toArray());
-    }
-
-    private void insertBookCategories(Long id, List<Long> categoryIds) {
-        StringBuilder sql = new StringBuilder("INSERT INTO `book_categories` (`book_id`, `category_id`) VALUES");
-
-        String[] values = new String[categoryIds.size()];
-        for (int i = 0; i < categoryIds.size(); i++) {
-            values[i] = Strings.format("({}, ?)", id);
-        }
-
-        sql.append(String.join(",", values));
-        logger.info("sql info: {}", sql);
-        database.execute(sql.toString(), categoryIds.toArray());
     }
 }

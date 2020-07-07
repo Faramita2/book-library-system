@@ -16,6 +16,6 @@ public class DeleteBatchNotificationRequest {
 
     @NotNull
     @NotBlank
-    @QueryParam(name = "operator")
-    public String operator;
+    @QueryParam(name = "requested_by")
+    public String requestedBy;
 }

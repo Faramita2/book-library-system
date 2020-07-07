@@ -32,6 +32,7 @@ public class AuthorService {
             view.name = author.name;
             return view;
         }).collect(Collectors.toList());
+
         return response;
     }
 }

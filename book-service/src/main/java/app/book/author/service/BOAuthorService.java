@@ -26,8 +26,8 @@ public class BOAuthorService {
         author.name = request.name;
         author.createdTime = LocalDateTime.now();
         author.updatedTime = LocalDateTime.now();
-        author.createdBy = request.operator;
-        author.updatedBy = request.operator;
+        author.createdBy = request.requestedBy;
+        author.updatedBy = request.requestedBy;
 
         repository.insert(author).orElseThrow();
     }
@@ -58,6 +58,8 @@ public class BOAuthorService {
         Author author = repository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         author.name = request.name;
+        author.updatedBy = request.requestedBy;
+        author.updatedTime = LocalDateTime.now();
         repository.partialUpdate(author);
     }
 

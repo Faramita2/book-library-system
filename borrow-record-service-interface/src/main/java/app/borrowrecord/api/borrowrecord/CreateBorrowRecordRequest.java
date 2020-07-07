@@ -47,6 +47,10 @@ public class CreateBorrowRecordRequest {
     public Long borrowUserId;
 
     @NotNull
+    @Property(name = "borrow_username")
+    public String borrowUsername;
+
+    @NotNull
     @Property(name = "borrowed_time")
     public LocalDateTime borrowedTime;
 
@@ -56,8 +60,8 @@ public class CreateBorrowRecordRequest {
 
     @NotNull
     @NotBlank
-    @Property(name = "operator")
-    public String operator;
+    @Property(name = "requested_by")
+    public String requestedBy;
 
     public static class Author {
         @NotNull

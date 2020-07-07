@@ -100,7 +100,7 @@ public class BookService {
         searchBorrowRecordRequest.tagIds = request.tagIds;
         searchBorrowRecordRequest.authorIds = request.authorIds;
         searchBorrowRecordRequest.categoryIds = request.categoryIds;
-        searchBorrowRecordRequest.borrowUserId = getUserId();
+        searchBorrowRecordRequest.borrowUserId = userId();
         searchBorrowRecordRequest.borrowedDate = request.borrowedDate;
         searchBorrowRecordRequest.returnDate = request.returnDate;
         searchBorrowRecordRequest.actualReturnDate = request.actualReturnDate;
@@ -161,8 +161,9 @@ public class BookService {
         return bookTagAJAXView;
     }
 
-    private Long getUserId() {
+    private Long userId() {
         String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
+
         return Long.parseLong(userId);
     }
 }

@@ -41,7 +41,7 @@ public class UserService {
         boCreateUserRequest.username = request.username;
         boCreateUserRequest.password = request.password;
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
-        boCreateUserRequest.operator = getAdminAccount();
+        boCreateUserRequest.requestedBy = getAdminAccount();
         userWebService.create(boCreateUserRequest);
     }
 
@@ -92,7 +92,7 @@ public class UserService {
     public void active(Long id) {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.ACTIVE;
-        boUpdateUserRequest.operator = getAdminAccount();
+        boUpdateUserRequest.requestedBy = getAdminAccount();
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.ACTIVE.name());
     }
@@ -100,7 +100,7 @@ public class UserService {
     public void inactive(Long id) {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.INACTIVE;
-        boUpdateUserRequest.operator = getAdminAccount();
+        boUpdateUserRequest.requestedBy = getAdminAccount();
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.INACTIVE.name());
     }

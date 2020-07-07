@@ -27,8 +27,8 @@ public class BOCategoryService {
         LocalDateTime now = LocalDateTime.now();
         category.createdTime = now;
         category.updatedTime = now;
-        category.createdBy = request.operator;
-        category.updatedBy = request.operator;
+        category.createdBy = request.requestedBy;
+        category.updatedBy = request.requestedBy;
 
         repository.insert(category).orElseThrow();
     }
@@ -59,12 +59,13 @@ public class BOCategoryService {
         Category category = repository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         category.name = request.name;
+        category.updatedBy = request.requestedBy;
+        category.updatedTime = LocalDateTime.now();
         repository.partialUpdate(category);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
+        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         repository.delete(id);
     }
 }

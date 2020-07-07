@@ -61,7 +61,7 @@ public class AuthenticationService {
 
         ResetUserPasswordRequest resetUserPasswordRequest = new ResetUserPasswordRequest();
         resetUserPasswordRequest.password = request.password;
-        resetUserPasswordRequest.operator = request.requestedBy;
+        resetUserPasswordRequest.requestedBy = request.requestedBy;
 
         userWebService.resetPassword(Long.parseLong(userId), resetUserPasswordRequest);
     }

@@ -1,4 +1,4 @@
-package app.user.api.user;
+package app.api.backoffice.booktag;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -7,13 +7,13 @@ import core.framework.api.validate.NotNull;
 /**
  * @author zoo
  */
-public class BOUpdateUserRequest {
+public class BookTagAJAXView {
     @NotNull
-    @Property(name = "status")
-    public UserStatusView status;
+    @Property(name = "id")
+    public Long id;
 
     @NotNull
     @NotBlank
-    @Property(name = "requested_by")
-    public String requestedBy;
+    @Property(name = "name")
+    public String name;
 }

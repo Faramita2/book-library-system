@@ -60,8 +60,8 @@ public class UserService {
 
     public void resetPassword(Long id, ResetUserPasswordRequest request) {
         User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
-        user.updatedBy = request.operator;
         hashPassword(user, request.password);
         repository.partialUpdate(user);
     }

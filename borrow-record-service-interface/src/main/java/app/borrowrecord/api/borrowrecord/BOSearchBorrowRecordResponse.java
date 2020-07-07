@@ -1,6 +1,7 @@
 package app.borrowrecord.api.borrowrecord;
 
 import core.framework.api.json.Property;
+import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 import java.time.LocalDate;
@@ -25,8 +26,12 @@ public class BOSearchBorrowRecordResponse {
         public String id;
 
         @NotNull
-        @Property(name = "borrow_user_id")
-        public Long borrowUserId;
+        @Property(name = "user")
+        public User user;
+
+        @NotNull
+        @Property(name = "book")
+        public Book book;
 
         @NotNull
         @Property(name = "borrowed_time")
@@ -38,5 +43,77 @@ public class BOSearchBorrowRecordResponse {
 
         @Property(name = "actual_return_date")
         public LocalDate actualReturnDate;
+    }
+
+    public static class User {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "username")
+        public String username;
+    }
+
+    public static class Book {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "description")
+        public String description;
+
+        @NotNull
+        @Property(name = "authors")
+        public List<Author> authors;
+
+        @NotNull
+        @Property(name = "categories")
+        public List<Category> categories;
+
+        @NotNull
+        @Property(name = "tags")
+        public List<Tag> tags;
+    }
+
+    public static class Author {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Category {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
+    }
+
+    public static class Tag {
+        @NotNull
+        @Property(name = "id")
+        public Long id;
+
+        @NotNull
+        @NotBlank
+        @Property(name = "name")
+        public String name;
     }
 }

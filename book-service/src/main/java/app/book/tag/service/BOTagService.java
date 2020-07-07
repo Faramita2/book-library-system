@@ -27,8 +27,8 @@ public class BOTagService {
         LocalDateTime now = LocalDateTime.now();
         tag.createdTime = now;
         tag.updatedTime = now;
-        tag.createdBy = request.operator;
-        tag.updatedBy = request.operator;
+        tag.createdBy = request.requestedBy;
+        tag.updatedBy = request.requestedBy;
 
         repository.insert(tag).orElseThrow();
     }
@@ -56,9 +56,10 @@ public class BOTagService {
     }
 
     public void update(Long id, BOUpdateTagRequest request) {
-        Tag tag = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
-        tag.name = request.name;
+        Tag tag = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
+        tag.updatedBy = request.requestedBy;
+        tag.updatedTime = LocalDateTime.now();
+
         repository.partialUpdate(tag);
     }
 

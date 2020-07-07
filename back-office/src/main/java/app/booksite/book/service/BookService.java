@@ -6,24 +6,23 @@ import app.api.backoffice.book.GetBookAJAXResponse;
 import app.api.backoffice.book.SearchBookAJAXRequest;
 import app.api.backoffice.book.SearchBookAJAXResponse;
 import app.api.backoffice.book.UpdateBookAJAXRequest;
-import app.book.api.BOAuthorWebService;
+import app.api.backoffice.bookauthor.BookAuthorAJAXView;
+import app.api.backoffice.bookcategory.BookCategoryAJAXView;
+import app.api.backoffice.booktag.BookTagAJAXView;
 import app.book.api.BOBookWebService;
-import app.book.api.BOCategoryWebService;
-import app.book.api.BOTagWebService;
-import app.book.api.author.BOSearchAuthorRequest;
+import app.book.api.author.AuthorView;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOUpdateBookRequest;
-import app.book.api.category.BOSearchCategoryRequest;
-import app.book.api.tag.BOSearchTagRequest;
+import app.book.api.category.CategoryView;
+import app.book.api.tag.TagView;
 import app.user.api.BOUserWebService;
 import core.framework.inject.Inject;
+import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -33,13 +32,9 @@ public class BookService {
     @Inject
     BOBookWebService boBookWebService;
     @Inject
-    BOTagWebService boTagWebService;
-    @Inject
-    BOCategoryWebService boCategoryWebService;
-    @Inject
-    BOAuthorWebService boAuthorWebService;
-    @Inject
     BOUserWebService boUserWebService;
+    @Inject
+    WebContext webContext;
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
@@ -54,23 +49,15 @@ public class BookService {
         BOSearchBookResponse boSearchBookResponse = boBookWebService.search(boSearchBookRequest);
         SearchBookAJAXResponse response = new SearchBookAJAXResponse();
 
-        List<Long> tagIds = distinctTagIds(boSearchBookResponse);
-        List<Long> categoryIds = distinctCategoryIds(boSearchBookResponse);
-        List<Long> authorIds = distinctAuthorIds(boSearchBookResponse);
-
-        Map<Long, String> tagNames = queryTagNames(tagIds);
-        Map<Long, String> categoryNames = queryCategoryNames(categoryIds);
-        Map<Long, String> authorNames = queryAuthorNames(authorIds);
-
         response.total = boSearchBookResponse.total;
         response.books = boSearchBookResponse.books.stream().map(book -> {
             SearchBookAJAXResponse.Book view = new SearchBookAJAXResponse.Book();
             view.id = book.id;
             view.name = book.name;
             view.description = book.description;
-            view.authorNames = book.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
-            view.categoryNames = book.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
-            view.tagNames = book.tagIds.stream().map(tagNames::get).collect(Collectors.toList());
+            view.authors = book.authors.stream().map(this::bookAuthorAJAXView).collect(Collectors.toList());
+            view.categories = book.categories.stream().map(this::bookCategoryAJAXView).collect(Collectors.toList());
+            view.tags = book.tags.stream().map(this::bookTagAJAXView).collect(Collectors.toList());
             view.status = BookStatusAJAXView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
@@ -82,18 +69,14 @@ public class BookService {
         BOGetBookResponse boGetBookResponse = boBookWebService.get(id);
         GetBookAJAXResponse response = new GetBookAJAXResponse();
 
-        Map<Long, String> authorNames = queryAuthorNames(boGetBookResponse.authorIds);
-        Map<Long, String> categoryNames = queryCategoryNames(boGetBookResponse.categoryIds);
-        Map<Long, String> tagNames = queryTagNames(boGetBookResponse.tagIds);
-
         response.id = boGetBookResponse.id;
         response.name = boGetBookResponse.name;
         response.description = boGetBookResponse.description;
         response.status = BookStatusAJAXView.valueOf(boGetBookResponse.status.name());
         response.borrowUsername = boGetBookResponse.borrowUserId != 0 ? boUserWebService.get(boGetBookResponse.borrowUserId).username : null;
-        response.authorNames = boGetBookResponse.authorIds.stream().map(authorNames::get).collect(Collectors.toList());
-        response.categoryNames = boGetBookResponse.categoryIds.stream().map(categoryNames::get).collect(Collectors.toList());
-        response.tagNames = boGetBookResponse.tagIds.stream().map(tagNames::get).collect(Collectors.toList());
+        response.authors = boGetBookResponse.authors.stream().map(this::bookAuthorAJAXView).collect(Collectors.toList());
+        response.categories = boGetBookResponse.categories.stream().map(this::bookCategoryAJAXView).collect(Collectors.toList());
+        response.tags = boGetBookResponse.tags.stream().map(this::bookTagAJAXView).collect(Collectors.toList());
         response.borrowedTime = boGetBookResponse.borrowedTime;
         response.returnDate = boGetBookResponse.returnDate;
 
@@ -107,7 +90,7 @@ public class BookService {
         boCreateBookRequest.description = request.description;
         boCreateBookRequest.categoryIds = request.categoryIds;
         boCreateBookRequest.authorIds = request.authorIds;
-        boCreateBookRequest.operator = "book-site";
+        boCreateBookRequest.requestedBy = adminAccount();
         boBookWebService.create(boCreateBookRequest);
     }
 
@@ -118,58 +101,32 @@ public class BookService {
         boUpdateBookRequest.description = request.description;
         boUpdateBookRequest.categoryIds = request.categoryIds;
         boUpdateBookRequest.authorIds = request.authorIds;
-        boUpdateBookRequest.operator = "book-site";
+        boUpdateBookRequest.requestedBy = adminAccount();
         boBookWebService.update(id, boUpdateBookRequest);
     }
 
-    private List<Long> distinctAuthorIds(BOSearchBookResponse boSearchBookResponse) {
-        return boSearchBookResponse.books.stream()
-            .map(book -> book.authorIds)
-            .flatMap(Collection::stream)
-            .distinct()
-            .collect(Collectors.toList());
+    private BookAuthorAJAXView bookAuthorAJAXView(AuthorView author) {
+        BookAuthorAJAXView bookAuthorAJAXView = new BookAuthorAJAXView();
+        bookAuthorAJAXView.id = author.id;
+        bookAuthorAJAXView.name = author.name;
+        return bookAuthorAJAXView;
     }
 
-    private List<Long> distinctCategoryIds(BOSearchBookResponse boSearchBookResponse) {
-        return boSearchBookResponse.books.stream()
-            .map(book -> book.categoryIds)
-            .flatMap(Collection::stream)
-            .distinct()
-            .collect(Collectors.toList());
+    private BookCategoryAJAXView bookCategoryAJAXView(CategoryView category) {
+        BookCategoryAJAXView bookCategoryAJAXView = new BookCategoryAJAXView();
+        bookCategoryAJAXView.id = category.id;
+        bookCategoryAJAXView.name = category.name;
+        return bookCategoryAJAXView;
     }
 
-    private List<Long> distinctTagIds(BOSearchBookResponse boSearchBookResponse) {
-        return boSearchBookResponse.books.stream()
-            .map(book -> book.tagIds)
-            .flatMap(Collection::stream)
-            .distinct()
-            .collect(Collectors.toList());
+    private BookTagAJAXView bookTagAJAXView(TagView tag) {
+        BookTagAJAXView bookTagAJAXView = new BookTagAJAXView();
+        bookTagAJAXView.id = tag.id;
+        bookTagAJAXView.name = tag.name;
+        return bookTagAJAXView;
     }
 
-    private Map<Long, String> queryTagNames(List<Long> tagIds) {
-        BOSearchTagRequest boSearchTagRequest = new BOSearchTagRequest();
-        boSearchTagRequest.skip = 0;
-        boSearchTagRequest.limit = tagIds.size();
-        boSearchTagRequest.ids = tagIds;
-        return boTagWebService.search(boSearchTagRequest).tags.stream()
-            .collect(Collectors.toMap(tag -> tag.id, tag -> tag.name));
-    }
-
-    private Map<Long, String> queryCategoryNames(List<Long> categoryIds) {
-        BOSearchCategoryRequest boSearchCategoryRequest = new BOSearchCategoryRequest();
-        boSearchCategoryRequest.skip = 0;
-        boSearchCategoryRequest.limit = categoryIds.size();
-        boSearchCategoryRequest.ids = categoryIds;
-        return boCategoryWebService.search(boSearchCategoryRequest).categories.stream()
-            .collect(Collectors.toMap(category -> category.id, category -> category.name));
-    }
-
-    private Map<Long, String> queryAuthorNames(List<Long> authorIds) {
-        BOSearchAuthorRequest boSearchAuthorRequest = new BOSearchAuthorRequest();
-        boSearchAuthorRequest.skip = 0;
-        boSearchAuthorRequest.limit = authorIds.size();
-        boSearchAuthorRequest.ids = authorIds;
-        return boAuthorWebService.search(boSearchAuthorRequest).authors.stream()
-            .collect(Collectors.toMap(author -> author.id, author -> author.name));
+    private String adminAccount() {
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }
