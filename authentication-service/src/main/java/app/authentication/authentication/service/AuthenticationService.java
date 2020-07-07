@@ -34,6 +34,7 @@ public class AuthenticationService {
 
     public LoginResponse login(LoginRequest request) {
         GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest();
+        getUserByUsernameRequest.username = request.username;
         GetUserByUsernameResponse getUserByUsernameResponse = userWebService.getUserByUsername(getUserByUsernameRequest);
 
         if (getUserByUsernameResponse.status == UserStatusView.INACTIVE) {

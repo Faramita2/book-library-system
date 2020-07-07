@@ -26,9 +26,9 @@ public class BOBorrowRecordService {
         BOSearchBorrowRecordResponse response = new BOSearchBorrowRecordResponse();
 
         List<Bson> filters = Lists.newArrayList();
-        filters.add(eq("book_id", request.bookId));
+        filters.add(eq("book.id", request.bookId));
         if (request.userId != null) {
-            filters.add(eq("borrow_user_id", request.userId));
+            filters.add(eq("user.id", request.userId));
         }
 
         Query query = new Query();

@@ -27,6 +27,7 @@ public class BOAuthenticationService {
 
     public BOLoginResponse login(BOLoginRequest request) {
         BOGetAdminByAccountRequest boGetAdminByAccountRequest = new BOGetAdminByAccountRequest();
+        boGetAdminByAccountRequest.account = request.account;
         BOGetAdminByAccountResponse boGetAdminByAccountResponse = boAdminWebService.getByAccount(boGetAdminByAccountRequest);
 
         if (!boGetAdminByAccountResponse.password.equals(getPasswordHash(request.password, boGetAdminByAccountResponse.salt))) {
