@@ -2,6 +2,7 @@ package app.borrowrecord.borrowrecord.web;
 
 import app.borrowrecord.api.BorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
@@ -19,6 +20,11 @@ public class BorrowRecordWebServiceImpl implements BorrowRecordWebService {
     @Override
     public void create(CreateBorrowRecordRequest request) {
         service.create(request);
+    }
+
+    @Override
+    public GetBorrowRecordResponse get(String id) {
+        return service.get(id);
     }
 
     @Override
