@@ -1,17 +1,22 @@
 package app.book.book.service;
 
+import app.book.api.author.AuthorView;
 import app.book.api.book.BOCreateBookRequest;
 import app.book.api.book.BOGetBookResponse;
 import app.book.api.book.BOSearchBookRequest;
 import app.book.api.book.BOSearchBookResponse;
 import app.book.api.book.BOUpdateBookRequest;
 import app.book.api.book.BookStatusView;
-import app.book.book.domain.AuthorIdView;
+import app.book.api.category.CategoryView;
+import app.book.api.tag.TagView;
+import app.book.author.domain.Author;
 import app.book.book.domain.Book;
-import app.book.book.domain.BookIdView;
+import app.book.book.domain.BookAuthor;
+import app.book.book.domain.BookCategory;
 import app.book.book.domain.BookStatus;
-import app.book.book.domain.CategoryIdView;
-import app.book.book.domain.TagIdView;
+import app.book.book.domain.BookTag;
+import app.book.category.domain.Category;
+import app.book.tag.domain.Tag;
 import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
@@ -32,7 +37,19 @@ import java.util.stream.Collectors;
 public class BOBookService {
     private final Logger logger = LoggerFactory.getLogger(BOBookService.class);
     @Inject
-    Repository<Book> repository;
+    Repository<Book> bookRepository;
+    @Inject
+    Repository<BookAuthor> bookAuthorRepository;
+    @Inject
+    Repository<BookCategory> bookCategoryRepository;
+    @Inject
+    Repository<BookTag> bookTagRepository;
+    @Inject
+    Repository<Author> authorRepository;
+    @Inject
+    Repository<Category> categoryRepository;
+    @Inject
+    Repository<Tag> tagRepository;
     @Inject
     Database database;
 
@@ -49,7 +66,7 @@ public class BOBookService {
 
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start create book ====");
-            Long id = repository.insert(book).orElseThrow();
+            Long id = bookRepository.insert(book).orElseThrow();
             insertBookAuthors(id, request.authorIds);
             insertBookTags(id, request.tagIds);
             insertBookCategories(id, request.categoryIds);
@@ -59,17 +76,17 @@ public class BOBookService {
     }
 
     public BOGetBookResponse get(Long id) {
-        Book book = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
+        Book book = bookRepository.get(id).orElseThrow(
+            () -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND")
         );
 
         BOGetBookResponse response = new BOGetBookResponse();
         response.id = book.id;
         response.name = book.name;
         response.description = book.description;
-        response.authorIds = queryAuthorIdsByBookId(id);
-        response.categoryIds = queryCategoryIdsByBookId(id);
-        response.tagIds = queryTagIdsByBookId(id);
+        response.authors = queryAuthorsByBookId(id).stream().map(this::getAuthorView).collect(Collectors.toList());
+        response.categories = queryCategoriesByBookId(id).stream().map(this::getCategoryView).collect(Collectors.toList());
+        response.tags = queryTagsByBookId(id).stream().map(this::getTagView).collect(Collectors.toList());
         response.status = BookStatusView.valueOf(book.status.name());
         response.borrowUserId = book.borrowUserId;
         response.borrowedTime = book.borrowedTime;
@@ -79,8 +96,7 @@ public class BOBookService {
     }
 
     public BOSearchBookResponse search(BOSearchBookRequest request) {
-        BOSearchBookResponse response = new BOSearchBookResponse();
-        Query<Book> query = repository.select();
+        Query<Book> query = bookRepository.select();
         query.skip(request.skip);
         query.limit(request.limit);
 
@@ -107,15 +123,16 @@ public class BOBookService {
             query.in("id", bookIds);
         }
 
+        BOSearchBookResponse response = new BOSearchBookResponse();
         response.total = query.count();
         response.books = query.fetch().stream().map(book -> {
             BOSearchBookResponse.Book view = new BOSearchBookResponse.Book();
             view.id = book.id;
             view.name = book.name;
-            view.tagIds = queryTagIdsByBookId(book.id);
             view.description = book.description;
-            view.categoryIds = queryCategoryIdsByBookId(book.id);
-            view.authorIds = queryAuthorIdsByBookId(book.id);
+            view.authors = queryAuthorsByBookId(book.id).stream().map(this::getAuthorView).collect(Collectors.toList());
+            view.categories = queryCategoriesByBookId(book.id).stream().map(this::getCategoryView).collect(Collectors.toList());
+            view.tags = queryTagsByBookId(book.id).stream().map(this::getTagView).collect(Collectors.toList());
             view.status = BookStatusView.valueOf(book.status.name());
             return view;
         }).collect(Collectors.toList());
@@ -124,7 +141,7 @@ public class BOBookService {
     }
 
     public void update(Long id, BOUpdateBookRequest request) {
-        Book book = repository.get(id).orElseThrow(() ->
+        Book book = bookRepository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.name = request.name;
         book.description = request.description;
@@ -134,7 +151,7 @@ public class BOBookService {
         try (Transaction transaction = database.beginTransaction()) {
             logger.warn("==== start update book ====");
             logger.warn("update book name = {}, description = {}", request.name, request.description);
-            repository.partialUpdate(book);
+            bookRepository.partialUpdate(book);
 
             List<Long> authorIds = request.authorIds;
             if (authorIds != null && !authorIds.isEmpty()) {
@@ -159,50 +176,64 @@ public class BOBookService {
         }
     }
 
-    private List<Long> queryTagIdsByBookId(Long bookId) {
-        return database.select(
-            "SELECT tag_id FROM book_tags WHERE book_id = ?", TagIdView.class, bookId)
-            .stream()
-            .map(tagIdView -> tagIdView.tagId)
-            .collect(Collectors.toList());
+    private List<Author> queryAuthorsByBookId(Long bookId) {
+        List<Long> authorIds = bookAuthorRepository.select("book_id = ?", bookId).stream().map(bookAuthor -> bookAuthor.authorId).collect(Collectors.toList());
+        Query<Author> query = authorRepository.select();
+        query.in("id", authorIds);
+        return query.fetch();
     }
 
-    private List<Long> queryCategoryIdsByBookId(Long bookId) {
-        return database.select(
-            "SELECT category_id FROM book_categories WHERE book_id = ?", CategoryIdView.class, bookId)
-            .stream()
-            .map(categoryIdView -> categoryIdView.categoryId)
-            .collect(Collectors.toList());
+    private List<Category> queryCategoriesByBookId(Long bookId) {
+        List<Long> categoryIds = bookCategoryRepository.select("book_id = ?", bookId).stream().map(bookCategory -> bookCategory.categoryId).collect(Collectors.toList());
+        Query<Category> query = categoryRepository.select();
+        query.in("id", categoryIds);
+        return query.fetch();
     }
 
-    private List<Long> queryAuthorIdsByBookId(Long bookId) {
-        return database.select(
-            "SELECT author_id FROM book_authors WHERE book_id = ?", AuthorIdView.class, bookId)
-            .stream()
-            .map(authorIdView -> authorIdView.authorId)
-            .collect(Collectors.toList());
-    }
-
-    // todo
-    private List<Long> queryBookIdsByTagIds(BOSearchBookRequest request) {
-        // todo pivot tables domain
-        return database.select(
-            "SELECT book_id FROM book_tags WHERE tag_id IN(?)", BookIdView.class, request.tagIds)
-            .stream().map(bookIdView -> bookIdView.bookId).collect(Collectors.toList());
-    }
-
-    private List<Long> queryBookIdsByCategoryIds(BOSearchBookRequest request) {
-        return database.select(
-            "SELECT book_id FROM book_categories WHERE category_id IN(?)", BookIdView.class, request.categoryIds)
-            .stream().map(bookIdView -> bookIdView.bookId).collect(Collectors.toList());
+    private List<Tag> queryTagsByBookId(Long bookId) {
+        List<Long> tagIds = bookTagRepository.select("book_id = ?", bookId).stream().map(bookTag -> bookTag.tagId).collect(Collectors.toList());
+        Query<Tag> query = tagRepository.select();
+        query.in("id", tagIds);
+        return query.fetch();
     }
 
     private List<Long> queryBookIdsByAuthorIds(BOSearchBookRequest request) {
-        return database.select(
-            "SELECT book_id FROM book_authors WHERE author_id IN(?)", BookIdView.class, request.authorIds)
-            .stream()
-            .map(bookIdView -> bookIdView.bookId)
-            .collect(Collectors.toList());
+        Query<BookTag> query = bookTagRepository.select();
+        query.in("tag_id", request.tagIds);
+        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
+    }
+
+    private List<Long> queryBookIdsByCategoryIds(BOSearchBookRequest request) {
+        Query<BookCategory> query = bookCategoryRepository.select();
+        query.in("category_id", request.categoryIds);
+        return query.fetch().stream().map(bookCategory -> bookCategory.bookId).collect(Collectors.toList());
+    }
+
+    private List<Long> queryBookIdsByTagIds(BOSearchBookRequest request) {
+        Query<BookTag> query = bookTagRepository.select();
+        query.in("tag_id", request.tagIds);
+        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
+    }
+
+    private AuthorView getAuthorView(Author author) {
+        AuthorView authorView = new AuthorView();
+        authorView.id = author.id;
+        authorView.name = author.name;
+        return authorView;
+    }
+
+    private CategoryView getCategoryView(Category category) {
+        CategoryView categoryView = new CategoryView();
+        categoryView.id = category.id;
+        categoryView.name = category.name;
+        return categoryView;
+    }
+
+    private TagView getTagView(Tag tag) {
+        TagView tagView = new TagView();
+        tagView.id = tag.id;
+        tagView.name = tag.name;
+        return tagView;
     }
 
     private void insertBookAuthors(Long id, List<Long> authorIds) {

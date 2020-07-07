@@ -1,9 +1,13 @@
 package app.book.api.book;
 
+import app.book.api.author.AuthorView;
+import app.book.api.category.CategoryView;
+import app.book.api.tag.TagView;
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -29,24 +33,30 @@ public class BOSearchBookResponse {
         public String name;
 
         @NotNull
-        @Property(name = "tag_ids")
-        public List<Long> tagIds;
-
-        @NotNull
         @NotBlank
         @Property(name = "description")
         public String description;
 
         @NotNull
-        @Property(name = "category_ids")
-        public List<Long> categoryIds;
+        @Property(name = "authors")
+        public List<AuthorView> authors;
 
         @NotNull
-        @Property(name = "author_ids")
-        public List<Long> authorIds;
+        @Property(name = "categories")
+        public List<CategoryView> categories;
+
+        @NotNull
+        @Property(name = "tags")
+        public List<TagView> tags;
 
         @NotNull
         @Property(name = "status")
         public BookStatusView status;
+
+        @Property(name = "return_date")
+        public LocalDate returnDate;
+
+        @Property(name = "actual_return_date")
+        public LocalDate actualReturnDate;
     }
 }

@@ -6,8 +6,12 @@ import core.framework.db.Column;
 /**
  * @author zoo
  */
-public class BookIdView {
-    @Column(name = "book_id")
+public class BookCategory {
     @NotNull
+    @Column(name = "category_id")
+    public Long categoryId;
+
+    @NotNull
+    @Column(name = "book_id")
     public Long bookId;
 }

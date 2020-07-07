@@ -1,10 +1,9 @@
 package app.book.api;
 
-import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
-import app.book.api.book.ReturnBookRequest;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.book.UpdateBookRequest;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
@@ -23,10 +22,6 @@ public interface BookWebService {
     GetBookResponse get(@PathParam("id") Long id);
 
     @PUT
-    @Path("/book/:id/borrow")
-    void borrow(@PathParam("id") Long id, BorrowBookRequest request);
-
-    @PUT
-    @Path("/book/:id/return")
-    void returnBook(@PathParam("id") Long id, ReturnBookRequest request);
+    @Path("/book/:id")
+    void update(@PathParam("id") Long id, UpdateBookRequest request);
 }
