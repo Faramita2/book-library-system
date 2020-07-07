@@ -1,7 +1,6 @@
 package app.website.bookcategory.web;
 
 import app.api.website.BookCategoryAJAXWebService;
-import app.api.website.bookcategory.ListBookCategoryAJAXResponse;
 import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
 import app.website.bookcategory.service.BookCategoryService;
@@ -20,10 +19,5 @@ public class BookCategoryAJAXWebServiceImpl implements BookCategoryAJAXWebServic
     @Override
     public SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request) {
         return service.search(request);
-    }
-
-    @Override
-    public ListBookCategoryAJAXResponse list() {
-        return service.list();
     }
 }

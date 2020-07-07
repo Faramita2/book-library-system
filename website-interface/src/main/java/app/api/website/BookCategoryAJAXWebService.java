@@ -14,8 +14,4 @@ public interface BookCategoryAJAXWebService {
     @PUT
     @Path("/ajax/book-category")
     SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request);
-
-    @GET
-    @Path("/ajax/book-category")
-    ListBookCategoryAJAXResponse list();
 }

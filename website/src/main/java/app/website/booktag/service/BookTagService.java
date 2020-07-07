@@ -1,6 +1,5 @@
 package app.website.booktag.service;
 
-import app.api.website.booktag.ListBookTagAJAXResponse;
 import app.api.website.booktag.SearchBookTagAJAXRequest;
 import app.api.website.booktag.SearchBookTagAJAXResponse;
 import app.book.api.TagWebService;
@@ -27,20 +26,6 @@ public class BookTagService {
         response.total = searchTagResponse.total;
         response.tags = searchTagResponse.tags.stream().map(tag -> {
             SearchBookTagAJAXResponse.Tag view = new SearchBookTagAJAXResponse.Tag();
-            view.id = tag.id;
-            view.name = tag.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public ListBookTagAJAXResponse list() {
-        ListBookTagAJAXResponse response = new ListBookTagAJAXResponse();
-        ListTagResponse listTagResponse = tagWebService.list();
-        response.total = listTagResponse.total;
-        response.tags = listTagResponse.tags.stream().map(tag -> {
-            ListBookTagAJAXResponse.Tag view = new ListBookTagAJAXResponse.Tag();
             view.id = tag.id;
             view.name = tag.name;
             return view;

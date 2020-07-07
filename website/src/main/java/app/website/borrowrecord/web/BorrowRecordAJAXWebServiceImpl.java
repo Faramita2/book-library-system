@@ -1,7 +1,7 @@
 package app.website.borrowrecord.web;
 
 import app.api.website.BorrowRecordAJAXWebService;
-import app.api.website.book.BorrowBookAJAXRequest;
+import app.api.website.borrowrecord.BorrowBookAJAXRequest;
 import app.website.borrowrecord.service.BorrowRecordService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -9,7 +9,7 @@ import core.framework.log.ActionLogContext;
 /**
  * @author meow
  */
-public class BorrowRecordWebServiceImpl implements BorrowRecordAJAXWebService {
+public class BorrowRecordAJAXWebServiceImpl implements BorrowRecordAJAXWebService {
     @Inject
     BorrowRecordService service;
 

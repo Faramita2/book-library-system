@@ -1,6 +1,5 @@
 package app.website.bookauthor.service;
 
-import app.api.website.bookauthor.ListBookAuthorAJAXResponse;
 import app.api.website.bookauthor.SearchBookAuthorAJAXRequest;
 import app.api.website.bookauthor.SearchBookAuthorAJAXResponse;
 import app.book.api.AuthorWebService;
@@ -28,20 +27,6 @@ public class BookAuthorService {
         response.total = searchAuthorResponse.total;
         response.authors = searchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();
-            view.id = author.id;
-            view.name = author.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public ListBookAuthorAJAXResponse list() {
-        ListAuthorResponse listAuthorResponse = authorWebService.list();
-        ListBookAuthorAJAXResponse response = new ListBookAuthorAJAXResponse();
-        response.total = listAuthorResponse.total;
-        response.authors = listAuthorResponse.authors.stream().map(author -> {
-            ListBookAuthorAJAXResponse.Author view = new ListBookAuthorAJAXResponse.Author();
             view.id = author.id;
             view.name = author.name;
             return view;

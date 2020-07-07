@@ -1,5 +1,8 @@
-package app.api.website.borrowedbook;
+package app.api.website.book;
 
+import app.api.website.bookauthor.BookAuthorAJAXView;
+import app.api.website.bookcategory.BookCategoryAJAXView;
+import app.api.website.booktag.BookTagAJAXView;
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
@@ -37,15 +40,15 @@ public class SearchBorrowedBookAJAXResponse {
 
         @NotNull
         @Property(name = "authors")
-        public List<Author> authors;
+        public List<BookAuthorAJAXView> authors;
 
         @NotNull
         @Property(name = "categories")
-        public List<Category> categories;
+        public List<BookCategoryAJAXView> categories;
 
         @NotNull
         @Property(name = "tags")
-        public List<Tag> tags;
+        public List<BookTagAJAXView> tags;
 
         @NotNull
         @Property(name = "borrowed_time")
@@ -57,38 +60,5 @@ public class SearchBorrowedBookAJAXResponse {
 
         @Property(name = "actual_return_date")
         public LocalDate actualReturnDate;
-    }
-
-    public static class Author {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
-    }
-
-    public static class Category {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
-    }
-
-    public static class Tag {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
     }
 }

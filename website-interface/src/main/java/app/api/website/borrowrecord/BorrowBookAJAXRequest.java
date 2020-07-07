@@ -1,4 +1,4 @@
-package app.api.website.book;
+package app.api.website.borrowrecord;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotNull;

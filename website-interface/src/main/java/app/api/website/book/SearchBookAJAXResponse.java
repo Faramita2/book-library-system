@@ -1,5 +1,8 @@
 package app.api.website.book;
 
+import app.api.website.bookauthor.BookAuthorAJAXView;
+import app.api.website.bookcategory.BookCategoryAJAXView;
+import app.api.website.booktag.BookTagAJAXView;
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
@@ -29,21 +32,21 @@ public class SearchBookAJAXResponse {
         public String name;
 
         @NotNull
-        @Property(name = "tag_names")
-        public List<String> tagNames;
-
-        @NotNull
         @NotBlank
         @Property(name = "description")
         public String description;
 
         @NotNull
-        @Property(name = "category_names")
-        public List<String> categoryNames;
+        @Property(name = "authors")
+        public List<BookAuthorAJAXView> authors;
 
         @NotNull
-        @Property(name = "author_names")
-        public List<String> authorNames;
+        @Property(name = "categories")
+        public List<BookCategoryAJAXView> categories;
+
+        @NotNull
+        @Property(name = "tags")
+        public List<BookTagAJAXView> tags;
 
         @NotNull
         @Property(name = "status")

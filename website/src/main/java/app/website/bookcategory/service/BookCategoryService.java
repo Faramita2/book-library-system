@@ -1,6 +1,5 @@
 package app.website.bookcategory.service;
 
-import app.api.website.bookcategory.ListBookCategoryAJAXResponse;
 import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
 import app.book.api.CategoryWebService;
@@ -27,20 +26,6 @@ public class BookCategoryService {
         response.total = searchCategoryResponse.total;
         response.categories = searchCategoryResponse.categories.stream().map(category -> {
             SearchBookCategoryAJAXResponse.Category view = new SearchBookCategoryAJAXResponse.Category();
-            view.id = category.id;
-            view.name = category.name;
-            return view;
-        }).collect(Collectors.toList());
-
-        return response;
-    }
-
-    public ListBookCategoryAJAXResponse list() {
-        ListBookCategoryAJAXResponse response = new ListBookCategoryAJAXResponse();
-        ListCategoryResponse listCategoryResponse = categoryWebService.list();
-        response.total = listCategoryResponse.total;
-        response.categories = listCategoryResponse.categories.stream().map(category -> {
-            ListBookCategoryAJAXResponse.Category view = new ListBookCategoryAJAXResponse.Category();
             view.id = category.id;
             view.name = category.name;
             return view;

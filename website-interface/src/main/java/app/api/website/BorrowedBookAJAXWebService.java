@@ -1,7 +1,7 @@
 package app.api.website;
 
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXRequest;
-import app.api.website.borrowedbook.SearchBorrowedBookAJAXResponse;
+import app.api.website.book.SearchBorrowedBookAJAXRequest;
+import app.api.website.book.SearchBorrowedBookAJAXResponse;
 import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 
@@ -9,7 +9,4 @@ import core.framework.api.web.service.Path;
  * @author meow
  */
 public interface BorrowedBookAJAXWebService {
-    @PUT
-    @Path("/ajax/borrow-book")
-    SearchBorrowedBookAJAXResponse search(SearchBorrowedBookAJAXRequest request);
 }

@@ -1,6 +1,6 @@
 package app.api.website;
 
-import app.api.website.book.BorrowBookAJAXRequest;
+import app.api.website.borrowrecord.BorrowBookAJAXRequest;
 import core.framework.api.web.service.POST;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;

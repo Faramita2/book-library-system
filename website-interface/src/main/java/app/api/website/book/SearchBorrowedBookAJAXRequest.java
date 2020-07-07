@@ -1,4 +1,4 @@
-package app.api.website.borrowedbook;
+package app.api.website.book;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.Length;

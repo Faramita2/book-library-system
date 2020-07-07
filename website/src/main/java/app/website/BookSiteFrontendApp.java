@@ -1,9 +1,11 @@
 package app.website;
 
+import app.api.authentication.AuthenticationWebService;
 import app.book.api.AuthorWebService;
 import app.book.api.BookWebService;
 import app.book.api.CategoryWebService;
 import app.book.api.TagWebService;
+import app.borrowrecord.api.BorrowRecordWebService;
 import app.notification.api.NotificationWebService;
 import app.user.api.UserWebService;
 import core.framework.module.App;
@@ -29,16 +31,18 @@ public class BookSiteFrontendApp extends App {
         load(new BookTagModule());
         load(new BookModule());
         load(new NotificationModule());
-        load(new BorrowedBookModule());
+        load(new BorrowRecordModule());
     }
 
     private void apiClients() {
         api().client(UserWebService.class, requiredProperty("app.user.ServiceURL"));
         api().client(AuthorWebService.class, requiredProperty("app.book.ServiceURL"));
+        api().client(AuthenticationWebService.class, requiredProperty("app.authentication.ServiceURL"));
         api().client(CategoryWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(TagWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(NotificationWebService.class, requiredProperty("app.notification.ServiceURL"));
+        api().client(BorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
     }
 
     private void sys() {
