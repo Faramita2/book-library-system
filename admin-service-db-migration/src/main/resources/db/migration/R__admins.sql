@@ -10,30 +10,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
     UNIQUE INDEX `account_index`(`account` ASC)
 );
 
----- rename columns `created_at`, `updated_at`
-
-set @columnExisting := (
-    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'admins' AND COLUMN_NAME = 'created_at'
-);
-
-set @sqlStmt := if(
-    @columnExisting > 0,
-    'ALTER TABLE admins RENAME COLUMN created_at TO created_time;',
-    "SELECT 'INFO: Column NOT exists.'"
-);
-
-PREPARE stmt FROM @sqlStmt;
-EXECUTE stmt;
-
-set @columnExisting := (
-    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'admins' AND COLUMN_NAME = 'updated_at'
-);
-
-set @sqlStmt := if(
-    @columnExisting > 0,
-    'ALTER TABLE admins RENAME COLUMN updated_at TO updated_time;',
-    "SELECT 'INFO: Column NOT exists.'"
-);
-
-PREPARE stmt FROM @sqlStmt;
-EXECUTE stmt;
+INSERT IGNORE INTO `admins`
+    (`account`, `password`, `salt`, `created_time`, `updated_time`, `created_by`, `updated_by`)
+VALUES
+    ('admin','rxHURjEixmKPk5EP971Hqw==','2Cc2SC9d+Jx7o38FrCU4lQ==', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'default','default');
