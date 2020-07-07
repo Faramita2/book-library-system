@@ -46,7 +46,6 @@ public class AuthenticationService {
 
         LoginResponse response = new LoginResponse();
         response.id = getUserByUsernameResponse.id;
-        response.username = getUserByUsernameResponse.username;
         response.email = getUserByUsernameResponse.email;
         response.status = LoginResponse.UserStatusView.valueOf(getUserByUsernameResponse.status.name());
 
@@ -75,7 +74,7 @@ public class AuthenticationService {
             byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
             passwordHash = Base64.getEncoder().encodeToString(encoded);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.info("hash password error, message = {}", e.getMessage());
+            logger.error("hash password error, message = {}", e.getMessage());
         }
 
         return passwordHash;

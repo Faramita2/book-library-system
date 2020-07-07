@@ -14,7 +14,7 @@ import core.framework.module.SystemModule;
 /**
  * @author meow
  */
-public class BookSiteFrontendApp extends App {
+public class WebsiteApp extends App {
     @Override
     protected void initialize() {
         sys();

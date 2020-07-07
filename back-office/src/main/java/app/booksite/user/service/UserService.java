@@ -42,6 +42,7 @@ public class UserService {
         boCreateUserRequest.password = request.password;
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
         boCreateUserRequest.requestedBy = getAdminAccount();
+
         userWebService.create(boCreateUserRequest);
     }
 
@@ -93,6 +94,7 @@ public class UserService {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.ACTIVE;
         boUpdateUserRequest.requestedBy = getAdminAccount();
+
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.ACTIVE.name());
     }
@@ -101,11 +103,12 @@ public class UserService {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.INACTIVE;
         boUpdateUserRequest.requestedBy = getAdminAccount();
+
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.INACTIVE.name());
     }
 
     private String getAdminAccount() {
-        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("You need login first."));
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

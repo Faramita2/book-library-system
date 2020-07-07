@@ -15,7 +15,7 @@ public class BOSearchUserRequest {
     @Property(name = "ids")
     public List<Long> ids;
 
-    @Length(max = 50)
+    @Length(max = 30)
     @Property(name = "username")
     public String username;
 

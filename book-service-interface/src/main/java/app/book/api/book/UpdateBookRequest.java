@@ -5,14 +5,14 @@ import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * @author zoo
  */
 public class UpdateBookRequest {
-    @Property(name = "user_id")
-    @NotNull
-    public Long userId;
+    @Property(name = "borrow_user_id")
+    public Long borrowUserId;
 
     @NotNull
     @Property(name = "status")
@@ -20,6 +20,9 @@ public class UpdateBookRequest {
 
     @Property(name = "return_date")
     public LocalDate returnDate;
+
+    @Property(name = "borrowed_time")
+    public LocalDateTime borrowedTime;
 
     @NotNull
     @NotBlank

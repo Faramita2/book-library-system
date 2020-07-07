@@ -25,9 +25,8 @@ public class AuthInterceptor implements Interceptor {
         SkipLogin pass = invocation.annotation(SkipLogin.class);
         if (pass == null) {
             Session session = invocation.context().request().session();
-            String userId = session.get("user_id").orElseThrow(() -> new UnauthorizedException("You need login first."));
-            String userStatus = redis.get((Strings.format("users:{}:status", userId)));
-
+            String userId = session.get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
+            String userStatus = redis.get(Strings.format("users:{}:status", userId));
             if (userStatus == null || !userStatus.equals(UserStatusAJAXView.ACTIVE.name())) {
                 throw new UnauthorizedException("Your account is inactive.");
             }

@@ -115,11 +115,10 @@ public class BookService {
     public void update(Long id, UpdateBookRequest request) {
         Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
         book.status = BookStatus.valueOf(request.status.name());
-        book.borrowUserId = request.userId;
-        LocalDateTime now = LocalDateTime.now();
-        book.borrowedTime = now;
+        book.borrowUserId = request.borrowUserId;
+        book.borrowedTime = request.borrowedTime;
         book.returnDate = request.returnDate;
-        book.updatedTime = now;
+        book.updatedTime = LocalDateTime.now();
         book.updatedBy = request.requestedBy;
 
         bookRepository.update(book);

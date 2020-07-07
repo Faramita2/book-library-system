@@ -134,7 +134,7 @@ public class BorrowRecordService {
 
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {
         List<Bson> filters = Lists.newArrayList();
-        filters.add(eq("borrow_user_id", request.borrowUserId));
+        filters.add(eq("user.id", request.borrowUserId));
         optionalQuery(request, filters);
 
         Query query = new Query();

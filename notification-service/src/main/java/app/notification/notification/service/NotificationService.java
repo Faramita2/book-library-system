@@ -11,7 +11,9 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.util.Strings;
+import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
+import core.framework.web.exception.UnauthorizedException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -80,8 +82,12 @@ public class NotificationService {
     }
 
     public void delete(Long id, DeleteNotificationRequest request) {
-        repository.selectOne("id = ? AND user_id = ?", id, request.userId).orElseThrow(() ->
+        Notification notification = repository.selectOne("id = ?", id).orElseThrow(() ->
             new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
+        if (!notification.userId.equals(request.userId)) {
+            throw new ForbiddenException("You cannot do this.");
+        }
+
         repository.delete(id);
     }
 

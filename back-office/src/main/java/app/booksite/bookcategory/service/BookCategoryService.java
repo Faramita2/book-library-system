@@ -30,6 +30,7 @@ public class BookCategoryService {
         boSearchCategoryRequest.limit = request.limit;
         boSearchCategoryRequest.name = request.name;
         BOSearchCategoryResponse boSearchCategoryResponse = boCategoryWebService.search(boSearchCategoryRequest);
+
         SearchBookCategoryAJAXResponse response = new SearchBookCategoryAJAXResponse();
         response.total = boSearchCategoryResponse.total;
         response.categories = boSearchCategoryResponse.categories.stream().map(category -> {
@@ -46,6 +47,7 @@ public class BookCategoryService {
         BOCreateCategoryRequest boCreateCategoryRequest = new BOCreateCategoryRequest();
         boCreateCategoryRequest.name = request.name;
         boCreateCategoryRequest.requestedBy = adminAccount();
+
         boCategoryWebService.create(boCreateCategoryRequest);
     }
 
@@ -53,6 +55,7 @@ public class BookCategoryService {
         BOUpdateCategoryRequest boUpdateCategoryRequest = new BOUpdateCategoryRequest();
         boUpdateCategoryRequest.name = request.name;
         boUpdateCategoryRequest.requestedBy = adminAccount();
+
         boCategoryWebService.update(id, boUpdateCategoryRequest);
     }
 

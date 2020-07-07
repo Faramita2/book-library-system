@@ -27,5 +27,4 @@ public class SearchNotificationRequest {
     @Max(1000)
     @Property(name = "limit")
     public Integer limit;
-
 }

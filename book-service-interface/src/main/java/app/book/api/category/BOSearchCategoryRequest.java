@@ -16,9 +16,6 @@ public class BOSearchCategoryRequest {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "ids")
-    public List<Long> ids;
-
     @NotNull
     @Min(0)
     @Property(name = "skip")

@@ -22,6 +22,7 @@ public class BookCategoryService {
         searchCategoryRequest.limit = request.limit;
         searchCategoryRequest.name = request.name;
         SearchCategoryResponse searchCategoryResponse = categoryWebService.search(searchCategoryRequest);
+
         SearchBookCategoryAJAXResponse response = new SearchBookCategoryAJAXResponse();
         response.total = searchCategoryResponse.total;
         response.categories = searchCategoryResponse.categories.stream().map(category -> {

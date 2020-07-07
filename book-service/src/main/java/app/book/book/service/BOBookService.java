@@ -64,8 +64,8 @@ public class BOBookService {
         try (Transaction transaction = database.beginTransaction()) {
             Long id = bookRepository.insert(book).orElseThrow();
             insertBookAuthors(id, request.authorIds);
-            insertBookTags(id, request.tagIds);
             insertBookCategories(id, request.categoryIds);
+            insertBookTags(id, request.tagIds);
             transaction.commit();
         }
     }

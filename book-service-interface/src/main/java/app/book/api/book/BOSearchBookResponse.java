@@ -55,8 +55,5 @@ public class BOSearchBookResponse {
 
         @Property(name = "return_date")
         public LocalDate returnDate;
-
-        @Property(name = "actual_return_date")
-        public LocalDate actualReturnDate;
     }
 }

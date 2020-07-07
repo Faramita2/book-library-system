@@ -1,6 +1,7 @@
 package app.booksite;
 
 import app.api.admin.BOAdminWebService;
+import app.api.authentication.BOAuthenticationWebService;
 import app.book.api.BOAuthorWebService;
 import app.book.api.BOBookWebService;
 import app.book.api.BOCategoryWebService;
@@ -13,7 +14,7 @@ import core.framework.module.SystemModule;
 /**
  * @author zoo
  */
-public class BookSiteApp extends App {
+public class BackOfficeApp extends App {
     @Override
     protected void initialize() {
         sys();
@@ -35,6 +36,7 @@ public class BookSiteApp extends App {
 
     private void apiClients() {
         api().client(BOAdminWebService.class, requiredProperty("app.admin.ServiceURL"));
+        api().client(BOAuthenticationWebService.class, requiredProperty("app.authentication.ServiceURL"));
         api().client(BOAuthorWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOBookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));

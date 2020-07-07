@@ -12,7 +12,7 @@ import core.framework.api.validate.Pattern;
 public class CreateUserAJAXRequest {
     @NotNull
     @NotBlank
-    @Length(min = 6, max = 50)
+    @Length(min = 6, max = 30)
     @Property(name = "username")
     public String username;
 
@@ -25,7 +25,7 @@ public class CreateUserAJAXRequest {
 
     @NotNull
     @NotBlank
-    @Length(min = 6)
+    @Length(min = 6, max = 30)
     @Property(name = "password")
     public String password;
 

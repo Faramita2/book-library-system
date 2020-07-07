@@ -30,7 +30,7 @@ public class BOCategoryService {
         category.createdBy = request.requestedBy;
         category.updatedBy = request.requestedBy;
 
-        repository.insert(category).orElseThrow();
+        repository.insert(category);
     }
 
     public BOSearchCategoryResponse search(BOSearchCategoryRequest request) {
@@ -61,6 +61,7 @@ public class BOCategoryService {
         category.name = request.name;
         category.updatedBy = request.requestedBy;
         category.updatedTime = LocalDateTime.now();
+
         repository.partialUpdate(category);
     }
 

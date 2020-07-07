@@ -11,7 +11,7 @@ import core.framework.api.validate.NotNull;
 public class ResetUserPasswordRequest {
     @NotNull
     @NotBlank
-    @Length(min = 6)
+    @Length(min = 6, max = 30)
     @Property(name = "password")
     public String password;
 

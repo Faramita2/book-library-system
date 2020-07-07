@@ -30,6 +30,7 @@ public class BookTagService {
         boSearchTagRequest.limit = request.limit;
         boSearchTagRequest.name = request.name;
         BOSearchTagResponse boSearchTagResponse = boTagWebService.search(boSearchTagRequest);
+
         SearchBookTagAJAXResponse response = new SearchBookTagAJAXResponse();
         response.total = boSearchTagResponse.total;
         response.tags = boSearchTagResponse.tags.stream().map(tag -> {
@@ -46,6 +47,7 @@ public class BookTagService {
         BOCreateTagRequest boCreateTagRequest = new BOCreateTagRequest();
         boCreateTagRequest.name = request.name;
         boCreateTagRequest.requestedBy = adminAccount();
+
         boTagWebService.create(boCreateTagRequest);
     }
 
@@ -53,6 +55,7 @@ public class BookTagService {
         BOUpdateTagRequest boUpdateTagRequest = new BOUpdateTagRequest();
         boUpdateTagRequest.name = request.name;
         boUpdateTagRequest.requestedBy = adminAccount();
+
         boTagWebService.update(id, boUpdateTagRequest);
     }
 

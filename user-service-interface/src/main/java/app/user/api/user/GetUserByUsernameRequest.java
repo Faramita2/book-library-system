@@ -11,7 +11,7 @@ import core.framework.api.web.service.QueryParam;
 public class GetUserByUsernameRequest {
     @NotNull
     @NotBlank
-    @Length(max = 50)
+    @Length(max = 30)
     @QueryParam(name = "username")
     public String username;
 }

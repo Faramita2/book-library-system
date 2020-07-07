@@ -16,18 +16,18 @@ public class SearchBookAJAXRequest {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "tag_ids")
-    public List<Long> tagIds;
-
     @Length(max = 255)
     @Property(name = "description")
     public String description;
 
+    @Property(name = "author_ids")
+    public List<Long> authorIds;
+
     @Property(name = "category_ids")
     public List<Long> categoryIds;
 
-    @Property(name = "author_ids")
-    public List<Long> authorIds;
+    @Property(name = "tag_ids")
+    public List<Long> tagIds;
 
     @NotNull
     @Min(0)

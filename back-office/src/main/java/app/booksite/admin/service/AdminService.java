@@ -23,6 +23,10 @@ public class AdminService {
         BOLoginResponse boLoginResponse = boAuthenticationWebService.login(boLoginRequest);
 
         webContext.request().session().set("admin_id", String.valueOf(boLoginResponse.id));
-        webContext.request().session().set("admin_account", boLoginResponse.account);
+        webContext.request().session().set("admin_account", request.account);
+    }
+
+    public void logout() {
+        webContext.request().session().invalidate();
     }
 }

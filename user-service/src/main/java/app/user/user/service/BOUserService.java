@@ -97,8 +97,7 @@ public class BOUserService {
     }
 
     public void update(Long id, BOUpdateUserRequest request) {
-        User user = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();

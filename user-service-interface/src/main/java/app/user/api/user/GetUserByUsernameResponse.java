@@ -14,14 +14,8 @@ public class GetUserByUsernameResponse {
 
     @NotNull
     @NotBlank
-    @Property(name = "username")
-    public String username;
-
-    @NotNull
-    @NotBlank
     @Property(name = "email")
     public String email;
-
 
     @NotNull
     @NotBlank

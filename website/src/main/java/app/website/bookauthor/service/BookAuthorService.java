@@ -21,9 +21,9 @@ public class BookAuthorService {
         searchAuthorRequest.skip = request.skip;
         searchAuthorRequest.limit = request.limit;
         searchAuthorRequest.name = request.name;
+        SearchAuthorResponse searchAuthorResponse = authorWebService.search(searchAuthorRequest);
 
         SearchBookAuthorAJAXResponse response = new SearchBookAuthorAJAXResponse();
-        SearchAuthorResponse searchAuthorResponse = authorWebService.search(searchAuthorRequest);
         response.total = searchAuthorResponse.total;
         response.authors = searchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();

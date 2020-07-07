@@ -63,6 +63,7 @@ public class UserService {
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
         hashPassword(user, request.password);
+
         repository.partialUpdate(user);
     }
 

@@ -74,7 +74,7 @@ public class NotificationService {
 
     private Long userId() {
         String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return Long.parseLong(userId);
+        return Long.valueOf(userId);
     }
 
     private String username() {

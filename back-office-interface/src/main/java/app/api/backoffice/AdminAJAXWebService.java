@@ -11,4 +11,8 @@ public interface AdminAJAXWebService {
     @PUT
     @Path("/ajax/login")
     void login(LoginAJAXRequest request);
+
+    @PUT
+    @Path("/ajax/logout")
+    void logout();
 }

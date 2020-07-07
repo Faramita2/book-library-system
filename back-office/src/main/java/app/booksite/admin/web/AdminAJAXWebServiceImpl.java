@@ -19,4 +19,9 @@ public class AdminAJAXWebServiceImpl implements AdminAJAXWebService {
         ActionLogContext.put("account", request.account);
         service.login(request);
     }
+
+    @Override
+    public void logout() {
+        service.logout();
+    }
 }

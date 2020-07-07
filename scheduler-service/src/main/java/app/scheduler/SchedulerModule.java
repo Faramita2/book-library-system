@@ -13,6 +13,6 @@ public class SchedulerModule extends Module {
     @Override
     protected void initialize() {
         kafka().publish("return-borrowed-book", ReturnBorrowedBookMessage.class);
-        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnBorrowRecordJob.class), LocalTime.of(23, 59));
+        schedule().dailyAt("find-need-return-record", bind(FindNeedReturnBorrowRecordJob.class), LocalTime.of(23, 30));
     }
 }

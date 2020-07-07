@@ -29,9 +29,9 @@ public class BookAuthorService {
         boSearchAuthorRequest.skip = request.skip;
         boSearchAuthorRequest.limit = request.limit;
         boSearchAuthorRequest.name = request.name;
+        BOSearchAuthorResponse boSearchAuthorResponse = boAuthorWebService.search(boSearchAuthorRequest);
 
         SearchBookAuthorAJAXResponse response = new SearchBookAuthorAJAXResponse();
-        BOSearchAuthorResponse boSearchAuthorResponse = boAuthorWebService.search(boSearchAuthorRequest);
         response.total = boSearchAuthorResponse.total;
         response.authors = boSearchAuthorResponse.authors.stream().map(author -> {
             SearchBookAuthorAJAXResponse.Author view = new SearchBookAuthorAJAXResponse.Author();
@@ -47,6 +47,7 @@ public class BookAuthorService {
         BOCreateAuthorRequest boCreateAuthorRequest = new BOCreateAuthorRequest();
         boCreateAuthorRequest.name = request.name;
         boCreateAuthorRequest.requestedBy = adminAccount();
+
         boAuthorWebService.create(boCreateAuthorRequest);
     }
 
@@ -54,6 +55,7 @@ public class BookAuthorService {
         BOUpdateAuthorRequest boUpdateAuthorRequest = new BOUpdateAuthorRequest();
         boUpdateAuthorRequest.name = request.name;
         boUpdateAuthorRequest.requestedBy = adminAccount();
+
         boAuthorWebService.update(id, boUpdateAuthorRequest);
     }
 

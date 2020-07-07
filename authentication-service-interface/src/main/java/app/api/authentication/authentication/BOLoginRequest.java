@@ -10,7 +10,7 @@ import core.framework.api.validate.NotNull;
 public class BOLoginRequest {
     @NotNull
     @NotBlank
-    @Property(name = "username")
+    @Property(name = "account")
     public String account;
 
     @NotNull

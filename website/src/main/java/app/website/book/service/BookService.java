@@ -49,13 +49,12 @@ public class BookService {
         searchBookRequest.tagIds = request.tagIds;
         searchBookRequest.authorIds = request.authorIds;
         searchBookRequest.categoryIds = request.categoryIds;
-
         if (request.status != null) {
             searchBookRequest.status = BookStatusView.valueOf(request.status.name());
         }
         SearchBookResponse searchBookResponse = bookWebService.search(searchBookRequest);
-        SearchBookAJAXResponse response = new SearchBookAJAXResponse();
 
+        SearchBookAJAXResponse response = new SearchBookAJAXResponse();
         response.total = searchBookResponse.total;
         response.books = searchBookResponse.books.stream().map(book -> {
             SearchBookAJAXResponse.Book view = new SearchBookAJAXResponse.Book();
@@ -74,8 +73,8 @@ public class BookService {
 
     public GetBookAJAXResponse get(Long id) {
         GetBookResponse getBookResponse = bookWebService.get(id);
-        GetBookAJAXResponse response = new GetBookAJAXResponse();
 
+        GetBookAJAXResponse response = new GetBookAJAXResponse();
         response.id = getBookResponse.id;
         response.name = getBookResponse.name;
         response.description = getBookResponse.description;
@@ -163,7 +162,6 @@ public class BookService {
 
     private Long userId() {
         String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-
-        return Long.parseLong(userId);
+        return Long.valueOf(userId);
     }
 }

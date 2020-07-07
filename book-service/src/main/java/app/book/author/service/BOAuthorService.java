@@ -29,7 +29,7 @@ public class BOAuthorService {
         author.createdBy = request.requestedBy;
         author.updatedBy = request.requestedBy;
 
-        repository.insert(author).orElseThrow();
+        repository.insert(author);
     }
 
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
@@ -55,17 +55,16 @@ public class BOAuthorService {
     }
 
     public void update(Long id, BOUpdateAuthorRequest request) {
-        Author author = repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        Author author = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         author.name = request.name;
         author.updatedBy = request.requestedBy;
         author.updatedTime = LocalDateTime.now();
+
         repository.partialUpdate(author);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         repository.delete(id);
     }
 }

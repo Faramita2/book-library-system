@@ -11,9 +11,4 @@ public class BOLoginResponse {
     @NotNull
     @Property(name = "id")
     public Long id;
-
-    @NotNull
-    @NotBlank
-    @Property(name = "account")
-    public String account;
 }

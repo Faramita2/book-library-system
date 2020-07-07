@@ -15,7 +15,7 @@ import core.framework.web.WebContext;
 /**
  * @author meow
  */
-public class AuthenticationService {
+public class UserService {
     @Inject
     AuthenticationWebService authenticationWebService;
     @Inject
@@ -28,10 +28,10 @@ public class AuthenticationService {
         loginRequest.username = request.username;
         loginRequest.password = request.password;
         LoginResponse loginResponse = authenticationWebService.login(loginRequest);
-        Session session = webContext.request().session();
 
+        Session session = webContext.request().session();
         session.set("user_id", String.valueOf(loginResponse.id));
-        session.set("username", loginResponse.username);
+        session.set("username", request.username);
         session.set("email", loginResponse.email);
         session.set("user_status", loginResponse.status.name());
 

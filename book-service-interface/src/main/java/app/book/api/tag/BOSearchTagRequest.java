@@ -16,9 +16,6 @@ public class BOSearchTagRequest {
     @Property(name = "name")
     public String name;
 
-    @Property(name = "ids")
-    public List<Long> ids;
-
     @NotNull
     @Property(name = "skip")
     @Min(0)

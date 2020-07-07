@@ -35,7 +35,6 @@ public class BOAuthenticationService {
 
         BOLoginResponse response = new BOLoginResponse();
         response.id = boGetAdminByAccountResponse.id;
-        response.account = boGetAdminByAccountResponse.account;
 
         return response;
     }
@@ -50,7 +49,7 @@ public class BOAuthenticationService {
             byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
             passwordHash = Base64.getEncoder().encodeToString(encoded);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.info("hash password error, message = {}", e.getMessage());
+            logger.error("hash password error, message = {}", e.getMessage());
         }
 
         return passwordHash;

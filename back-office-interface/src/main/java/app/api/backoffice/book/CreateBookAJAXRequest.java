@@ -19,15 +19,15 @@ public class CreateBookAJAXRequest {
     public String name;
 
     @NotNull
-    @Size(min = 1)
-    @Property(name = "tag_ids")
-    public List<Long> tagIds;
-
-    @NotNull
     @NotBlank
     @Length(max = 255)
     @Property(name = "description")
     public String description;
+
+    @NotNull
+    @Size(min = 1)
+    @Property(name = "author_ids")
+    public List<Long> authorIds;
 
     @NotNull
     @Size(min = 1)
@@ -36,6 +36,6 @@ public class CreateBookAJAXRequest {
 
     @NotNull
     @Size(min = 1)
-    @Property(name = "author_ids")
-    public List<Long> authorIds;
+    @Property(name = "tag_ids")
+    public List<Long> tagIds;
 }

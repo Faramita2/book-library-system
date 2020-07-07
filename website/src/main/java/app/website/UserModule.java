@@ -1,7 +1,7 @@
 package app.website;
 
 import app.api.website.UserAJAXWebService;
-import app.website.user.service.AuthenticationService;
+import app.website.user.service.UserService;
 import app.website.user.web.AuthInterceptor;
 import app.website.user.web.AuthenticationAJAXWebServiceImpl;
 import core.framework.module.Module;
@@ -23,6 +23,6 @@ public class UserModule extends Module {
     }
 
     private void services() {
-        bind(AuthenticationService.class);
+        bind(UserService.class);
     }
 }

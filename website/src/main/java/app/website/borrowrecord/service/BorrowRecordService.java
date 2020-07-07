@@ -48,7 +48,7 @@ public class BorrowRecordService {
         borrowRecordWebService.create(createBorrowRecordRequest);
 
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
-        updateBookRequest.userId = userId();
+        updateBookRequest.borrowUserId = userId();
         updateBookRequest.status = BookStatusView.BORROWED;
         updateBookRequest.returnDate = request.returnDate;
         updateBookRequest.requestedBy = username();
@@ -61,8 +61,9 @@ public class BorrowRecordService {
             throw new ForbiddenException("You cannot do this.");
         }
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
-        updateBookRequest.userId = null;
+        updateBookRequest.borrowUserId = null;
         updateBookRequest.status = BookStatusView.AVAILABLE;
+        updateBookRequest.borrowedTime = null;
         updateBookRequest.returnDate = null;
         updateBookRequest.requestedBy = username();
         bookWebService.update(getBorrowRecordResponse.bookId, updateBookRequest);
@@ -96,7 +97,7 @@ public class BorrowRecordService {
 
     private Long userId() {
         String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return Long.parseLong(userId);
+        return Long.valueOf(userId);
     }
 
     private String username() {

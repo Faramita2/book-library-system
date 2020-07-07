@@ -22,6 +22,7 @@ public class BookTagService {
         searchTagRequest.limit = request.limit;
         searchTagRequest.name = request.name;
         SearchTagResponse searchTagResponse = tagWebService.search(searchTagRequest);
+
         SearchBookTagAJAXResponse response = new SearchBookTagAJAXResponse();
         response.total = searchTagResponse.total;
         response.tags = searchTagResponse.tags.stream().map(tag -> {

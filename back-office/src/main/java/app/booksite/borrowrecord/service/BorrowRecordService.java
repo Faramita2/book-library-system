@@ -25,8 +25,8 @@ public class BorrowRecordService {
         boSearchBorrowRecordRequest.bookId = request.bookId;
         boSearchBorrowRecordRequest.skip = request.skip;
         boSearchBorrowRecordRequest.limit = request.limit;
-
         BOSearchBorrowRecordResponse boSearchBorrowRecordResponse = borrowRecordWebService.search(boSearchBorrowRecordRequest);
+
         SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
         response.total = boSearchBorrowRecordResponse.total;
         response.records = boSearchBorrowRecordResponse.records.stream().map(record -> {
@@ -51,6 +51,7 @@ public class BorrowRecordService {
             recordView.actualReturnDate = record.actualReturnDate;
             return recordView;
         }).collect(Collectors.toList());
+
         return response;
     }
 

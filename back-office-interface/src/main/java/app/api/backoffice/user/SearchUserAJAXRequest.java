@@ -11,7 +11,7 @@ import core.framework.api.validate.NotNull;
  * @author zoo
  */
 public class SearchUserAJAXRequest {
-    @Length(max = 50)
+    @Length(max = 30)
     @Property(name = "username")
     public String username;
 

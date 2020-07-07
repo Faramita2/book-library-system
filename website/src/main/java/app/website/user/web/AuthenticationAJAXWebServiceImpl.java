@@ -3,7 +3,7 @@ package app.website.user.web;
 import app.api.website.UserAJAXWebService;
 import app.api.website.user.LoginAJAXRequest;
 import app.api.website.user.ResetPasswordAJAXRequest;
-import app.website.user.service.AuthenticationService;
+import app.website.user.service.UserService;
 import core.framework.inject.Inject;
 
 /**
@@ -11,7 +11,7 @@ import core.framework.inject.Inject;
  */
 public class AuthenticationAJAXWebServiceImpl implements UserAJAXWebService {
     @Inject
-    AuthenticationService service;
+    UserService service;
 
     @SkipLogin
     @Override
