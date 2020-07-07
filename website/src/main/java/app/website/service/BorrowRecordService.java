@@ -14,10 +14,12 @@ import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import core.framework.inject.Inject;
 import core.framework.web.WebContext;
+import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.UnauthorizedException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +35,9 @@ public class BorrowRecordService {
 
     public void borrowBook(BorrowBookAJAXRequest request) {
         GetBookResponse getBookResponse = bookWebService.get(request.bookId);
+        if (getBookResponse.status != BookStatusView.AVAILABLE) {
+            throw new BadRequestException("cannot borrow this book!", "BOOK_BORROWED");
+        }
         CreateBorrowRecordRequest createBorrowRecordRequest = new CreateBorrowRecordRequest();
         createBorrowRecordRequest.bookId = getBookResponse.id;
         createBorrowRecordRequest.bookName = getBookResponse.name;
@@ -50,6 +55,7 @@ public class BorrowRecordService {
         updateBookRequest.borrowUserId = userId();
         updateBookRequest.status = BookStatusView.BORROWED;
         updateBookRequest.returnDate = request.returnDate;
+        updateBookRequest.borrowedTime = LocalDateTime.now();
         updateBookRequest.requestedBy = username();
         bookWebService.update(request.bookId, updateBookRequest);
     }
@@ -58,6 +64,9 @@ public class BorrowRecordService {
         GetBorrowRecordResponse getBorrowRecordResponse = borrowRecordWebService.get(id);
         if (!userId().equals(getBorrowRecordResponse.borrowUserId)) {
             throw new ForbiddenException("You cannot do this.");
+        }
+        if (getBorrowRecordResponse.actualReturnDate != null) {
+            throw new BadRequestException("book has been returned!", "BOOK_RETURNED");
         }
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
         updateBookRequest.borrowUserId = null;
