@@ -1,4 +1,4 @@
-package app.booksite.admin.web;
+package app.booksite.web;
 
 import app.api.backoffice.AdminAJAXWebService;
 import app.api.backoffice.admin.LoginAJAXRequest;

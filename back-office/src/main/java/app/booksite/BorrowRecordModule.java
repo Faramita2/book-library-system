@@ -2,7 +2,7 @@ package app.booksite;
 
 import app.api.backoffice.BorrowRecordAJAXWebService;
 import app.booksite.borrowrecord.service.BorrowRecordService;
-import app.booksite.borrowrecord.web.BorrowRecordAJAXWebServiceImpl;
+import app.booksite.web.BorrowRecordAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

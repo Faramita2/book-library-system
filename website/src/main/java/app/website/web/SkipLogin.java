@@ -1,4 +1,4 @@
-package app.website.user.web;
+package app.website.web;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

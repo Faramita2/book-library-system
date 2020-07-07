@@ -1,10 +1,10 @@
-package app.website.bookcategory.web;
+package app.website.web;
 
 import app.api.website.BookCategoryAJAXWebService;
 import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
 import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
 import app.website.bookcategory.service.BookCategoryService;
-import app.website.user.web.SkipLogin;
+import app.website.web.SkipLogin;
 import core.framework.inject.Inject;
 
 

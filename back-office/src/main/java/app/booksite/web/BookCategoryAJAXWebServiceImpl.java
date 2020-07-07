@@ -1,4 +1,4 @@
-package app.booksite.bookcategory.web;
+package app.booksite.web;
 
 import app.api.backoffice.BookCategoryAJAXWebService;
 import app.api.backoffice.bookcategory.CreateBookCategoryAJAXRequest;

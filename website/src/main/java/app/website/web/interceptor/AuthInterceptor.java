@@ -1,6 +1,7 @@
-package app.website.user.web;
+package app.website.web.interceptor;
 
 import app.api.website.user.UserStatusAJAXView;
+import app.website.web.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;

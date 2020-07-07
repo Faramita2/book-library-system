@@ -2,7 +2,7 @@ package app.booksite;
 
 import app.api.backoffice.BookAuthorAJAXWebService;
 import app.booksite.bookauthor.service.BookAuthorService;
-import app.booksite.bookauthor.web.BookAuthorAJAXWebServiceImpl;
+import app.booksite.web.BookAuthorAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

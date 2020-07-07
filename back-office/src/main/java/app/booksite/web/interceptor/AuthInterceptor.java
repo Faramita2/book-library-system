@@ -1,5 +1,6 @@
-package app.booksite.admin.web;
+package app.booksite.web.interceptor;
 
+import app.booksite.web.SkipLogin;
 import core.framework.web.Interceptor;
 import core.framework.web.Invocation;
 import core.framework.web.Response;

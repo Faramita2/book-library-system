@@ -1,4 +1,4 @@
-package app.booksite.booktag.web;
+package app.booksite.web;
 
 import app.api.backoffice.BookTagAJAXWebService;
 import app.api.backoffice.booktag.CreateBookTagAJAXRequest;

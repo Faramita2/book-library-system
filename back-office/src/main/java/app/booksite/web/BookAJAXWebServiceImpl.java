@@ -1,4 +1,4 @@
-package app.booksite.book.web;
+package app.booksite.web;
 
 import app.api.backoffice.BookAJAXWebService;
 import app.api.backoffice.book.CreateBookAJAXRequest;

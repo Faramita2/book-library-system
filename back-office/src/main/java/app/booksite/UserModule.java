@@ -2,7 +2,7 @@ package app.booksite;
 
 import app.api.backoffice.UserAJAXWebService;
 import app.booksite.user.service.UserService;
-import app.booksite.user.web.UserAJAXWebServiceImpl;
+import app.booksite.web.UserAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

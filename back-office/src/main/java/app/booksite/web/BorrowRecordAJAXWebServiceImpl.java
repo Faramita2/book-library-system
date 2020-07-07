@@ -1,4 +1,4 @@
-package app.booksite.borrowrecord.web;
+package app.booksite.web;
 
 import app.api.backoffice.BorrowRecordAJAXWebService;
 import app.api.backoffice.borrowrecord.SearchBorrowRecordAJAXRequest;

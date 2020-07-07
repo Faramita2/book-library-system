@@ -2,7 +2,7 @@ package app.website;
 
 import app.api.website.BookTagAJAXWebService;
 import app.website.booktag.service.BookTagService;
-import app.website.booktag.web.BookTagAJAXWebServiceImpl;
+import app.website.web.BookTagAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

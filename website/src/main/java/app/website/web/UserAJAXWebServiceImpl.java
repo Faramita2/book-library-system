@@ -1,4 +1,4 @@
-package app.website.user.web;
+package app.website.web;
 
 import app.api.website.UserAJAXWebService;
 import app.api.website.user.LoginAJAXRequest;
@@ -9,7 +9,7 @@ import core.framework.inject.Inject;
 /**
  * @author meow
  */
-public class AuthenticationAJAXWebServiceImpl implements UserAJAXWebService {
+public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Inject
     UserService service;
 

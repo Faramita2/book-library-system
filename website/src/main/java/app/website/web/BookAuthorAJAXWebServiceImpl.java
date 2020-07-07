@@ -1,4 +1,4 @@
-package app.website.bookauthor.web;
+package app.website.web;
 
 import app.api.website.BookAuthorAJAXWebService;
 import app.api.website.bookauthor.SearchBookAuthorAJAXRequest;

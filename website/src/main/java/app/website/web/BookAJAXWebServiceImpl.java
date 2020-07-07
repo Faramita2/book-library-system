@@ -1,4 +1,4 @@
-package app.website.book.web;
+package app.website.web;
 
 import app.api.website.BookAJAXWebService;
 import app.api.website.book.GetBookAJAXResponse;
@@ -7,7 +7,7 @@ import app.api.website.book.SearchBookAJAXResponse;
 import app.api.website.book.SearchBorrowedBookAJAXRequest;
 import app.api.website.book.SearchBorrowedBookAJAXResponse;
 import app.website.book.service.BookService;
-import app.website.user.web.SkipLogin;
+import app.website.web.SkipLogin;
 import core.framework.inject.Inject;
 
 /**

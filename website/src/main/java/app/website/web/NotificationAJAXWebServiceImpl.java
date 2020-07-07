@@ -1,4 +1,4 @@
-package app.website.notification.web;
+package app.website.web;
 
 import app.api.website.NotificationAJAXWebService;
 import app.api.website.notification.DeleteBatchNotificationAJAXRequest;

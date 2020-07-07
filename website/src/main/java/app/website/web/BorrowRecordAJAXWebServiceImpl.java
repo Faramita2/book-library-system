@@ -1,4 +1,4 @@
-package app.website.borrowrecord.web;
+package app.website.web;
 
 import app.api.website.BorrowRecordAJAXWebService;
 import app.api.website.borrowrecord.BorrowBookAJAXRequest;

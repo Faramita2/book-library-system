@@ -2,7 +2,7 @@ package app.website;
 
 import app.api.website.BookAJAXWebService;
 import app.website.book.service.BookService;
-import app.website.book.web.BookAJAXWebServiceImpl;
+import app.website.web.BookAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

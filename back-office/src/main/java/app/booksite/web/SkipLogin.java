@@ -1,4 +1,4 @@
-package app.booksite.admin.web;
+package app.booksite.web;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

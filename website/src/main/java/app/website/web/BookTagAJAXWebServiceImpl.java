@@ -1,10 +1,10 @@
-package app.website.booktag.web;
+package app.website.web;
 
 import app.api.website.BookTagAJAXWebService;
 import app.api.website.booktag.SearchBookTagAJAXRequest;
 import app.api.website.booktag.SearchBookTagAJAXResponse;
 import app.website.booktag.service.BookTagService;
-import app.website.user.web.SkipLogin;
+import app.website.web.SkipLogin;
 import core.framework.inject.Inject;
 
 /**

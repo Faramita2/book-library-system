@@ -2,8 +2,8 @@ package app.booksite;
 
 import app.api.backoffice.AdminAJAXWebService;
 import app.booksite.admin.service.AdminService;
-import app.booksite.admin.web.AdminAJAXWebServiceImpl;
-import app.booksite.admin.web.AuthInterceptor;
+import app.booksite.web.AdminAJAXWebServiceImpl;
+import app.booksite.web.interceptor.AuthInterceptor;
 import core.framework.module.Module;
 
 /**
