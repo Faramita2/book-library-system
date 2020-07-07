@@ -1,8 +1,8 @@
 package app.booksite;
 
 import app.api.backoffice.BookAJAXWebService;
-import app.booksite.book.service.BookService;
-import app.booksite.web.BookAJAXWebServiceImpl;
+import app.booksite.service.BookService;
+import app.booksite.api.BookAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

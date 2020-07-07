@@ -1,8 +1,8 @@
 package app.website;
 
 import app.api.website.NotificationAJAXWebService;
-import app.website.notification.service.NotificationService;
-import app.website.web.NotificationAJAXWebServiceImpl;
+import app.website.service.NotificationService;
+import app.website.api.NotificationAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**

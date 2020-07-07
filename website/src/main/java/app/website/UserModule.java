@@ -1,9 +1,9 @@
 package app.website;
 
 import app.api.website.UserAJAXWebService;
-import app.website.user.service.UserService;
+import app.website.service.UserService;
 import app.website.web.interceptor.AuthInterceptor;
-import app.website.web.UserAJAXWebServiceImpl;
+import app.website.api.UserAJAXWebServiceImpl;
 import core.framework.module.Module;
 
 /**
