@@ -9,6 +9,8 @@ import app.api.backoffice.book.UpdateBookAJAXRequest;
 import app.booksite.service.BookService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
+import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 /**
  * @author zoo
@@ -16,6 +18,8 @@ import core.framework.log.ActionLogContext;
 public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Inject
     BookService service;
+    @Inject
+    WebContext webContext;
 
     @Override
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
@@ -29,12 +33,16 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public void create(CreateBookAJAXRequest request) {
-        service.create(request);
+        service.create(request, adminAccount());
     }
 
     @Override
     public void update(Long id, UpdateBookAJAXRequest request) {
         ActionLogContext.put("id", id);
-        service.update(id, request);
+        service.update(id, request, adminAccount());
+    }
+
+    private String adminAccount() {
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

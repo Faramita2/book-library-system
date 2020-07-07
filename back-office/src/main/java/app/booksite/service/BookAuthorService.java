@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 public class BookAuthorService {
     @Inject
     BOAuthorWebService boAuthorWebService;
-    @Inject
-    WebContext webContext;
 
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
         BOSearchAuthorRequest boSearchAuthorRequest = new BOSearchAuthorRequest();
@@ -43,27 +41,23 @@ public class BookAuthorService {
         return response;
     }
 
-    public void create(CreateBookAuthorAJAXRequest request) {
+    public void create(CreateBookAuthorAJAXRequest request, String adminAccount) {
         BOCreateAuthorRequest boCreateAuthorRequest = new BOCreateAuthorRequest();
         boCreateAuthorRequest.name = request.name;
-        boCreateAuthorRequest.requestedBy = adminAccount();
+        boCreateAuthorRequest.requestedBy = adminAccount;
 
         boAuthorWebService.create(boCreateAuthorRequest);
     }
 
-    public void update(Long id, UpdateBookAuthorAJAXRequest request) {
+    public void update(Long id, UpdateBookAuthorAJAXRequest request, String adminAccount) {
         BOUpdateAuthorRequest boUpdateAuthorRequest = new BOUpdateAuthorRequest();
         boUpdateAuthorRequest.name = request.name;
-        boUpdateAuthorRequest.requestedBy = adminAccount();
+        boUpdateAuthorRequest.requestedBy = adminAccount;
 
         boAuthorWebService.update(id, boUpdateAuthorRequest);
     }
 
     public void delete(Long id) {
         boAuthorWebService.delete(id);
-    }
-
-    private String adminAccount() {
-        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

@@ -14,9 +14,7 @@ import core.framework.inject.Inject;
 import core.framework.redis.Redis;
 import core.framework.util.Randoms;
 import core.framework.util.Strings;
-import core.framework.web.WebContext;
 import core.framework.web.exception.TooManyRequestsException;
-import core.framework.web.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,17 +29,15 @@ public class UserService {
     @Inject
     BOUserWebService userWebService;
     @Inject
-    WebContext webContext;
-    @Inject
     Redis redis;
 
-    public void create(CreateUserAJAXRequest request) {
+    public void create(CreateUserAJAXRequest request, String adminAccount) {
         BOCreateUserRequest boCreateUserRequest = new BOCreateUserRequest();
         boCreateUserRequest.email = request.email;
         boCreateUserRequest.username = request.username;
         boCreateUserRequest.password = request.password;
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
-        boCreateUserRequest.requestedBy = getAdminAccount();
+        boCreateUserRequest.requestedBy = adminAccount;
 
         userWebService.create(boCreateUserRequest);
     }
@@ -71,7 +67,7 @@ public class UserService {
         return response;
     }
 
-    public void resetPassword(Long id) {
+    public void resetPassword(Long id, String hostName) {
         String userRequestTimesKey = Strings.format("user:{}:resetPassword", id);
         String currentRequestTimes = redis.get(userRequestTimesKey);
 
@@ -86,29 +82,24 @@ public class UserService {
         String token = Randoms.alphaNumeric(32);
         redis.set(token, String.valueOf(id), Duration.ofMinutes(30));
 
-        String hostName = webContext.request().hostName();
         logger.info("send email to user(id = {}) with reset password url: {}/user/reset-password?token={}?requested_by=email", id, hostName, token);
     }
 
-    public void active(Long id) {
+    public void active(Long id, String adminAccount) {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.ACTIVE;
-        boUpdateUserRequest.requestedBy = getAdminAccount();
+        boUpdateUserRequest.requestedBy = adminAccount;
 
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.ACTIVE.name());
     }
 
-    public void inactive(Long id) {
+    public void inactive(Long id, String adminAccount) {
         BOUpdateUserRequest boUpdateUserRequest = new BOUpdateUserRequest();
         boUpdateUserRequest.status = UserStatusView.INACTIVE;
-        boUpdateUserRequest.requestedBy = getAdminAccount();
+        boUpdateUserRequest.requestedBy = adminAccount;
 
         userWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.INACTIVE.name());
-    }
-
-    private String getAdminAccount() {
-        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

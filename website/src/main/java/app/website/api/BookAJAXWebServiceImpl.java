@@ -9,6 +9,8 @@ import app.api.website.book.SearchBorrowedBookAJAXResponse;
 import app.website.service.BookService;
 import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
+import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 /**
  * @author meow
@@ -16,6 +18,8 @@ import core.framework.inject.Inject;
 public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     @Inject
     BookService service;
+    @Inject
+    WebContext webContext;
 
     @SkipLogin
     @Override
@@ -31,6 +35,7 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public SearchBorrowedBookAJAXResponse searchBorrowedBook(SearchBorrowedBookAJAXRequest request) {
-        return service.searchBorrowedBook(request);
+        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
+        return service.searchBorrowedBook(request, Long.valueOf(userId));
     }
 }

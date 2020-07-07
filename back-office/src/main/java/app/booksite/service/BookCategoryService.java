@@ -10,8 +10,6 @@ import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
 import app.book.api.category.BOUpdateCategoryRequest;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.util.stream.Collectors;
 
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
 public class BookCategoryService {
     @Inject
     BOCategoryWebService boCategoryWebService;
-    @Inject
-    WebContext webContext;
 
     public SearchBookCategoryAJAXResponse search(SearchBookCategoryAJAXRequest request) {
         BOSearchCategoryRequest boSearchCategoryRequest = new BOSearchCategoryRequest();
@@ -43,27 +39,23 @@ public class BookCategoryService {
         return response;
     }
 
-    public void create(CreateBookCategoryAJAXRequest request) {
+    public void create(CreateBookCategoryAJAXRequest request, String adminAccount) {
         BOCreateCategoryRequest boCreateCategoryRequest = new BOCreateCategoryRequest();
         boCreateCategoryRequest.name = request.name;
-        boCreateCategoryRequest.requestedBy = adminAccount();
+        boCreateCategoryRequest.requestedBy = adminAccount;
 
         boCategoryWebService.create(boCreateCategoryRequest);
     }
 
-    public void update(Long id, UpdateBookCategoryAJAXRequest request) {
+    public void update(Long id, UpdateBookCategoryAJAXRequest request, String adminAccount) {
         BOUpdateCategoryRequest boUpdateCategoryRequest = new BOUpdateCategoryRequest();
         boUpdateCategoryRequest.name = request.name;
-        boUpdateCategoryRequest.requestedBy = adminAccount();
+        boUpdateCategoryRequest.requestedBy = adminAccount;
 
         boCategoryWebService.update(id, boUpdateCategoryRequest);
     }
 
     public void delete(Long id) {
         boCategoryWebService.delete(id);
-    }
-
-    private String adminAccount() {
-        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

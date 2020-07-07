@@ -33,8 +33,6 @@ public class BookService {
     BOBookWebService boBookWebService;
     @Inject
     BOUserWebService boUserWebService;
-    @Inject
-    WebContext webContext;
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         BOSearchBookRequest boSearchBookRequest = new BOSearchBookRequest();
@@ -83,26 +81,26 @@ public class BookService {
         return response;
     }
 
-    public void create(CreateBookAJAXRequest request) {
+    public void create(CreateBookAJAXRequest request, String adminAccount) {
         BOCreateBookRequest boCreateBookRequest = new BOCreateBookRequest();
         boCreateBookRequest.name = request.name;
         boCreateBookRequest.tagIds = request.tagIds;
         boCreateBookRequest.description = request.description;
         boCreateBookRequest.categoryIds = request.categoryIds;
         boCreateBookRequest.authorIds = request.authorIds;
-        boCreateBookRequest.requestedBy = adminAccount();
+        boCreateBookRequest.requestedBy = adminAccount;
 
         boBookWebService.create(boCreateBookRequest);
     }
 
-    public void update(Long id, UpdateBookAJAXRequest request) {
+    public void update(Long id, UpdateBookAJAXRequest request, String adminAccount) {
         BOUpdateBookRequest boUpdateBookRequest = new BOUpdateBookRequest();
         boUpdateBookRequest.name = request.name;
         boUpdateBookRequest.tagIds = request.tagIds;
         boUpdateBookRequest.description = request.description;
         boUpdateBookRequest.categoryIds = request.categoryIds;
         boUpdateBookRequest.authorIds = request.authorIds;
-        boUpdateBookRequest.requestedBy = adminAccount();
+        boUpdateBookRequest.requestedBy = adminAccount;
 
         boBookWebService.update(id, boUpdateBookRequest);
     }
@@ -126,9 +124,5 @@ public class BookService {
         bookTagAJAXView.id = tag.id;
         bookTagAJAXView.name = tag.name;
         return bookTagAJAXView;
-    }
-
-    private String adminAccount() {
-        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

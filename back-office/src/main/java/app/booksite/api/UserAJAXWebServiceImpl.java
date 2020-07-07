@@ -8,6 +8,8 @@ import app.booksite.service.UserService;
 import app.booksite.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
+import core.framework.web.WebContext;
+import core.framework.web.exception.UnauthorizedException;
 
 /**
  * @author meow
@@ -15,10 +17,12 @@ import core.framework.log.ActionLogContext;
 public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Inject
     UserService service;
+    @Inject
+    WebContext webContext;
 
     @Override
     public void create(CreateUserAJAXRequest request) {
-        service.create(request);
+        service.create(request, adminAccount());
     }
 
     @Override
@@ -29,19 +33,24 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public void active(Long id) {
         ActionLogContext.put("id", id);
-        service.active(id);
+        service.active(id, adminAccount());
     }
 
     @Override
     public void inactive(Long id) {
         ActionLogContext.put("id", id);
-        service.inactive(id);
+        service.inactive(id, adminAccount());
     }
 
     @SkipLogin
     @Override
     public void resetPassword(Long id) {
         ActionLogContext.put("id", id);
-        service.resetPassword(id);
+        String hostName = webContext.request().hostName();
+        service.resetPassword(id, hostName);
+    }
+
+    private String adminAccount() {
+        return webContext.request().session().get("admin_account").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

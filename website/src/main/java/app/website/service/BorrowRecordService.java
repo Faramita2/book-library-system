@@ -13,10 +13,8 @@ import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ForbiddenException;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,10 +28,8 @@ public class BorrowRecordService {
     BookWebService bookWebService;
     @Inject
     BorrowRecordWebService borrowRecordWebService;
-    @Inject
-    WebContext webContext;
 
-    public void borrowBook(BorrowBookAJAXRequest request) {
+    public void borrowBook(BorrowBookAJAXRequest request, Long userId, String username) {
         GetBookResponse getBookResponse = bookWebService.get(request.bookId);
         if (getBookResponse.status != BookStatusView.AVAILABLE) {
             throw new BadRequestException("cannot borrow this book!", "BOOK_BORROWED");
@@ -45,24 +41,24 @@ public class BorrowRecordService {
         createBorrowRecordRequest.authors = getBookResponse.authors.stream().map(this::getAuthorView).collect(Collectors.toList());
         createBorrowRecordRequest.categories = getBookResponse.categories.stream().map(this::getCategoryView).collect(Collectors.toList());
         createBorrowRecordRequest.tags = getBookResponse.tags.stream().map(this::getTagView).collect(Collectors.toList());
-        createBorrowRecordRequest.borrowUserId = userId();
-        createBorrowRecordRequest.borrowUsername = username();
+        createBorrowRecordRequest.borrowUserId = userId;
+        createBorrowRecordRequest.borrowUsername = username;
         createBorrowRecordRequest.returnDate = request.returnDate;
-        createBorrowRecordRequest.requestedBy = username();
+        createBorrowRecordRequest.requestedBy = username;
         borrowRecordWebService.create(createBorrowRecordRequest);
 
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
-        updateBookRequest.borrowUserId = userId();
+        updateBookRequest.borrowUserId = userId;
         updateBookRequest.status = BookStatusView.BORROWED;
         updateBookRequest.returnDate = request.returnDate;
         updateBookRequest.borrowedTime = LocalDateTime.now();
-        updateBookRequest.requestedBy = username();
+        updateBookRequest.requestedBy = username;
         bookWebService.update(request.bookId, updateBookRequest);
     }
 
-    public void returnBook(String id) {
+    public void returnBook(String id, Long userId, String username) {
         GetBorrowRecordResponse getBorrowRecordResponse = borrowRecordWebService.get(id);
-        if (!userId().equals(getBorrowRecordResponse.borrowUserId)) {
+        if (!userId.equals(getBorrowRecordResponse.borrowUserId)) {
             throw new ForbiddenException("You cannot do this.");
         }
         if (getBorrowRecordResponse.actualReturnDate != null) {
@@ -73,12 +69,12 @@ public class BorrowRecordService {
         updateBookRequest.status = BookStatusView.AVAILABLE;
         updateBookRequest.borrowedTime = null;
         updateBookRequest.returnDate = null;
-        updateBookRequest.requestedBy = username();
+        updateBookRequest.requestedBy = username;
         bookWebService.update(getBorrowRecordResponse.bookId, updateBookRequest);
 
         UpdateBorrowRecordRequest updateBorrowRecordRequest = new UpdateBorrowRecordRequest();
         updateBorrowRecordRequest.actualReturnDate = LocalDate.now();
-        updateBorrowRecordRequest.requestedBy = username();
+        updateBorrowRecordRequest.requestedBy = username;
         borrowRecordWebService.update(id, updateBorrowRecordRequest);
     }
 
@@ -101,14 +97,5 @@ public class BorrowRecordService {
         tagView.id = tag.id;
         tagView.name = tag.name;
         return tagView;
-    }
-
-    private Long userId() {
-        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return Long.valueOf(userId);
-    }
-
-    private String username() {
-        return webContext.request().session().get("username").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

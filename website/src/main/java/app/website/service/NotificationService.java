@@ -11,8 +11,6 @@ import app.notification.api.notification.GetNotificationResponse;
 import app.notification.api.notification.SearchNotificationRequest;
 import app.notification.api.notification.SearchNotificationResponse;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.util.stream.Collectors;
 
@@ -22,15 +20,13 @@ import java.util.stream.Collectors;
 public class NotificationService {
     @Inject
     NotificationWebService notificationWebService;
-    @Inject
-    WebContext webContext;
 
-    public SearchNotificationAJAXResponse search(SearchNotificationAJAXRequest request) {
+    public SearchNotificationAJAXResponse search(SearchNotificationAJAXRequest request, Long userId) {
         SearchNotificationRequest searchNotificationRequest = new SearchNotificationRequest();
         searchNotificationRequest.skip = request.skip;
         searchNotificationRequest.limit = request.limit;
         searchNotificationRequest.content = request.content;
-        searchNotificationRequest.userId = userId();
+        searchNotificationRequest.userId = userId;
         SearchNotificationResponse searchNotificationResponse = notificationWebService.search(searchNotificationRequest);
 
         SearchNotificationAJAXResponse response = new SearchNotificationAJAXResponse();
@@ -56,28 +52,19 @@ public class NotificationService {
         return response;
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long userId, String username) {
         DeleteNotificationRequest deleteNotificationRequest = new DeleteNotificationRequest();
-        deleteNotificationRequest.userId = userId();
-        deleteNotificationRequest.requestedBy = username();
+        deleteNotificationRequest.userId = userId;
+        deleteNotificationRequest.requestedBy = username;
 
         notificationWebService.delete(id, deleteNotificationRequest);
     }
 
-    public void deleteBatch(DeleteBatchNotificationAJAXRequest request) {
+    public void deleteBatch(DeleteBatchNotificationAJAXRequest request, String username) {
         DeleteBatchNotificationRequest deleteBatchNotificationRequest = new DeleteBatchNotificationRequest();
         deleteBatchNotificationRequest.ids = request.ids;
-        deleteBatchNotificationRequest.requestedBy = username();
+        deleteBatchNotificationRequest.requestedBy = username;
 
         notificationWebService.deleteBatch(deleteBatchNotificationRequest);
-    }
-
-    private Long userId() {
-        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return Long.valueOf(userId);
-    }
-
-    private String username() {
-        return webContext.request().session().get("username").orElseThrow(() -> new UnauthorizedException("please login first."));
     }
 }

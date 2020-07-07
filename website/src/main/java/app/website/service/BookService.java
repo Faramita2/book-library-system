@@ -22,8 +22,6 @@ import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.user.api.UserWebService;
 import core.framework.inject.Inject;
-import core.framework.web.WebContext;
-import core.framework.web.exception.UnauthorizedException;
 
 import java.util.stream.Collectors;
 
@@ -37,8 +35,6 @@ public class BookService {
     UserWebService userWebService;
     @Inject
     BorrowRecordWebService borrowRecordWebService;
-    @Inject
-    WebContext webContext;
 
     public SearchBookAJAXResponse search(SearchBookAJAXRequest request) {
         SearchBookRequest searchBookRequest = new SearchBookRequest();
@@ -90,11 +86,11 @@ public class BookService {
         return response;
     }
 
-    public SearchBorrowedBookAJAXResponse searchBorrowedBook(SearchBorrowedBookAJAXRequest request) {
+    public SearchBorrowedBookAJAXResponse searchBorrowedBook(SearchBorrowedBookAJAXRequest request, Long userId) {
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
         searchBorrowRecordRequest.skip = request.skip;
         searchBorrowRecordRequest.limit = request.limit;
-        searchBorrowRecordRequest.borrowUserId = userId();
+        searchBorrowRecordRequest.borrowUserId = userId;
         SearchBorrowRecordResponse searchBorrowRecordResponse = borrowRecordWebService.search(searchBorrowRecordRequest);
 
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
@@ -151,10 +147,5 @@ public class BookService {
         bookTagAJAXView.id = tag.id;
         bookTagAJAXView.name = tag.name;
         return bookTagAJAXView;
-    }
-
-    private Long userId() {
-        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return Long.valueOf(userId);
     }
 }
