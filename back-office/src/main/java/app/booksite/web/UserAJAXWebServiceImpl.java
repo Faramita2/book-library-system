@@ -5,6 +5,7 @@ import app.api.backoffice.user.CreateUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
 import app.booksite.user.service.UserService;
+import app.booksite.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 
@@ -37,6 +38,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
         service.inactive(id);
     }
 
+    @SkipLogin
     @Override
     public void resetPassword(Long id) {
         ActionLogContext.put("id", id);

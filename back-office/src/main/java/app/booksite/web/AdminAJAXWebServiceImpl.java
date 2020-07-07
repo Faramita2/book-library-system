@@ -3,6 +3,7 @@ package app.booksite.web;
 import app.api.backoffice.AdminAJAXWebService;
 import app.api.backoffice.admin.LoginAJAXRequest;
 import app.booksite.admin.service.AdminService;
+import app.booksite.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 

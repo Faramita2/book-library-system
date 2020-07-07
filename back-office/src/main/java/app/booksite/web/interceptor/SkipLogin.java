@@ -1,4 +1,4 @@
-package app.booksite.web;
+package app.booksite.web.interceptor;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

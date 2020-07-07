@@ -1,4 +1,4 @@
-package app.website.web;
+package app.website.web.interceptor;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;

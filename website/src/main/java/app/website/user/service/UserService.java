@@ -36,6 +36,7 @@ public class UserService {
         session.set("user_status", loginResponse.status.name());
 
         redis.set(Strings.format("users:{}:status", loginResponse.id), loginResponse.status.name());
+        redis.set(Strings.format("users:{}:login", loginResponse.id), "TRUE");
     }
 
     public void resetPassword(ResetPasswordAJAXRequest request) {
@@ -45,6 +46,9 @@ public class UserService {
         resetPasswordRequest.requestedBy = request.requestedBy;
 
         authenticationWebService.resetPassword(resetPasswordRequest);
+        String userId = redis.get(request.token);
+        redis.del(Strings.format("users:{}:login", userId));
+        redis.del(request.token);
     }
 
     public void logout() {

@@ -4,6 +4,7 @@ import app.api.website.UserAJAXWebService;
 import app.api.website.user.LoginAJAXRequest;
 import app.api.website.user.ResetPasswordAJAXRequest;
 import app.website.user.service.UserService;
+import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 
 /**

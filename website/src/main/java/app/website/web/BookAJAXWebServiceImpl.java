@@ -7,7 +7,7 @@ import app.api.website.book.SearchBookAJAXResponse;
 import app.api.website.book.SearchBorrowedBookAJAXRequest;
 import app.api.website.book.SearchBorrowedBookAJAXResponse;
 import app.website.book.service.BookService;
-import app.website.web.SkipLogin;
+import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 
 /**
