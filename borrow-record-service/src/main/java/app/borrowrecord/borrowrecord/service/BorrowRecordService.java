@@ -7,7 +7,6 @@ import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
-import com.mongodb.client.model.Filters;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
@@ -20,13 +19,11 @@ import org.bson.types.ObjectId;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.gte;
-import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.Filters.lt;
 import static com.mongodb.client.model.Filters.or;
 
@@ -131,12 +128,8 @@ public class BorrowRecordService {
     }
 
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {
-        List<Bson> filters = Lists.newArrayList();
-        filters.add(eq("user.id", request.borrowUserId));
-        optionalQuery(request, filters);
-
         Query query = new Query();
-        query.filter = and(filters);
+        query.filter = eq("user.id", request.borrowUserId);
         query.skip = request.skip;
         query.limit = request.limit;
 
@@ -176,42 +169,5 @@ public class BorrowRecordService {
         }).collect(Collectors.toList());
 
         return response;
-    }
-
-    private void optionalQuery(SearchBorrowRecordRequest request, List<Bson> filters) {
-        if (!Strings.isBlank(request.bookName)) {
-            filters.add(Filters.regex("book.name", Pattern.compile(request.bookName)));
-        }
-
-        if (!Strings.isBlank(request.bookDescription)) {
-            filters.add(Filters.regex("book.description", Pattern.compile(request.bookDescription)));
-        }
-
-        if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            filters.add(in("book.authors.id", request.authorIds));
-        }
-
-        if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            filters.add(in("book.categories.id", request.categoryIds));
-        }
-
-        if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            filters.add(in("book.tags.id", request.tagIds));
-        }
-
-        if (request.borrowedDate != null) {
-            filters.add(and(
-                gte("borrowed_time", request.borrowedDate.atStartOfDay()),
-                lt("borrowed_time", request.borrowedDate.atStartOfDay().plusDays(1))
-            ));
-        }
-
-        if (request.returnDate != null) {
-            filters.add(eq("return_date", request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1)));
-        }
-
-        if (request.actualReturnDate != null) {
-            filters.add(eq("actual_return_date", request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1)));
-        }
     }
 }

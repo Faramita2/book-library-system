@@ -94,15 +94,7 @@ public class BookService {
         SearchBorrowRecordRequest searchBorrowRecordRequest = new SearchBorrowRecordRequest();
         searchBorrowRecordRequest.skip = request.skip;
         searchBorrowRecordRequest.limit = request.limit;
-        searchBorrowRecordRequest.bookName = request.name;
-        searchBorrowRecordRequest.bookDescription = request.description;
-        searchBorrowRecordRequest.tagIds = request.tagIds;
-        searchBorrowRecordRequest.authorIds = request.authorIds;
-        searchBorrowRecordRequest.categoryIds = request.categoryIds;
         searchBorrowRecordRequest.borrowUserId = userId();
-        searchBorrowRecordRequest.borrowedDate = request.borrowedDate;
-        searchBorrowRecordRequest.returnDate = request.returnDate;
-        searchBorrowRecordRequest.actualReturnDate = request.actualReturnDate;
         SearchBorrowRecordResponse searchBorrowRecordResponse = borrowRecordWebService.search(searchBorrowRecordRequest);
 
         SearchBorrowedBookAJAXResponse response = new SearchBorrowedBookAJAXResponse();
