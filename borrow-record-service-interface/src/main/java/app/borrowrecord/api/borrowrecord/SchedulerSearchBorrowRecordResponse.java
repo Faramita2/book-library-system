@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author meow
  */
-public class ListNeedReturnBorrowRecordResponse {
+public class SchedulerSearchBorrowRecordResponse {
     @NotNull
     @Property(name = "total")
     public Long total;

@@ -2130,7 +2130,7 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{url}}:9008/_sys/job/find-need-return-record",
+							"raw": "{{url}}:9008/_sys/job/notify-user-return-book",
 							"host": [
 								"{{url}}"
 							],
@@ -2138,7 +2138,7 @@
 							"path": [
 								"_sys",
 								"job",
-								"find-need-return-record"
+								"notify-user-return-book"
 							]
 						}
 					},

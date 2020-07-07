@@ -2,7 +2,7 @@ package app.borrowrecord.borrowrecord.service;
 
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.ListNeedReturnBorrowRecordResponse;
+import app.borrowrecord.api.borrowrecord.SchedulerSearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
@@ -94,24 +94,22 @@ public class BorrowRecordService {
         return response;
     }
 
-    public ListNeedReturnBorrowRecordResponse findNeedReturnRecords() {
-        Query query = new Query();
-        LocalDate.of(2020, 7, 5).atStartOfDay();
-        LocalDate.of(2020, 7, 5).atStartOfDay().plusDays(1);
-        // todo combine
-        query.filter = or(
-            and(
-                gte("return_date", LocalDate.now().atStartOfDay().plusDays(1)),
-                lt("return_date", LocalDate.now().atStartOfDay().plusDays(2)),
-                eq("actual_return_date", null)
-            ),
+    public SchedulerSearchBorrowRecordResponse list() {
+        List<Bson> filters = Lists.newArrayList();
+        filters.add(eq("actual_return_date", null));
+        filters.add(or(
+            and(gte("return_date", LocalDate.now().atStartOfDay().plusDays(1)),
+                lt("return_date", LocalDate.now().atStartOfDay().plusDays(2))),
             lt("return_date", LocalDate.now().atStartOfDay())
-        );
+        ));
 
-        ListNeedReturnBorrowRecordResponse response = new ListNeedReturnBorrowRecordResponse();
+        Query query = new Query();
+        query.filter = and(filters);
+
+        SchedulerSearchBorrowRecordResponse response = new SchedulerSearchBorrowRecordResponse();
         response.total = collection.count(query.filter);
         response.records = collection.find(query).stream().map(borrowRecord -> {
-            ListNeedReturnBorrowRecordResponse.Record view = new ListNeedReturnBorrowRecordResponse.Record();
+            SchedulerSearchBorrowRecordResponse.Record view = new SchedulerSearchBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
             view.bookId = borrowRecord.book.id;
             view.borrowUserId = borrowRecord.user.id;
