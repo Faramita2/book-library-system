@@ -751,36 +751,6 @@
 							"response": []
 						},
 						{
-							"name": "bo reset user password",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"password\": \"1234567\",\r\n    \"password_confirm\": \"1234567\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}:9001/bo/user/1/reset-password",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9001",
-									"path": [
-										"bo",
-										"user",
-										"1",
-										"reset-password"
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "get user",
 							"request": {
 								"method": "GET",
@@ -893,7 +863,61 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"book_id\": 1,\n\t\"borrow_user_id\": 1,\n\t\"borrowed_time\": \"2020-07-03T00:18:24.068656\",\n\t\"return_date\": \"2020-07-04\",\n\t\"operator\": \"self\"\n}",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"borrower_id\": 1,\n\t\"borrowed_at\": \"2020-07-03T00:18:24.068656\",\n\t\"return_at\": \"2020-07-04\",\n\t\"operator\": \"self\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9003/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create borrow record",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"book_id\": 1,\r\n    \"borrower_id\": 1,\r\n    \"book_name\": \"water margin\",\r\n    \"borrower_name\": \"a\",\r\n    \"borrowed_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"return_at\": \"2020-06-24T12:55:38.219432200\",\r\n    \"created_by\": \"self\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9003/borrow-record",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9003",
+									"path": [
+										"borrow-record"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "search borrow record",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -925,7 +949,70 @@
 			"item": [
 				{
 					"name": "notification",
-					"item": [],
+					"item": [
+						{
+							"name": "search notification",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9004/notification",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9004",
+									"path": [
+										"notification"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete notification",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9004/notification?ids=2",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9004",
+									"path": [
+										"notification"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete batch notification",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
 				}
@@ -1031,7 +1118,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "book-site",
+			"name": "back-office",
 			"item": [
 				{
 					"name": "admin",
@@ -1051,14 +1138,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9006/ajax/admin/login",
+									"raw": "{{url}}:9006/ajax/login",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9006",
 									"path": [
 										"ajax",
-										"admin",
 										"login"
 									]
 								}
@@ -1079,7 +1165,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000,\r\n    \"name\": \"a\"\r\n}",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1152,25 +1238,6 @@
 										"ajax",
 										"book-author",
 										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "list book author",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9006/ajax/book-author",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9006",
-									"path": [
-										"ajax",
-										"book-author"
 									]
 								}
 							},
@@ -1267,25 +1334,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "list book category",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9006/ajax/book-category",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9006",
-									"path": [
-										"ajax",
-										"book-category"
-									]
-								}
-							},
-							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1378,25 +1426,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "list book tag",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9006/ajax/book-tag",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9006",
-									"path": [
-										"ajax",
-										"book-tag"
-									]
-								}
-							},
-							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1460,7 +1489,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"test\",\r\n    \"tag_ids\": [1],\r\n    \"description\": \"test book\",\r\n    \"category_ids\": [1],\r\n    \"author_ids\": [1]\r\n\t\r\n}",
+									"raw": "{\r\n    \"name\": \"book2\",\r\n    \"tag_ids\": [2],\r\n    \"description\": \"test book 2\",\r\n    \"category_ids\": [1,2],\r\n    \"author_ids\": [1]\r\n\t\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1640,11 +1669,11 @@
 						{
 							"name": "reset user password",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"password\": \"7654321\",\n\t\"password_confirm\": \"7654321\"\n}",
+									"raw": "",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1675,7 +1704,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "book-site-front",
+			"name": "website",
 			"item": [
 				{
 					"name": "user",
@@ -1687,7 +1716,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"password\": \"7654321\"\n}",
+									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"password\": \"8765432\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1695,15 +1724,42 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/user/login",
+									"raw": "{{url}}:9007/ajax/login",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9007",
 									"path": [
 										"ajax",
-										"user",
 										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reset password",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"token\": \"7ehd7lkfp4mrv8v10bbplh1kbek1ubng\",\r\n    \"password\": \"8765432\",\r\n    \"requested_by\": \"email\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9007/ajax/reset-password",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"reset-password"
 									]
 								}
 							},
@@ -1778,7 +1834,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/2",
+									"raw": "{{url}}:9007/ajax/book/1",
 									"host": [
 										"{{url}}"
 									],
@@ -1786,7 +1842,7 @@
 									"path": [
 										"ajax",
 										"book",
-										"2"
+										"1"
 									]
 								}
 							},
@@ -1795,11 +1851,11 @@
 						{
 							"name": "borrow book",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"return_date\": \"2020-07-04\"\n}",
+									"raw": "{\n\t\"book_id\": 1,\n\t\"return_date\": \"2020-07-08\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1807,16 +1863,14 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/2/borrow",
+									"raw": "{{url}}:9007/ajax/borrow-record",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9007",
 									"path": [
 										"ajax",
-										"book",
-										"2",
-										"borrow"
+										"borrow-record"
 									]
 								}
 							},
@@ -1825,7 +1879,7 @@
 						{
 							"name": "return book",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
@@ -1837,15 +1891,15 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/book/2/return",
+									"raw": "{{url}}:9007/ajax/borrow-record/5f04573dfa6c28363e93524a/return",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9007",
 									"path": [
 										"ajax",
-										"book",
-										"2",
+										"borrow-record",
+										"5f04573dfa6c28363e93524a",
 										"return"
 									]
 								}
@@ -1866,32 +1920,13 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000,\r\n    \"name\": \"b\"\r\n}",
+									"raw": "{\r\n    \"skip\": 0,\r\n    \"limit\": 1000\r\n    }",
 									"options": {
 										"raw": {
 											"language": "json"
 										}
 									}
 								},
-								"url": {
-									"raw": "{{url}}:9007/ajax/book-author",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9007",
-									"path": [
-										"ajax",
-										"book-author"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "list book author",
-							"request": {
-								"method": "GET",
-								"header": [],
 								"url": {
 									"raw": "{{url}}:9007/ajax/book-author",
 									"host": [
@@ -1940,25 +1975,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "list book category",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{url}}:9007/ajax/book-category",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9007",
-									"path": [
-										"ajax",
-										"book-category"
-									]
-								}
-							},
-							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1981,25 +1997,6 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "{{url}}:9007/ajax/book-tag",
-									"host": [
-										"{{url}}"
-									],
-									"port": "9007",
-									"path": [
-										"ajax",
-										"book-tag"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "list book tag",
-							"request": {
-								"method": "GET",
-								"header": [],
 								"url": {
 									"raw": "{{url}}:9007/ajax/book-tag",
 									"host": [
@@ -2191,10 +2188,9 @@
 	],
 	"variable": [
 		{
-			"id": "875c4766-336d-48d7-b21f-cb120cf2670f",
+			"id": "a40d6fa5-4ea5-4542-9e93-cea065cea799",
 			"key": "url",
-			"value": "https://localhost",
-			"type": "string"
+			"value": "https://localhost"
 		}
 	],
 	"protocolProfileBehavior": {}
