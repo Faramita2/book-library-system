@@ -59,18 +59,18 @@ public class BookService {
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            List<Long> bookIds = queryBookIdsByAuthorIds(request);
-            query.in("id", bookIds);
+            query.where("id IN(SELECT book_id from book_authors WHERE author_id IN(?))",
+                request.authorIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            List<Long> bookIds = queryBookIdsByCategoryIds(request);
-            query.in("id", bookIds);
+            query.where("id IN(SELECT book_id from book_categories WHERE category_id IN(?))",
+                request.categoryIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            List<Long> bookIds = queryBookIdsByTagIds(request);
-            query.in("id", bookIds);
+            query.where("id IN(SELECT book_id from book_tags WHERE tag_id IN(?))",
+                request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.status != null) {
@@ -143,24 +143,6 @@ public class BookService {
         Query<Tag> query = tagRepository.select();
         query.in("id", tagIds);
         return query.fetch();
-    }
-
-    private List<Long> queryBookIdsByAuthorIds(SearchBookRequest request) {
-        Query<BookTag> query = bookTagRepository.select();
-        query.in("tag_id", request.tagIds);
-        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
-    }
-
-    private List<Long> queryBookIdsByCategoryIds(SearchBookRequest request) {
-        Query<BookCategory> query = bookCategoryRepository.select();
-        query.in("category_id", request.categoryIds);
-        return query.fetch().stream().map(bookCategory -> bookCategory.bookId).collect(Collectors.toList());
-    }
-
-    private List<Long> queryBookIdsByTagIds(SearchBookRequest request) {
-        Query<BookTag> query = bookTagRepository.select();
-        query.in("tag_id", request.tagIds);
-        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
     }
 
     private AuthorView authorView(Author author) {

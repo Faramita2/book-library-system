@@ -57,6 +57,7 @@ public class BOTagService {
 
     public void update(Long id, BOUpdateTagRequest request) {
         Tag tag = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
+        tag.name = request.name;
         tag.updatedBy = request.requestedBy;
         tag.updatedTime = LocalDateTime.now();
 
