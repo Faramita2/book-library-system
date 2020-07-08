@@ -3,7 +3,6 @@ package app.book;
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
 import app.book.book.domain.Book;
-import app.book.book.domain.BookCategory;
 import app.book.book.service.BOBookService;
 import app.book.book.service.BookService;
 import app.book.book.web.BOBookWebServiceImpl;
