@@ -190,24 +190,6 @@ public class BOBookService {
         return query.fetch();
     }
 
-    private List<Long> queryBookIdsByAuthorIds(BOSearchBookRequest request) {
-        Query<BookTag> query = bookTagRepository.select();
-        query.in("tag_id", request.tagIds);
-        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
-    }
-
-    private List<Long> queryBookIdsByCategoryIds(BOSearchBookRequest request) {
-        Query<BookCategory> query = bookCategoryRepository.select();
-        query.in("category_id", request.categoryIds);
-        return query.fetch().stream().map(bookCategory -> bookCategory.bookId).collect(Collectors.toList());
-    }
-
-    private List<Long> queryBookIdsByTagIds(BOSearchBookRequest request) {
-        Query<BookTag> query = bookTagRepository.select();
-        query.in("tag_id", request.tagIds);
-        return query.fetch().stream().map(bookTag -> bookTag.bookId).collect(Collectors.toList());
-    }
-
     private void insertBookAuthors(Long bookId, List<Long> authorIds) {
         List<BookAuthor> bookAuthors = authorIds.stream().map(authorId -> {
             BookAuthor bookAuthor = new BookAuthor();
