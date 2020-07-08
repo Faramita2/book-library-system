@@ -8,7 +8,10 @@ import app.api.website.user.LoginAJAXRequest;
 import app.api.website.user.ResetPasswordAJAXRequest;
 import core.framework.inject.Inject;
 import core.framework.redis.Redis;
+import core.framework.util.Maps;
 import core.framework.util.Strings;
+
+import java.util.Map;
 
 /**
  * @author meow
@@ -25,8 +28,10 @@ public class UserService {
         loginRequest.password = request.password;
         LoginResponse loginResponse = authenticationWebService.login(loginRequest);
 
-        redis.set(Strings.format("users:{}:status", loginResponse.id), loginResponse.status.name());
-        redis.set(Strings.format("users:{}:login", loginResponse.id), String.valueOf(true));
+        Map<String, String> user = Maps.newHashMap();
+        user.put("status", loginResponse.status.name());
+        user.put("login", String.valueOf(true));
+        redis.hash().multiSet(Strings.format("users:{}", loginResponse.id), user);
 
         return loginResponse;
     }
@@ -38,12 +43,11 @@ public class UserService {
         resetPasswordRequest.requestedBy = request.requestedBy;
 
         authenticationWebService.resetPassword(resetPasswordRequest);
-        String userId = redis.get(request.token);
-        redis.del(Strings.format("users:{}:login", userId));
+        logout(redis.get(request.token));
         redis.del(request.token);
     }
 
     public void logout(String userId) {
-        redis.del(Strings.format("users:{}:status", userId));
+        redis.hash().del(Strings.format("users:{}:status", userId), "status", "login");
     }
 }

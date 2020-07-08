@@ -12,6 +12,8 @@ import core.framework.web.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * @author zoo
  */
@@ -26,12 +28,11 @@ public class AuthInterceptor implements Interceptor {
         if (pass == null) {
             Session session = invocation.context().request().session();
             String userId = session.get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-            String login = redis.get(Strings.format("users:{}:login", userId));
-            String userStatus = redis.get(Strings.format("users:{}:status", userId));
-            if (!UserStatusAJAXView.ACTIVE.name().equals(userStatus)) {
+            Map<String, String> user = redis.hash().getAll(Strings.format("users:{}", userId));
+            if (!UserStatusAJAXView.ACTIVE.name().equals(user.get("status"))) {
                 throw new UnauthorizedException("Your account is inactive.");
             }
-            if (!String.valueOf(true).equals(login)) {
+            if (!String.valueOf(true).equals(user.get("login"))) {
                 throw new UnauthorizedException("please login first.");
             }
         }
