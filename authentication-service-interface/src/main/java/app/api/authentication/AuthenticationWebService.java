@@ -11,10 +11,10 @@ import core.framework.api.web.service.Path;
  */
 public interface AuthenticationWebService {
     @PUT
-    @Path("/authentication/login")
+    @Path("/login")
     LoginResponse login(LoginRequest request);
 
     @PUT
-    @Path("/authentication/reset-password")
+    @Path("/reset-password")
     void resetPassword(ResetPasswordRequest request);
 }
