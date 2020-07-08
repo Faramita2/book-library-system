@@ -10,6 +10,6 @@ import core.framework.api.web.service.Path;
  */
 public interface BOAuthenticationWebService {
     @PUT
-    @Path("/bo/login")
+    @Path("/bo/authentication/login")
     BOLoginResponse login(BOLoginRequest request);
 }
