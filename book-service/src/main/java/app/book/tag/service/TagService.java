@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
  */
 public class TagService {
     @Inject
-    Repository<Tag> repository;
+    Repository<Tag> tagRepository;
 
     public SearchTagResponse search(SearchTagRequest request) {
         SearchTagResponse response = new SearchTagResponse();
 
-        Query<Tag> query = repository.select();
+        Query<Tag> query = tagRepository.select();
         if (request.name != null) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
         }

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class BOTagService {
     @Inject
-    Repository<Tag> repository;
+    Repository<Tag> tagRepository;
 
     public void create(BOCreateTagRequest request) {
         Tag tag = new Tag();
@@ -30,11 +30,11 @@ public class BOTagService {
         tag.createdBy = request.requestedBy;
         tag.updatedBy = request.requestedBy;
 
-        repository.insert(tag).orElseThrow();
+        tagRepository.insert(tag).orElseThrow();
     }
 
     public BOSearchTagResponse search(BOSearchTagRequest request) {
-        Query<Tag> query = repository.select();
+        Query<Tag> query = tagRepository.select();
 
         if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
@@ -56,17 +56,17 @@ public class BOTagService {
     }
 
     public void update(Long id, BOUpdateTagRequest request) {
-        Tag tag = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
+        Tag tag = tagRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
         tag.name = request.name;
         tag.updatedBy = request.requestedBy;
         tag.updatedTime = LocalDateTime.now();
 
-        repository.partialUpdate(tag);
+        tagRepository.partialUpdate(tag);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() ->
+        tagRepository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
-        repository.delete(id);
+        tagRepository.delete(id);
     }
 }

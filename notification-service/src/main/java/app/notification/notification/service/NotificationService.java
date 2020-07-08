@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 public class NotificationService {
     @Inject
-    Repository<Notification> repository;
+    Repository<Notification> notificationRepository;
 
     public void create(ReturnBorrowedBookMessage message) {
         Notification notification = new Notification();
@@ -41,11 +41,11 @@ public class NotificationService {
         notification.createdBy = message.requestedBy;
         notification.updatedBy = message.requestedBy;
 
-        repository.insert(notification);
+        notificationRepository.insert(notification);
     }
 
     public SearchNotificationResponse search(SearchNotificationRequest request) {
-        Query<Notification> query = repository.select();
+        Query<Notification> query = notificationRepository.select();
 
         query.skip(request.skip);
         query.limit(request.limit);
@@ -70,7 +70,7 @@ public class NotificationService {
     }
 
     public GetNotificationResponse get(Long id) {
-        Notification notification = repository.get(id).orElseThrow(() ->
+        Notification notification = notificationRepository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
         GetNotificationResponse response = new GetNotificationResponse();
         response.id = notification.id;
@@ -81,16 +81,16 @@ public class NotificationService {
     }
 
     public void delete(Long id, DeleteNotificationRequest request) {
-        Notification notification = repository.selectOne("id = ?", id).orElseThrow(() ->
+        Notification notification = notificationRepository.selectOne("id = ?", id).orElseThrow(() ->
             new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
         if (!notification.userId.equals(request.userId)) {
             throw new ForbiddenException("You cannot do this.");
         }
 
-        repository.delete(id);
+        notificationRepository.delete(id);
     }
 
     public void deleteBatch(DeleteBatchNotificationRequest request) {
-        repository.batchDelete(List.of(request.ids.split(",")));
+        notificationRepository.batchDelete(List.of(request.ids.split(",")));
     }
 }

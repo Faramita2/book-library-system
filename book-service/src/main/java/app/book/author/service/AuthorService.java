@@ -15,12 +15,12 @@ import java.util.stream.Collectors;
  */
 public class AuthorService {
     @Inject
-    Repository<Author> repository;
+    Repository<Author> authorRepository;
 
     public SearchAuthorResponse search(SearchAuthorRequest request) {
         SearchAuthorResponse response = new SearchAuthorResponse();
 
-        Query<Author> query = repository.select();
+        Query<Author> query = authorRepository.select();
         if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
         }

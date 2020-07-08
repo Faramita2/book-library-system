@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class BOAuthorService {
     @Inject
-    Repository<Author> repository;
+    Repository<Author> authorRepository;
 
     public void create(BOCreateAuthorRequest request) {
         Author author = new Author();
@@ -29,11 +29,11 @@ public class BOAuthorService {
         author.createdBy = request.requestedBy;
         author.updatedBy = request.requestedBy;
 
-        repository.insert(author);
+        authorRepository.insert(author);
     }
 
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
-        Query<Author> query = repository.select();
+        Query<Author> query = authorRepository.select();
         if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
         }
@@ -55,16 +55,16 @@ public class BOAuthorService {
     }
 
     public void update(Long id, BOUpdateAuthorRequest request) {
-        Author author = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        Author author = authorRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
         author.name = request.name;
         author.updatedBy = request.requestedBy;
         author.updatedTime = LocalDateTime.now();
 
-        repository.partialUpdate(author);
+        authorRepository.partialUpdate(author);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
-        repository.delete(id);
+        authorRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        authorRepository.delete(id);
     }
 }

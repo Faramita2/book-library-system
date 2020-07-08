@@ -29,10 +29,10 @@ import java.util.Base64;
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
-    Repository<User> repository;
+    Repository<User> userRepository;
 
     public GetUserResponse get(Long id) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         GetUserResponse response = new GetUserResponse();
         response.id = user.id;
@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public GetUserByUsernameResponse getUserByUsername(GetUserByUsernameRequest request) {
-        User user = repository.selectOne("username = ?", request.username).orElseThrow(() ->
+        User user = userRepository.selectOne("username = ?", request.username).orElseThrow(() ->
             new BadRequestException(Strings.format("user not exists, username = {}", request.username), "USER_NOT_FOUND"));
 
         GetUserByUsernameResponse response = new GetUserByUsernameResponse();
@@ -58,12 +58,12 @@ public class UserService {
     }
 
     public void resetPassword(Long id, ResetUserPasswordRequest request) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
         hashPassword(user, request.password);
 
-        repository.partialUpdate(user);
+        userRepository.partialUpdate(user);
     }
 
     private byte[] generateSalt() {

@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
  */
 public class CategoryService {
     @Inject
-    Repository<Category> repository;
+    Repository<Category> categoryRepository;
 
     public SearchCategoryResponse search(SearchCategoryRequest request) {
         SearchCategoryResponse response = new SearchCategoryResponse();
-        Query<Category> query = repository.select();
+        Query<Category> query = categoryRepository.select();
         if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
         }

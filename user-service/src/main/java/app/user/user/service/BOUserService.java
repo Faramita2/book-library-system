@@ -33,14 +33,14 @@ import java.util.stream.Collectors;
 public class BOUserService {
     private final Logger logger = LoggerFactory.getLogger(BOUserService.class);
     @Inject
-    Repository<User> repository;
+    Repository<User> userRepository;
 
     public void create(BOCreateUserRequest request) {
-        repository.selectOne("username = ?", request.username).ifPresent(user -> {
+        userRepository.selectOne("username = ?", request.username).ifPresent(user -> {
             throw new ConflictException(Strings.format("user already exists, username = {}", user.username), "USER_USERNAME_EXISTS");
         });
 
-        repository.selectOne("email = ?", request.email).ifPresent(user -> {
+        userRepository.selectOne("email = ?", request.email).ifPresent(user -> {
             throw new ConflictException(Strings.format("user already exists, email = {}", user.email), "USER_EMAIL_EXISTS");
         });
 
@@ -55,12 +55,12 @@ public class BOUserService {
         user.updatedBy = request.requestedBy;
         hashPassword(user, request.password);
 
-        repository.insert(user);
+        userRepository.insert(user);
     }
 
     public BOSearchUserResponse search(BOSearchUserRequest request) {
         BOSearchUserResponse response = new BOSearchUserResponse();
-        Query<User> query = repository.select();
+        Query<User> query = userRepository.select();
 
         if (request.ids != null && !request.ids.isEmpty()) {
             query.in("id", request.ids);
@@ -97,16 +97,16 @@ public class BOUserService {
     }
 
     public void update(Long id, BOUpdateUserRequest request) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
 
-        repository.partialUpdate(user);
+        userRepository.partialUpdate(user);
     }
 
     public BOGetUserResponse get(Long id) {
-        User user = repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;

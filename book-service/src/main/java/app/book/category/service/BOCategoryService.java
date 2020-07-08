@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class BOCategoryService {
     @Inject
-    Repository<Category> repository;
+    Repository<Category> categoryRepository;
 
     public void create(BOCreateCategoryRequest request) {
         Category category = new Category();
@@ -30,11 +30,11 @@ public class BOCategoryService {
         category.createdBy = request.requestedBy;
         category.updatedBy = request.requestedBy;
 
-        repository.insert(category);
+        categoryRepository.insert(category);
     }
 
     public BOSearchCategoryResponse search(BOSearchCategoryRequest request) {
-        Query<Category> query = repository.select();
+        Query<Category> query = categoryRepository.select();
 
         if (!Strings.isBlank(request.name)) {
             query.where("name LIKE ?", Strings.format("{}%", request.name));
@@ -56,17 +56,17 @@ public class BOCategoryService {
     }
 
     public void update(Long id, BOUpdateCategoryRequest request) {
-        Category category = repository.get(id).orElseThrow(() ->
+        Category category = categoryRepository.get(id).orElseThrow(() ->
             new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         category.name = request.name;
         category.updatedBy = request.requestedBy;
         category.updatedTime = LocalDateTime.now();
 
-        repository.partialUpdate(category);
+        categoryRepository.partialUpdate(category);
     }
 
     public void delete(Long id) {
-        repository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
-        repository.delete(id);
+        categoryRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
+        categoryRepository.delete(id);
     }
 }

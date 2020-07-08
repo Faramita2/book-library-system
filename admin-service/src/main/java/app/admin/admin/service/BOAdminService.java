@@ -13,10 +13,10 @@ import core.framework.web.exception.BadRequestException;
  */
 public class BOAdminService {
     @Inject
-    Repository<Admin> repository;
+    Repository<Admin> adminRepository;
 
     public BOGetAdminByAccountResponse getByAccount(BOGetAdminByAccountRequest request) {
-        Admin admin = repository.selectOne("account = ?", request.account).orElseThrow(() ->
+        Admin admin = adminRepository.selectOne("account = ?", request.account).orElseThrow(() ->
             new BadRequestException(Strings.format("account not exists, account = {}", request.account), "ADMIN_NOT_FOUND"));
 
         BOGetAdminByAccountResponse response = new BOGetAdminByAccountResponse();
