@@ -5,11 +5,13 @@ import app.book.api.author.BOSearchAuthorRequest;
 import app.book.api.author.BOSearchAuthorResponse;
 import app.book.api.author.BOUpdateAuthorRequest;
 import app.book.author.domain.Author;
+import app.book.book.domain.BookAuthor;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
+import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class BOAuthorService {
     @Inject
     Repository<Author> authorRepository;
+    @Inject
+    Repository<BookAuthor> bookAuthorRepository;
 
     public void create(BOCreateAuthorRequest request) {
         Author author = new Author();
@@ -68,6 +72,9 @@ public class BOAuthorService {
     public void delete(Long id) {
         authorRepository.get(id).orElseThrow(() -> new NotFoundException(
             Strings.format("author not found, id = {}", id), Markers.errorCode("BOOK_AUTHOR_NOT_FOUND").getName()));
+        if (bookAuthorRepository.count("author_id = ?", id) != 0) {
+            throw new BadRequestException("books have this author, cannot delete it!", Markers.errorCode("BOOK_RELATED_AUTHOR").getName());
+        }
         authorRepository.delete(id);
     }
 }

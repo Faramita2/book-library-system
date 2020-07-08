@@ -7,6 +7,7 @@ import app.book.author.service.AuthorService;
 import app.book.author.service.BOAuthorService;
 import app.book.author.web.AuthorWebServiceImpl;
 import app.book.author.web.BOAuthorWebServiceImpl;
+import app.book.book.domain.BookAuthor;
 import core.framework.module.Module;
 
 /**
@@ -34,5 +35,6 @@ public class AuthorModule extends Module {
 
     private void dbs() {
         db().repository(Author.class);
+        db().repository(BookAuthor.class);
     }
 }

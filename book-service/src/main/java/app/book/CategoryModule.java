@@ -2,6 +2,7 @@ package app.book;
 
 import app.book.api.BOCategoryWebService;
 import app.book.api.CategoryWebService;
+import app.book.book.domain.BookCategory;
 import app.book.category.domain.Category;
 import app.book.category.service.BOCategoryService;
 import app.book.category.service.CategoryService;
@@ -34,5 +35,6 @@ public class CategoryModule extends Module {
 
     private void dbs() {
         db().repository(Category.class);
+        db().repository(BookCategory.class);
     }
 }

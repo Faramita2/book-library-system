@@ -4,12 +4,14 @@ import app.book.api.category.BOCreateCategoryRequest;
 import app.book.api.category.BOSearchCategoryRequest;
 import app.book.api.category.BOSearchCategoryResponse;
 import app.book.api.category.BOUpdateCategoryRequest;
+import app.book.book.domain.BookCategory;
 import app.book.category.domain.Category;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
+import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class BOCategoryService {
     @Inject
     Repository<Category> categoryRepository;
+    @Inject
+    Repository<BookCategory> bookCategoryRepository;
 
     public void create(BOCreateCategoryRequest request) {
         Category category = new Category();
@@ -69,6 +73,9 @@ public class BOCategoryService {
     public void delete(Long id) {
         categoryRepository.get(id).orElseThrow(() -> new NotFoundException(
             Strings.format("category not found, id = {}", id), Markers.errorCode("BOOK_CATEGORY_NOT_FOUND").getName()));
+        if (bookCategoryRepository.count("category_id = ?", id) != 0) {
+            throw new BadRequestException("books have this category, cannot delete it!", Markers.errorCode("BOOK_RELATED_CATEGORY").getName());
+        }
         categoryRepository.delete(id);
     }
 }

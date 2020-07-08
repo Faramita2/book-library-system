@@ -2,6 +2,7 @@ package app.book;
 
 import app.book.api.BOTagWebService;
 import app.book.api.TagWebService;
+import app.book.book.domain.BookTag;
 import app.book.tag.domain.Tag;
 import app.book.tag.service.BOTagService;
 import app.book.tag.service.TagService;
@@ -34,5 +35,6 @@ public class TagModule extends Module {
 
     private void dbs() {
         db().repository(Tag.class);
+        db().repository(BookTag.class);
     }
 }
