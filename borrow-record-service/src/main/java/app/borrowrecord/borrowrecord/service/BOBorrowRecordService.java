@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Filters.lt;
-import static com.mongodb.client.model.Filters.or;
 
 /**
  * @author zoo
@@ -67,15 +66,10 @@ public class BOBorrowRecordService {
     }
 
     public BOListBorrowRecordResponse list() {
-        List<Bson> filters = Lists.newArrayList();
-        filters.add(eq("actual_return_date", null));
-        filters.add(or(
-            eq("return_date", LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1)),
-            lt("return_date", LocalDate.now())
-        ));
-
         Query query = new Query();
-        query.filter = and(filters);
+        query.filter = and(eq("actual_return_date", null),
+            lt("return_date", LocalDate.now().atStartOfDay().plusDays(2))
+        );
 
         BOListBorrowRecordResponse response = new BOListBorrowRecordResponse();
         response.total = collection.count(query.filter);
