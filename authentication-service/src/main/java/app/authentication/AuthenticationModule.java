@@ -25,6 +25,8 @@ public class AuthenticationModule extends Module {
     }
 
     private void services() {
+        String secretKey = property("app.secretKey").orElseThrow();
+        bind(String.class, "secretKey", secretKey);
         bind(AuthenticationService.class);
         bind(BOAuthenticationService.class);
     }

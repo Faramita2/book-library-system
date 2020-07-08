@@ -6,6 +6,7 @@ import app.api.admin.admin.BOGetAdminByAccountResponse;
 import app.api.authentication.authentication.BOLoginRequest;
 import app.api.authentication.authentication.BOLoginResponse;
 import core.framework.inject.Inject;
+import core.framework.inject.Named;
 import core.framework.web.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class BOAuthenticationService {
     private final Logger logger = LoggerFactory.getLogger(BOAuthenticationService.class);
     @Inject
     BOAdminWebService boAdminWebService;
+    @Inject
+    @Named("secretKey")
+    String secretKey;
 
     public BOLoginResponse login(BOLoginRequest request) {
         BOGetAdminByAccountRequest boGetAdminByAccountRequest = new BOGetAdminByAccountRequest();
@@ -46,7 +50,7 @@ public class BOAuthenticationService {
         byte[] saltBytes = Base64.getDecoder().decode(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 128);
         try {
-            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKey);
             byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
             passwordHash = Base64.getEncoder().encodeToString(encoded);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

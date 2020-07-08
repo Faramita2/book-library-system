@@ -9,6 +9,7 @@ import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.ResetUserPasswordRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.inject.Named;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
@@ -31,6 +32,9 @@ public class AuthenticationService {
     UserWebService userWebService;
     @Inject
     Redis redis;
+    @Inject
+    @Named("secretKey")
+    String secretKey;
 
     public LoginResponse login(LoginRequest request) {
         GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest();
@@ -71,7 +75,7 @@ public class AuthenticationService {
         byte[] saltBytes = Base64.getDecoder().decode(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 128);
         try {
-            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKey);
             byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
             passwordHash = Base64.getEncoder().encodeToString(encoded);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
