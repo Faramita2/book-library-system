@@ -10,6 +10,7 @@ import app.notification.notification.domain.Notification;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
@@ -70,8 +71,8 @@ public class NotificationService {
     }
 
     public GetNotificationResponse get(Long id) {
-        Notification notification = notificationRepository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
+        Notification notification = notificationRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("notification not found, id = ?", id), Markers.errorCode("NOTIFICATION_NOT_FOUND").getName()));
         GetNotificationResponse response = new GetNotificationResponse();
         response.id = notification.id;
         response.content = notification.content;
@@ -81,8 +82,8 @@ public class NotificationService {
     }
 
     public void delete(Long id, DeleteNotificationRequest request) {
-        Notification notification = notificationRepository.selectOne("id = ?", id).orElseThrow(() ->
-            new NotFoundException(Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
+        Notification notification = notificationRepository.selectOne("id = ?", id).orElseThrow(() -> new NotFoundException(
+            Strings.format("notification not found, id = ?", id), Markers.errorCode("NOTIFICATION_NOT_FOUND").getName()));
         if (!notification.userId.equals(request.userId)) {
             throw new ForbiddenException("You cannot do this.");
         }

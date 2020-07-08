@@ -8,6 +8,7 @@ import app.book.author.domain.Author;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -55,7 +56,8 @@ public class BOAuthorService {
     }
 
     public void update(Long id, BOUpdateAuthorRequest request) {
-        Author author = authorRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        Author author = authorRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("author not found, id = {}", id), Markers.errorCode("BOOK_AUTHOR_NOT_FOUND").getName()));
         author.name = request.name;
         author.updatedBy = request.requestedBy;
         author.updatedTime = LocalDateTime.now();
@@ -64,7 +66,8 @@ public class BOAuthorService {
     }
 
     public void delete(Long id) {
-        authorRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("author not found, id = {}", id), "BOOK_AUTHOR_NOT_FOUND"));
+        authorRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("author not found, id = {}", id), Markers.errorCode("BOOK_AUTHOR_NOT_FOUND").getName()));
         authorRepository.delete(id);
     }
 }

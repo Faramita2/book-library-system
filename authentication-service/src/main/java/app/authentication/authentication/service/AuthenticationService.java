@@ -9,6 +9,7 @@ import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.ResetUserPasswordRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
@@ -43,11 +44,11 @@ public class AuthenticationService {
         GetUserByUsernameResponse getUserByUsernameResponse = userWebService.getUserByUsername(getUserByUsernameRequest);
 
         if (getUserByUsernameResponse.status == UserStatusView.INACTIVE) {
-            throw new BadRequestException("user not active", "USER_INACTIVE");
+            throw new BadRequestException("user not active", Markers.errorCode("USER_INACTIVE").getName());
         }
 
         if (!getUserByUsernameResponse.password.equals(getPasswordHash(request.password, getUserByUsernameResponse.salt))) {
-            throw new BadRequestException("password incorrect", "USER_PASSWORD_INCORRECT");
+            throw new BadRequestException("password incorrect", Markers.errorCode("USER_PASSWORD_INCORRECT").getName());
         }
 
         LoginResponse response = new LoginResponse();
@@ -61,7 +62,7 @@ public class AuthenticationService {
     public void resetPassword(ResetPasswordRequest request) {
         String userId = redis.get(request.token);
         if (Strings.isBlank(userId)) {
-            throw new BadRequestException("token expired", "RESET_PASSWORD_TOKEN_EXPIRED");
+            throw new BadRequestException("token expired", Markers.errorCode("RESET_PASSWORD_TOKEN_EXPIRED").getName());
         }
 
         ResetUserPasswordRequest resetUserPasswordRequest = new ResetUserPasswordRequest();

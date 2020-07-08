@@ -11,6 +11,7 @@ import app.user.user.domain.UserStatus;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
@@ -37,11 +38,11 @@ public class BOUserService {
 
     public void create(BOCreateUserRequest request) {
         userRepository.selectOne("username = ?", request.username).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, username = {}", user.username), "USER_USERNAME_EXISTS");
+            throw new ConflictException(Strings.format("user already exists, username = {}", user.username), Markers.errorCode("USER_USERNAME_EXISTS").getName());
         });
 
         userRepository.selectOne("email = ?", request.email).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, email = {}", user.email), "USER_EMAIL_EXISTS");
+            throw new ConflictException(Strings.format("user already exists, email = {}", user.email), Markers.errorCode("USER_EMAIL_EXISTS").getName());
         });
 
         User user = new User();
@@ -97,7 +98,8 @@ public class BOUserService {
     }
 
     public void update(Long id, BOUpdateUserRequest request) {
-        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("user not found, id = {}", id), Markers.errorCode("USER_NOT_FOUND").getName()));
         user.status = UserStatus.valueOf(request.status.name());
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
@@ -106,7 +108,8 @@ public class BOUserService {
     }
 
     public BOGetUserResponse get(Long id) {
-        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
+        User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("user not found, id = {}", id), Markers.errorCode("USER_NOT_FOUND").getName()));
 
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;

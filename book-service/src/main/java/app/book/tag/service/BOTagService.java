@@ -8,6 +8,7 @@ import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -56,7 +57,8 @@ public class BOTagService {
     }
 
     public void update(Long id, BOUpdateTagRequest request) {
-        Tag tag = tagRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
+        Tag tag = tagRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("tag not found, id = {}", id), Markers.errorCode("BOOK_TAG_NOT_FOUND").getName()));
         tag.name = request.name;
         tag.updatedBy = request.requestedBy;
         tag.updatedTime = LocalDateTime.now();
@@ -65,8 +67,8 @@ public class BOTagService {
     }
 
     public void delete(Long id) {
-        tagRepository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
+        tagRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("tag not found, id = {}", id), Markers.errorCode("BOOK_TAG_NOT_FOUND").getName()));
         tagRepository.delete(id);
     }
 }

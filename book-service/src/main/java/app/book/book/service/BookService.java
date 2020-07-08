@@ -19,6 +19,7 @@ import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -95,7 +96,8 @@ public class BookService {
     }
 
     public GetBookResponse get(Long id) {
-        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
 
         GetBookResponse response = new GetBookResponse();
         response.id = book.id;
@@ -113,7 +115,8 @@ public class BookService {
     }
 
     public void update(Long id, UpdateBookRequest request) {
-        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("book not found, id = {}", id)));
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
         book.status = BookStatus.valueOf(request.status.name());
         book.borrowUserId = request.borrowUserId;
         book.borrowedTime = request.borrowedTime;

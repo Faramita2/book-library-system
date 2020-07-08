@@ -8,6 +8,7 @@ import app.book.category.domain.Category;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -56,8 +57,8 @@ public class BOCategoryService {
     }
 
     public void update(Long id, BOUpdateCategoryRequest request) {
-        Category category = categoryRepository.get(id).orElseThrow(() ->
-            new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
+        Category category = categoryRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("category not found, id = {}", id), Markers.errorCode("BOOK_CATEGORY_NOT_FOUND").getName()));
         category.name = request.name;
         category.updatedBy = request.requestedBy;
         category.updatedTime = LocalDateTime.now();
@@ -66,7 +67,8 @@ public class BOCategoryService {
     }
 
     public void delete(Long id) {
-        categoryRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
+        categoryRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("category not found, id = {}", id), Markers.errorCode("BOOK_CATEGORY_NOT_FOUND").getName()));
         categoryRepository.delete(id);
     }
 }

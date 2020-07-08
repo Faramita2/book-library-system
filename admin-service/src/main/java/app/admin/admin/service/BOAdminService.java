@@ -5,6 +5,7 @@ import app.api.admin.admin.BOGetAdminByAccountRequest;
 import app.api.admin.admin.BOGetAdminByAccountResponse;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 
@@ -17,7 +18,7 @@ public class BOAdminService {
 
     public BOGetAdminByAccountResponse getByAccount(BOGetAdminByAccountRequest request) {
         Admin admin = adminRepository.selectOne("account = ?", request.account).orElseThrow(() ->
-            new BadRequestException(Strings.format("account not exists, account = {}", request.account), "ADMIN_NOT_FOUND"));
+            new BadRequestException(Strings.format("account not exists, account = {}", request.account), Markers.errorCode("ADMIN_NOT_FOUND").getName()));
 
         BOGetAdminByAccountResponse response = new BOGetAdminByAccountResponse();
         response.id = admin.id;

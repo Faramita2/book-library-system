@@ -7,6 +7,7 @@ import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
 import core.framework.util.Strings;
@@ -69,8 +70,8 @@ public class BorrowRecordService {
     }
 
     public GetBorrowRecordResponse get(String id) {
-        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() ->
-            new NotFoundException(Strings.format("borrow record not found, id = {}", id)));
+        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
+            Strings.format("borrow record not found, id = {}", id), Markers.errorCode("BORROW_RECORD_NOT_FOUND").getName()));
         GetBorrowRecordResponse response = new GetBorrowRecordResponse();
         response.id = borrowRecord.id.toString();
         response.bookId = borrowRecord.book.id;
@@ -83,7 +84,8 @@ public class BorrowRecordService {
     }
 
     public void update(String id, UpdateBorrowRecordRequest request) {
-        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
+        BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
+            Strings.format("borrow record not found, id = {}", id), Markers.errorCode("BORROW_RECORD_NOT_FOUND").getName()));
         borrowRecord.actualReturnDate = request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1);
         borrowRecord.updatedBy = request.requestedBy;
         borrowRecord.updatedTime = LocalDateTime.now();

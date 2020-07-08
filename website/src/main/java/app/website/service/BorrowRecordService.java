@@ -13,6 +13,7 @@ import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ForbiddenException;
 
@@ -32,7 +33,7 @@ public class BorrowRecordService {
     public void borrowBook(BorrowBookAJAXRequest request, Long userId, String username) {
         GetBookResponse getBookResponse = bookWebService.get(request.bookId);
         if (getBookResponse.status != BookStatusView.AVAILABLE) {
-            throw new BadRequestException("cannot borrow this book!", "BOOK_BORROWED");
+            throw new BadRequestException("cannot borrow this book!", Markers.errorCode("BOOK_BORROWED").getName());
         }
         CreateBorrowRecordRequest createBorrowRecordRequest = new CreateBorrowRecordRequest();
         createBorrowRecordRequest.bookId = getBookResponse.id;
@@ -62,7 +63,7 @@ public class BorrowRecordService {
             throw new ForbiddenException("You cannot do this.");
         }
         if (getBorrowRecordResponse.actualReturnDate != null) {
-            throw new BadRequestException("book has been returned!", "BOOK_RETURNED");
+            throw new BadRequestException("book has been returned!", Markers.errorCode("BOOK_RETURNED").getName());
         }
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
         updateBookRequest.borrowUserId = null;

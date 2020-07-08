@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `books` (
 
     INDEX `status_index`(`status` ASC),
     INDEX `name_index`(`name` ASC),
-    INDEX `description_index`(`description` ASC),
+    INDEX `description_index`(`description`(255) ASC),
     INDEX `borrow_user_id_index`(`borrow_user_id` ASC)
 );
 
