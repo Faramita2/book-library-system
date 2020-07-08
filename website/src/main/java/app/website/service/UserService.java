@@ -48,6 +48,6 @@ public class UserService {
     }
 
     public void logout(String userId) {
-        redis.hash().del(Strings.format("users:{}:status", userId), "status", "login");
+        redis.hash().del(Strings.format("users:{}", userId), "status", "login");
     }
 }
