@@ -28,8 +28,11 @@ public class UserModule extends Module {
     }
 
     private void services() {
-        bind(BOUserService.class);
-        bind(UserService.class);
+        String secretKey = property("app.secretKey").orElseThrow();
+        BOUserService boUserService = new BOUserService(secretKey);
+        bind(boUserService);
+        UserService userService = new UserService(secretKey);
+        bind(userService);
     }
 
     private void dbs() {

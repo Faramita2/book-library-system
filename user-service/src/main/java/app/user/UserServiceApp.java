@@ -15,6 +15,7 @@ public class UserServiceApp extends App {
 
     private void sys() {
         load(new SystemModule("sys.properties"));
+        loadProperties("app.properties");
     }
 
     private void modules() {

@@ -35,6 +35,11 @@ public class BOUserService {
     private final Logger logger = LoggerFactory.getLogger(BOUserService.class);
     @Inject
     Repository<User> userRepository;
+    String secretKey;
+
+    public BOUserService(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public void create(BOCreateUserRequest request) {
         userRepository.selectOne("username = ?", request.username).ifPresent(user -> {
@@ -132,7 +137,7 @@ public class BOUserService {
         byte[] salt = generateSalt();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
             byte[] hash = f.generateSecret(spec).getEncoded();
             Base64.Encoder enc = Base64.getEncoder();
             user.password = enc.encodeToString(hash);

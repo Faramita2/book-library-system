@@ -30,6 +30,11 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
     Repository<User> userRepository;
+    String secretKey;
+
+    public UserService(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public GetUserResponse get(Long id) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
@@ -78,7 +83,7 @@ public class UserService {
         byte[] salt = generateSalt();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
             byte[] hash = f.generateSecret(spec).getEncoded();
             Base64.Encoder enc = Base64.getEncoder();
             user.password = enc.encodeToString(hash);
