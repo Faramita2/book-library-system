@@ -1,7 +1,7 @@
 package app.scheduler.job;
 
 import app.book.api.BookWebService;
-import app.borrowrecord.api.SchedulerBorrowRecordWebService;
+import app.borrowrecord.api.BOBorrowRecordWebService;
 import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class NotifyUserReturnBookJob implements Job {
     private final Logger logger = LoggerFactory.getLogger(NotifyUserReturnBookJob.class);
     @Inject
-    SchedulerBorrowRecordWebService schedulerBorrowRecordWebService;
+    BOBorrowRecordWebService boBorrowRecordWebService;
     @Inject
     MessagePublisher<ReturnBorrowedBookMessage> publisher;
     @Inject
@@ -24,7 +24,7 @@ public class NotifyUserReturnBookJob implements Job {
 
     @Override
     public void execute(JobContext context) {
-        schedulerBorrowRecordWebService.list().records.forEach(borrowRecord -> {
+        boBorrowRecordWebService.list().records.forEach(borrowRecord -> {
             ReturnBorrowedBookMessage message = new ReturnBorrowedBookMessage();
             message.bookName = bookWebService.get(borrowRecord.bookId).name;
             message.userId = borrowRecord.borrowUserId;

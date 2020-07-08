@@ -1,5 +1,6 @@
 package app.borrowrecord.borrowrecord.service;
 
+import app.borrowrecord.api.borrowrecord.BOListBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
@@ -9,11 +10,14 @@ import core.framework.mongo.Query;
 import core.framework.util.Lists;
 import org.bson.conversions.Bson;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.or;
 
 /**
  * @author zoo
@@ -56,6 +60,32 @@ public class BOBorrowRecordService {
             view.borrowedTime = borrowRecord.borrowedTime;
             view.returnDate = borrowRecord.returnDate.toLocalDate();
             view.actualReturnDate = borrowRecord.actualReturnDate != null ? borrowRecord.actualReturnDate.toLocalDate() : null;
+            return view;
+        }).collect(Collectors.toList());
+
+        return response;
+    }
+
+    public BOListBorrowRecordResponse list() {
+        List<Bson> filters = Lists.newArrayList();
+        filters.add(eq("actual_return_date", null));
+        filters.add(or(
+            eq("return_date", LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1)),
+            lt("return_date", LocalDate.now())
+        ));
+
+        Query query = new Query();
+        query.filter = and(filters);
+
+        BOListBorrowRecordResponse response = new BOListBorrowRecordResponse();
+        response.total = collection.count(query.filter);
+        response.records = collection.find(query).stream().map(borrowRecord -> {
+            BOListBorrowRecordResponse.Record view = new BOListBorrowRecordResponse.Record();
+            view.id = borrowRecord.id.toString();
+            view.bookId = borrowRecord.book.id;
+            view.borrowUserId = borrowRecord.user.id;
+            view.borrowedTime = borrowRecord.borrowedTime;
+            view.returnDate = borrowRecord.returnDate.toLocalDate();
             return view;
         }).collect(Collectors.toList());
 

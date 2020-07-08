@@ -2,7 +2,6 @@ package app.borrowrecord.borrowrecord.service;
 
 import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.SchedulerSearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
@@ -10,21 +9,14 @@ import app.borrowrecord.borrowrecord.domain.BorrowRecord;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
-import core.framework.util.Lists;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.lt;
-import static com.mongodb.client.model.Filters.or;
 
 /**
  * @author zoo
@@ -86,32 +78,6 @@ public class BorrowRecordService {
         response.borrowedTime = borrowRecord.borrowedTime;
         response.returnDate = borrowRecord.returnDate.toLocalDate();
         response.actualReturnDate = borrowRecord.actualReturnDate != null ? borrowRecord.actualReturnDate.toLocalDate() : null;
-
-        return response;
-    }
-
-    public SchedulerSearchBorrowRecordResponse list() {
-        List<Bson> filters = Lists.newArrayList();
-        filters.add(eq("actual_return_date", null));
-        filters.add(or(
-            eq("return_date", LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1)),
-            lt("return_date", LocalDate.now())
-        ));
-
-        Query query = new Query();
-        query.filter = and(filters);
-
-        SchedulerSearchBorrowRecordResponse response = new SchedulerSearchBorrowRecordResponse();
-        response.total = collection.count(query.filter);
-        response.records = collection.find(query).stream().map(borrowRecord -> {
-            SchedulerSearchBorrowRecordResponse.Record view = new SchedulerSearchBorrowRecordResponse.Record();
-            view.id = borrowRecord.id.toString();
-            view.bookId = borrowRecord.book.id;
-            view.borrowUserId = borrowRecord.user.id;
-            view.borrowedTime = borrowRecord.borrowedTime;
-            view.returnDate = borrowRecord.returnDate.toLocalDate();
-            return view;
-        }).collect(Collectors.toList());
 
         return response;
     }
