@@ -31,6 +31,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
         session.set("user_status", loginResponse.status.name());
     }
 
+    @SkipLogin
     @Override
     public void logout() {
         String userId = webContext.request().session().get("user_id").orElse(null);
