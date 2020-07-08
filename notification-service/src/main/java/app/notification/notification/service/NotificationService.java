@@ -54,7 +54,7 @@ public class NotificationService {
         query.where("user_id = ?", request.userId);
 
         if (!Strings.isBlank(request.content)) {
-            query.where("content LIKE ?", Strings.format("{}%", request.content));
+            query.where("content LIKE ?", Strings.format("%{}%", request.content));
         }
 
         SearchNotificationResponse response = new SearchNotificationResponse();

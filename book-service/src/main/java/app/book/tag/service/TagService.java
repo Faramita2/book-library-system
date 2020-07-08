@@ -22,7 +22,7 @@ public class TagService {
 
         Query<Tag> query = tagRepository.select();
         if (request.name != null) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         response.total = query.count();

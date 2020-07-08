@@ -22,7 +22,7 @@ public class AuthorService {
 
         Query<Author> query = authorRepository.select();
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         response.total = query.count();

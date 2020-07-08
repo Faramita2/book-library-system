@@ -21,7 +21,7 @@ public class CategoryService {
         SearchCategoryResponse response = new SearchCategoryResponse();
         Query<Category> query = categoryRepository.select();
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         response.total = query.count();

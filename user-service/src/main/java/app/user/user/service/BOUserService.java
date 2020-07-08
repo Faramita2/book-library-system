@@ -68,11 +68,11 @@ public class BOUserService {
         }
 
         if (!Strings.isBlank(request.username)) {
-            query.where("username LIKE ?", Strings.format("{}%", request.username));
+            query.where("username LIKE ?", Strings.format("%{}%", request.username));
         }
 
         if (!Strings.isBlank(request.email)) {
-            query.where("email LIKE ?", Strings.format("{}%", request.email));
+            query.where("email LIKE ?", Strings.format("%{}%", request.email));
         }
 
         if (request.status != null) {

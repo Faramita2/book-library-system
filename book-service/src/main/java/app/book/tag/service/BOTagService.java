@@ -38,7 +38,7 @@ public class BOTagService {
         Query<Tag> query = tagRepository.select();
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         query.skip(request.skip);

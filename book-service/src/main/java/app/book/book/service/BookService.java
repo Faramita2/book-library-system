@@ -52,11 +52,11 @@ public class BookService {
         query.limit(request.limit);
 
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         if (!Strings.isBlank(request.description)) {
-            query.where("description LIKE ?", Strings.format("{}%", request.description));
+            query.where("description LIKE ?", Strings.format("%{}%", request.description));
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {

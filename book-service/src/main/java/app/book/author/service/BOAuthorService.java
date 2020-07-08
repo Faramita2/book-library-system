@@ -36,7 +36,7 @@ public class BOAuthorService {
     public BOSearchAuthorResponse search(BOSearchAuthorRequest request) {
         Query<Author> query = authorRepository.select();
         if (!Strings.isBlank(request.name)) {
-            query.where("name LIKE ?", Strings.format("{}%", request.name));
+            query.where("name LIKE ?", Strings.format("%{}%", request.name));
         }
 
         query.skip(request.skip);
