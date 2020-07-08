@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.gte;
 import static com.mongodb.client.model.Filters.lt;
 import static com.mongodb.client.model.Filters.or;
 
@@ -95,9 +94,8 @@ public class BorrowRecordService {
         List<Bson> filters = Lists.newArrayList();
         filters.add(eq("actual_return_date", null));
         filters.add(or(
-            and(gte("return_date", LocalDate.now().atStartOfDay().plusDays(1)),
-                lt("return_date", LocalDate.now().atStartOfDay().plusDays(2))),
-            lt("return_date", LocalDate.now().atStartOfDay())
+            eq("return_date", LocalDate.now().atStartOfDay().plusDays(1).minusSeconds(1)),
+            lt("return_date", LocalDate.now())
         ));
 
         Query query = new Query();
