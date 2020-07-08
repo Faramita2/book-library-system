@@ -6,7 +6,6 @@ import app.api.admin.admin.BOGetAdminByAccountResponse;
 import app.api.authentication.authentication.BOLoginRequest;
 import app.api.authentication.authentication.BOLoginResponse;
 import core.framework.inject.Inject;
-import core.framework.inject.Named;
 import core.framework.web.exception.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +24,11 @@ public class BOAuthenticationService {
     private final Logger logger = LoggerFactory.getLogger(BOAuthenticationService.class);
     @Inject
     BOAdminWebService boAdminWebService;
-    @Inject
-    @Named("secretKey")
     String secretKey;
+
+    public BOAuthenticationService(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public BOLoginResponse login(BOLoginRequest request) {
         BOGetAdminByAccountRequest boGetAdminByAccountRequest = new BOGetAdminByAccountRequest();

@@ -9,7 +9,6 @@ import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.ResetUserPasswordRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
-import core.framework.inject.Named;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
@@ -32,9 +31,11 @@ public class AuthenticationService {
     UserWebService userWebService;
     @Inject
     Redis redis;
-    @Inject
-    @Named("secretKey")
     String secretKey;
+
+    public AuthenticationService(String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     public LoginResponse login(LoginRequest request) {
         GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest();
