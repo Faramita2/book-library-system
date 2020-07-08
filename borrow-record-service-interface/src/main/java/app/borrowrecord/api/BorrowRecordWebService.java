@@ -1,10 +1,10 @@
 package app.borrowrecord.api;
 
-import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BorrowBookRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.ReturnBookRequest;
 import core.framework.api.http.HTTPStatus;
 import core.framework.api.web.service.GET;
 import core.framework.api.web.service.POST;
@@ -20,7 +20,7 @@ public interface BorrowRecordWebService {
     @POST
     @Path("/borrow-record")
     @ResponseStatus(HTTPStatus.CREATED)
-    void create(CreateBorrowRecordRequest request);
+    void borrowBook(BorrowBookRequest request);
 
     @GET
     @Path("/borrow-record/:id")
@@ -31,6 +31,6 @@ public interface BorrowRecordWebService {
     SearchBorrowRecordResponse search(SearchBorrowRecordRequest request);
 
     @PUT
-    @Path("/borrow-record/:id")
-    void update(@PathParam("id") String id, UpdateBorrowRecordRequest request);
+    @Path("/borrow-record/:id/return")
+    void returnBook(@PathParam("id") String id, ReturnBookRequest request);
 }

@@ -9,15 +9,14 @@ import app.book.api.book.UpdateBookRequest;
 import app.book.api.category.CategoryView;
 import app.book.api.tag.TagView;
 import app.borrowrecord.api.BorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BorrowBookRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.ReturnBookRequest;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ForbiddenException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -35,18 +34,18 @@ public class BorrowRecordService {
         if (getBookResponse.status != BookStatusView.AVAILABLE) {
             throw new BadRequestException("cannot borrow this book!", Markers.errorCode("BOOK_BORROWED").getName());
         }
-        CreateBorrowRecordRequest createBorrowRecordRequest = new CreateBorrowRecordRequest();
-        createBorrowRecordRequest.bookId = getBookResponse.id;
-        createBorrowRecordRequest.bookName = getBookResponse.name;
-        createBorrowRecordRequest.bookDescription = getBookResponse.description;
-        createBorrowRecordRequest.authors = getBookResponse.authors.stream().map(this::getAuthorView).collect(Collectors.toList());
-        createBorrowRecordRequest.categories = getBookResponse.categories.stream().map(this::getCategoryView).collect(Collectors.toList());
-        createBorrowRecordRequest.tags = getBookResponse.tags.stream().map(this::getTagView).collect(Collectors.toList());
-        createBorrowRecordRequest.borrowUserId = userId;
-        createBorrowRecordRequest.borrowUsername = username;
-        createBorrowRecordRequest.returnDate = request.returnDate;
-        createBorrowRecordRequest.requestedBy = username;
-        borrowRecordWebService.create(createBorrowRecordRequest);
+        BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
+        borrowBookRequest.bookId = getBookResponse.id;
+        borrowBookRequest.bookName = getBookResponse.name;
+        borrowBookRequest.bookDescription = getBookResponse.description;
+        borrowBookRequest.authors = getBookResponse.authors.stream().map(this::getAuthorView).collect(Collectors.toList());
+        borrowBookRequest.categories = getBookResponse.categories.stream().map(this::getCategoryView).collect(Collectors.toList());
+        borrowBookRequest.tags = getBookResponse.tags.stream().map(this::getTagView).collect(Collectors.toList());
+        borrowBookRequest.borrowUserId = userId;
+        borrowBookRequest.borrowUsername = username;
+        borrowBookRequest.returnDate = request.returnDate;
+        borrowBookRequest.requestedBy = username;
+        borrowRecordWebService.borrowBook(borrowBookRequest);
 
         UpdateBookRequest updateBookRequest = new UpdateBookRequest();
         updateBookRequest.borrowUserId = userId;
@@ -73,28 +72,27 @@ public class BorrowRecordService {
         updateBookRequest.requestedBy = username;
         bookWebService.update(getBorrowRecordResponse.bookId, updateBookRequest);
 
-        UpdateBorrowRecordRequest updateBorrowRecordRequest = new UpdateBorrowRecordRequest();
-        updateBorrowRecordRequest.actualReturnDate = LocalDate.now();
-        updateBorrowRecordRequest.requestedBy = username;
-        borrowRecordWebService.update(id, updateBorrowRecordRequest);
+        ReturnBookRequest returnBookRequest = new ReturnBookRequest();
+        returnBookRequest.requestedBy = username;
+        borrowRecordWebService.returnBook(id, returnBookRequest);
     }
 
-    private CreateBorrowRecordRequest.Author getAuthorView(AuthorView author) {
-        CreateBorrowRecordRequest.Author authorView = new CreateBorrowRecordRequest.Author();
+    private BorrowBookRequest.Author getAuthorView(AuthorView author) {
+        BorrowBookRequest.Author authorView = new BorrowBookRequest.Author();
         authorView.id = author.id;
         authorView.name = author.name;
         return authorView;
     }
 
-    private CreateBorrowRecordRequest.Category getCategoryView(CategoryView category) {
-        CreateBorrowRecordRequest.Category categoryView = new CreateBorrowRecordRequest.Category();
+    private BorrowBookRequest.Category getCategoryView(CategoryView category) {
+        BorrowBookRequest.Category categoryView = new BorrowBookRequest.Category();
         categoryView.id = category.id;
         categoryView.name = category.name;
         return categoryView;
     }
 
-    private CreateBorrowRecordRequest.Tag getTagView(TagView tag) {
-        CreateBorrowRecordRequest.Tag tagView = new CreateBorrowRecordRequest.Tag();
+    private BorrowBookRequest.Tag getTagView(TagView tag) {
+        BorrowBookRequest.Tag tagView = new BorrowBookRequest.Tag();
         tagView.id = tag.id;
         tagView.name = tag.name;
         return tagView;

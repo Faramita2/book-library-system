@@ -1,11 +1,11 @@
 package app.borrowrecord.borrowrecord.web;
 
 import app.borrowrecord.api.BorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BorrowBookRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.ReturnBookRequest;
 import app.borrowrecord.borrowrecord.service.BorrowRecordService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
@@ -18,8 +18,8 @@ public class BorrowRecordWebServiceImpl implements BorrowRecordWebService {
     BorrowRecordService service;
 
     @Override
-    public void create(CreateBorrowRecordRequest request) {
-        service.create(request);
+    public void borrowBook(BorrowBookRequest request) {
+        service.borrowBook(request);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class BorrowRecordWebServiceImpl implements BorrowRecordWebService {
     }
 
     @Override
-    public void update(String id, UpdateBorrowRecordRequest request) {
+    public void returnBook(String id, ReturnBookRequest request) {
         ActionLogContext.put("id", id);
-        service.update(id, request);
+        service.returnBook(id, request);
     }
 }

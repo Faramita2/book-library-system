@@ -1,10 +1,10 @@
 package app.borrowrecord.borrowrecord.service;
 
-import app.borrowrecord.api.borrowrecord.CreateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.BorrowBookRequest;
 import app.borrowrecord.api.borrowrecord.GetBorrowRecordResponse;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
 import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
-import app.borrowrecord.api.borrowrecord.UpdateBorrowRecordRequest;
+import app.borrowrecord.api.borrowrecord.ReturnBookRequest;
 import app.borrowrecord.borrowrecord.domain.BorrowRecord;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
@@ -26,7 +26,7 @@ public class BorrowRecordService {
     @Inject
     MongoCollection<BorrowRecord> collection;
 
-    public void create(CreateBorrowRecordRequest request) {
+    public void borrowBook(BorrowBookRequest request) {
         BorrowRecord.User user = new BorrowRecord.User();
         user.id = request.borrowUserId;
         user.username = request.borrowUsername;
@@ -60,7 +60,7 @@ public class BorrowRecordService {
         borrowRecord.book = book;
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.borrowedTime = now;
-        borrowRecord.returnDate = request.returnDate.atStartOfDay().plusDays(1).minusSeconds(1);
+        borrowRecord.returnDate = request.returnDate.atStartOfDay();
         borrowRecord.createdTime = now;
         borrowRecord.updatedTime = now;
         borrowRecord.createdBy = request.requestedBy;
@@ -83,10 +83,10 @@ public class BorrowRecordService {
         return response;
     }
 
-    public void update(String id, UpdateBorrowRecordRequest request) {
+    public void returnBook(String id, ReturnBookRequest request) {
         BorrowRecord borrowRecord = collection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
             Strings.format("borrow record not found, id = {}", id), Markers.errorCode("BORROW_RECORD_NOT_FOUND").getName()));
-        borrowRecord.actualReturnDate = request.actualReturnDate.atStartOfDay().plusDays(1).minusSeconds(1);
+        borrowRecord.actualReturnDate = LocalDateTime.now();
         borrowRecord.updatedBy = request.requestedBy;
         borrowRecord.updatedTime = LocalDateTime.now();
 

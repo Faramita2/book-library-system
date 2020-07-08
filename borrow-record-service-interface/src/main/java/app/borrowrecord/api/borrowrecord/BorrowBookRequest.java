@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author zoo
  */
-public class CreateBorrowRecordRequest {
+public class BorrowBookRequest {
     @NotNull
     @Property(name = "book_id")
     public Long bookId;
