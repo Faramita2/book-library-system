@@ -12,6 +12,7 @@ import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,9 @@ public class BOCategoryService {
     Repository<BookCategory> bookCategoryRepository;
 
     public void create(BOCreateCategoryRequest request) {
+        categoryRepository.selectOne("name = ?", request.name).ifPresent(category -> {
+            throw new ConflictException(Strings.format("category exists, name = {}", category.name), Markers.errorCode("BOOK_CATEGORY_EXIST").getName());
+        });
         Category category = new Category();
         category.name = request.name;
         LocalDateTime now = LocalDateTime.now();

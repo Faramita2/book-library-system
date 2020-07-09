@@ -12,6 +12,7 @@ import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
+import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,9 @@ public class BOTagService {
     Repository<BookTag> bookTagRepository;
 
     public void create(BOCreateTagRequest request) {
+        tagRepository.selectOne("name = ?", request.name).ifPresent(tag -> {
+            throw new ConflictException(Strings.format("tag exists, name = {}", tag.name), Markers.errorCode("BOOK_TAG_EXISTS").getName());
+        });
         Tag tag = new Tag();
         tag.name = request.name;
         LocalDateTime now = LocalDateTime.now();
@@ -35,7 +39,7 @@ public class BOTagService {
         tag.createdBy = request.requestedBy;
         tag.updatedBy = request.requestedBy;
 
-        tagRepository.insert(tag).orElseThrow();
+        tagRepository.insert(tag);
     }
 
     public BOSearchTagResponse search(BOSearchTagRequest request) {

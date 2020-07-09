@@ -5,32 +5,32 @@ CREATE TABLE IF NOT EXISTS `categories` (
     `updated_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `created_by` VARCHAR(50) NOT NULL,
     `updated_by` VARCHAR(50) NOT NULL,
-    INDEX `name_index`(`name` ASC)
+    UNIQUE INDEX `name_index`(`name` ASC)
 );
 
----- rename columns `created_at`, `updated_at`
+---- change index `name_index` to unique
 
-set @columnExisting := (
-    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'categories' AND COLUMN_NAME = 'created_at'
+set @indexExisting := (
+    SELECT COUNT(*) FROM information_schema.STATISTICS where table_name = 'categories' and index_name = 'name_index' and table_schema = database()
 );
 
 set @sqlStmt := if(
-    @columnExisting > 0,
-    'ALTER TABLE categories RENAME COLUMN created_at TO created_time;',
-    "SELECT 'INFO: Column NOT exists.'"
+    @indexExisting > 0,
+    'DROP INDEX name_index ON categories;',
+    "SELECT 'INFO: INDEX NOT exists.'"
 );
 
 PREPARE stmt FROM @sqlStmt;
 EXECUTE stmt;
 
-set @columnExisting := (
-    select count(COLUMN_NAME) from information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'categories' AND COLUMN_NAME = 'updated_at'
+set @indexExisting := (
+    SELECT COUNT(*) FROM information_schema.STATISTICS where table_name = 'categories' and index_name = 'name_index' and table_schema = database()
 );
 
 set @sqlStmt := if(
-    @columnExisting > 0,
-    'ALTER TABLE categories RENAME COLUMN updated_at TO updated_time;',
-    "SELECT 'INFO: Column NOT exists.'"
+    @indexExisting = 0,
+    'CREATE UNIQUE INDEX `name_index` ON categories (`name`);',
+    "SELECT 'INFO: INDEX exists.'"
 );
 
 PREPARE stmt FROM @sqlStmt;
