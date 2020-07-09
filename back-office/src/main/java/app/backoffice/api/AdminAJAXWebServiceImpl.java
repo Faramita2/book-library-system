@@ -27,6 +27,7 @@ public class AdminAJAXWebServiceImpl implements AdminAJAXWebService {
         webContext.request().session().set("admin_account", request.account);
     }
 
+    @SkipLogin
     @Override
     public void logout() {
         webContext.request().session().invalidate();
