@@ -1,4 +1,4 @@
-package app.book.api.book;
+package app.book.api.kafka;
 
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
@@ -10,19 +10,22 @@ import java.time.LocalDateTime;
 /**
  * @author zoo
  */
-public class UpdateBookRequest {
-    @Property(name = "borrow_user_id")
-    public Long borrowUserId;
+public class ReturnBorrowedBookMessage {
+    @NotNull
+    @Property(name = "book_name")
+    public String bookName;
 
     @NotNull
-    @Property(name = "status")
-    public BookStatusView status;
+    @Property(name = "user_id")
+    public Long userId;
 
-    @Property(name = "return_date")
-    public LocalDate returnDate;
-
+    @NotNull
     @Property(name = "borrowed_time")
     public LocalDateTime borrowedTime;
+
+    @NotNull
+    @Property(name = "return_date")
+    public LocalDate returnDate;
 
     @NotNull
     @NotBlank

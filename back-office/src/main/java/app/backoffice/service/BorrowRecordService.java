@@ -5,9 +5,9 @@ import app.api.backoffice.bookcategory.BookCategoryAJAXView;
 import app.api.backoffice.booktag.BookTagAJAXView;
 import app.api.backoffice.borrowrecord.SearchBorrowRecordAJAXRequest;
 import app.api.backoffice.borrowrecord.SearchBorrowRecordAJAXResponse;
-import app.borrowrecord.api.BOBorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordRequest;
-import app.borrowrecord.api.borrowrecord.BOSearchBorrowRecordResponse;
+import app.book.api.BOBorrowRecordWebService;
+import app.book.api.borrowrecord.BOSearchBorrowRecordRequest;
+import app.book.api.borrowrecord.BOSearchBorrowRecordResponse;
 import core.framework.inject.Inject;
 
 import java.util.stream.Collectors;

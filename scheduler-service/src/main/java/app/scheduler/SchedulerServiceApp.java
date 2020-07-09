@@ -1,7 +1,7 @@
 package app.scheduler;
 
+import app.book.api.BOBorrowRecordWebService;
 import app.book.api.BookWebService;
-import app.borrowrecord.api.BOBorrowRecordWebService;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
 
@@ -18,7 +18,7 @@ public class SchedulerServiceApp extends App {
 
     private void apiClients() {
         api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
-        api().client(BOBorrowRecordWebService.class, requiredProperty("app.borrowRecord.ServiceURL"));
+        api().client(BOBorrowRecordWebService.class, requiredProperty("app.book.ServiceURL"));
     }
 
     private void modules() {

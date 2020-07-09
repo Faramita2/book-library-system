@@ -62,7 +62,7 @@ public class NotificationService {
         response.notifications = query.fetch().stream().map(notification -> {
             SearchNotificationResponse.Notification view = new SearchNotificationResponse.Notification();
             view.id = notification.id;
-            view.content = Strings.truncate(notification.content, 50);
+            view.content = Strings.truncate(notification.content, 100);
             view.createdTime = notification.createdTime;
             return view;
         }).collect(Collectors.toList());

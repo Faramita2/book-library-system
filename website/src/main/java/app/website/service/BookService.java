@@ -9,17 +9,19 @@ import app.api.website.book.SearchBorrowedBookAJAXResponse;
 import app.api.website.bookauthor.BookAuthorAJAXView;
 import app.api.website.bookcategory.BookCategoryAJAXView;
 import app.api.website.booktag.BookTagAJAXView;
+import app.api.website.borrowrecord.BorrowBookAJAXRequest;
 import app.book.api.BookWebService;
+import app.book.api.BorrowRecordWebService;
 import app.book.api.author.AuthorView;
 import app.book.api.book.BookStatusView;
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
+import app.book.api.borrowrecord.SearchBorrowRecordRequest;
+import app.book.api.borrowrecord.SearchBorrowRecordResponse;
 import app.book.api.category.CategoryView;
 import app.book.api.tag.TagView;
-import app.borrowrecord.api.BorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.SearchBorrowRecordRequest;
-import app.borrowrecord.api.borrowrecord.SearchBorrowRecordResponse;
 import app.user.api.UserWebService;
 import core.framework.inject.Inject;
 
@@ -84,6 +86,15 @@ public class BookService {
         response.status = BookStatusAJAXView.valueOf(getBookResponse.status.name());
 
         return response;
+    }
+
+    public void borrow(Long id, BorrowBookAJAXRequest request, Long userId, String username) {
+        BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
+        borrowBookRequest.borrowUserId = userId;
+        borrowBookRequest.borrowUsername = username;
+        borrowBookRequest.returnDate = request.returnDate;
+        borrowBookRequest.requestedBy = username;
+        bookWebService.borrow(id, borrowBookRequest);
     }
 
     public SearchBorrowedBookAJAXResponse searchBorrowedBook(SearchBorrowedBookAJAXRequest request, Long userId) {

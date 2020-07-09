@@ -1,8 +1,8 @@
 package app.scheduler.job;
 
+import app.book.api.BOBorrowRecordWebService;
 import app.book.api.BookWebService;
-import app.borrowrecord.api.BOBorrowRecordWebService;
-import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
+import app.book.api.kafka.ReturnBorrowedBookMessage;
 import core.framework.inject.Inject;
 import core.framework.kafka.MessagePublisher;
 import core.framework.scheduler.Job;

@@ -10,10 +10,6 @@ import java.time.LocalDate;
  */
 public class BorrowBookAJAXRequest {
     @NotNull
-    @Property(name = "book_id")
-    public Long bookId;
-
-    @NotNull
     @Property(name = "return_date")
     public LocalDate returnDate;
 }

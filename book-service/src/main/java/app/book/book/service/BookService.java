@@ -2,10 +2,10 @@ package app.book.book.service;
 
 import app.book.api.author.AuthorView;
 import app.book.api.book.BookStatusView;
+import app.book.api.book.BorrowBookRequest;
 import app.book.api.book.GetBookResponse;
 import app.book.api.book.SearchBookRequest;
 import app.book.api.book.SearchBookResponse;
-import app.book.api.book.UpdateBookRequest;
 import app.book.api.category.CategoryView;
 import app.book.api.tag.TagView;
 import app.book.author.domain.Author;
@@ -14,14 +14,20 @@ import app.book.book.domain.BookAuthor;
 import app.book.book.domain.BookCategory;
 import app.book.book.domain.BookStatus;
 import app.book.book.domain.BookTag;
+import app.book.borrowrecord.domain.BorrowRecord;
 import app.book.category.domain.Category;
 import app.book.tag.domain.Tag;
+import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
+import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
+import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
+import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -45,6 +51,10 @@ public class BookService {
     Repository<Category> categoryRepository;
     @Inject
     Repository<Tag> tagRepository;
+    @Inject
+    Database database;
+    @Inject
+    MongoCollection<BorrowRecord> borrowRecordMongoCollection;
 
     public SearchBookResponse search(SearchBookRequest request) {
         Query<Book> query = bookRepository.select();
@@ -60,18 +70,18 @@ public class BookService {
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_authors WHERE author_id IN(?))",
+            query.where(Strings.format("id IN(SELECT book_id from book_authors WHERE author_id IN({}))"),
                 request.authorIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_categories WHERE category_id IN(?))",
+            query.where(Strings.format("id IN(SELECT book_id from book_categories WHERE category_id IN({}))"),
                 request.categoryIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_tags WHERE tag_id IN(?))",
-                request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
+            query.where(Strings.format("id IN(SELECT book_id from book_tags WHERE tag_id IN({}))",
+                request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(","))));
         }
 
         if (request.status != null) {
@@ -114,17 +124,64 @@ public class BookService {
         return response;
     }
 
-    public void update(Long id, UpdateBookRequest request) {
+    public void borrow(Long id, BorrowBookRequest request) {
         Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
             Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
-        book.status = BookStatus.valueOf(request.status.name());
+        if (book.status == BookStatus.BORROWED) {
+            throw new BadRequestException(Strings.format("book has been borrowed!"), Markers.errorCode("BOOK_BORROWED").getName());
+        }
+        book.status = BookStatus.BORROWED;
         book.borrowUserId = request.borrowUserId;
-        book.borrowedTime = request.borrowedTime;
+        LocalDateTime now = LocalDateTime.now();
+        book.borrowedTime = now;
         book.returnDate = request.returnDate;
-        book.updatedTime = LocalDateTime.now();
+        book.updatedTime = now;
         book.updatedBy = request.requestedBy;
 
-        bookRepository.update(book);
+        BorrowRecord borrowRecord = getBorrowRecord(request, book, now);
+
+        try (Transaction transaction = database.beginTransaction()) {
+            bookRepository.update(book);
+            borrowRecordMongoCollection.insert(borrowRecord);
+            transaction.commit();
+        }
+    }
+
+    private BorrowRecord getBorrowRecord(BorrowBookRequest request, Book book, LocalDateTime now) {
+        BorrowRecord borrowRecord = new BorrowRecord();
+        borrowRecord.id = ObjectId.get();
+        borrowRecord.user = new BorrowRecord.User();
+        borrowRecord.user.id = request.borrowUserId;
+        borrowRecord.user.username = request.borrowUsername;
+        borrowRecord.book = new BorrowRecord.Book();
+        borrowRecord.book.id = book.id;
+        borrowRecord.book.name = book.name;
+        borrowRecord.book.description = book.description;
+        borrowRecord.book.authors = queryAuthorsByBookId(book.id).stream().map(author -> {
+            BorrowRecord.Author view = new BorrowRecord.Author();
+            view.id = author.id;
+            view.name = author.name;
+            return view;
+        }).collect(Collectors.toList());
+        borrowRecord.book.categories = queryCategoriesByBookId(book.id).stream().map(category -> {
+            BorrowRecord.Category view = new BorrowRecord.Category();
+            view.id = category.id;
+            view.name = category.name;
+            return view;
+        }).collect(Collectors.toList());
+        borrowRecord.book.tags = queryTagsByBookId(book.id).stream().map(tag -> {
+            BorrowRecord.Tag view = new BorrowRecord.Tag();
+            view.id = tag.id;
+            view.name = tag.name;
+            return view;
+        }).collect(Collectors.toList());
+        borrowRecord.borrowedTime = now;
+        borrowRecord.returnDate = request.returnDate.atStartOfDay();
+        borrowRecord.createdTime = now;
+        borrowRecord.updatedTime = now;
+        borrowRecord.createdBy = request.requestedBy;
+        borrowRecord.updatedBy = request.requestedBy;
+        return borrowRecord;
     }
 
     private List<Author> queryAuthorsByBookId(Long bookId) {

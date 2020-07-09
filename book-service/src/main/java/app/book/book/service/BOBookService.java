@@ -104,18 +104,18 @@ public class BOBookService {
         }
 
         if (request.authorIds != null && !request.authorIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_authors WHERE author_id IN(?))",
+            query.where(Strings.format("id IN(SELECT book_id from book_authors WHERE author_id IN({}))"),
                 request.authorIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.categoryIds != null && !request.categoryIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_categories WHERE category_id IN(?))",
+            query.where(Strings.format("id IN(SELECT book_id from book_categories WHERE category_id IN({}))"),
                 request.categoryIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
         }
 
         if (request.tagIds != null && !request.tagIds.isEmpty()) {
-            query.where("id IN(SELECT book_id from book_tags WHERE tag_id IN(?))",
-                request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(",")));
+            query.where(Strings.format("id IN(SELECT book_id from book_tags WHERE tag_id IN({}))",
+                request.tagIds.stream().map(String::valueOf).collect(Collectors.joining(","))));
         }
 
         BOSearchBookResponse response = new BOSearchBookResponse();

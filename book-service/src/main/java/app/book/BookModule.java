@@ -2,7 +2,6 @@ package app.book;
 
 import app.book.api.BOBookWebService;
 import app.book.api.BookWebService;
-import app.book.book.domain.Book;
 import app.book.book.service.BOBookService;
 import app.book.book.service.BookService;
 import app.book.book.web.BOBookWebServiceImpl;
@@ -15,8 +14,6 @@ import core.framework.module.Module;
 public class BookModule extends Module {
     @Override
     protected void initialize() {
-        dbs();
-
         services();
 
         apiServices();
@@ -30,9 +27,5 @@ public class BookModule extends Module {
     private void services() {
         bind(BOBookService.class);
         bind(BookService.class);
-    }
-
-    private void dbs() {
-        db().repository(Book.class);
     }
 }

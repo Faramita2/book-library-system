@@ -1,6 +1,6 @@
 package app.scheduler;
 
-import app.borrowrecord.api.borrowrecord.kafka.ReturnBorrowedBookMessage;
+import app.book.api.kafka.ReturnBorrowedBookMessage;
 import app.scheduler.job.NotifyUserReturnBookJob;
 import core.framework.module.Module;
 
