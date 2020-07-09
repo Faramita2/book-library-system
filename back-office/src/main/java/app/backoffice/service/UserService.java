@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
-    BOUserWebService userWebService;
+    BOUserWebService boUserWebService;
     @Inject
     Redis redis;
 
@@ -39,7 +39,7 @@ public class UserService {
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
         boCreateUserRequest.requestedBy = adminAccount;
 
-        userWebService.create(boCreateUserRequest);
+        boUserWebService.create(boCreateUserRequest);
     }
 
     public SearchUserAJAXResponse search(SearchUserAJAXRequest request) {
@@ -49,7 +49,7 @@ public class UserService {
         boSearchUserRequest.email = request.email;
         boSearchUserRequest.username = request.username;
         boSearchUserRequest.status = request.status != null ? UserStatusView.valueOf(request.status.name()) : null;
-        BOSearchUserResponse boSearchUserResponse = userWebService.search(boSearchUserRequest);
+        BOSearchUserResponse boSearchUserResponse = boUserWebService.search(boSearchUserRequest);
 
         SearchUserAJAXResponse response = new SearchUserAJAXResponse();
         response.total = boSearchUserResponse.total;
@@ -90,7 +90,7 @@ public class UserService {
         boUpdateUserRequest.status = UserStatusView.ACTIVE;
         boUpdateUserRequest.requestedBy = adminAccount;
 
-        userWebService.update(id, boUpdateUserRequest);
+        boUserWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.ACTIVE.name());
     }
 
@@ -99,7 +99,7 @@ public class UserService {
         boUpdateUserRequest.status = UserStatusView.INACTIVE;
         boUpdateUserRequest.requestedBy = adminAccount;
 
-        userWebService.update(id, boUpdateUserRequest);
+        boUserWebService.update(id, boUpdateUserRequest);
         redis.set(Strings.format("users:{}:status", id), UserStatusView.INACTIVE.name());
     }
 }

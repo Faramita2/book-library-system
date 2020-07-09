@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class BorrowRecordService {
     @Inject
-    BOBorrowRecordWebService borrowRecordWebService;
+    BOBorrowRecordWebService boBorrowRecordWebService;
 
     public SearchBorrowRecordAJAXResponse search(SearchBorrowRecordAJAXRequest request) {
         BOSearchBorrowRecordRequest boSearchBorrowRecordRequest = new BOSearchBorrowRecordRequest();
@@ -25,7 +25,7 @@ public class BorrowRecordService {
         boSearchBorrowRecordRequest.bookId = request.bookId;
         boSearchBorrowRecordRequest.skip = request.skip;
         boSearchBorrowRecordRequest.limit = request.limit;
-        BOSearchBorrowRecordResponse boSearchBorrowRecordResponse = borrowRecordWebService.search(boSearchBorrowRecordRequest);
+        BOSearchBorrowRecordResponse boSearchBorrowRecordResponse = boBorrowRecordWebService.search(boSearchBorrowRecordRequest);
 
         SearchBorrowRecordAJAXResponse response = new SearchBorrowRecordAJAXResponse();
         response.total = boSearchBorrowRecordResponse.total;

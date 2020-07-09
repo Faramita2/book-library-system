@@ -24,7 +24,10 @@ import app.book.api.category.CategoryView;
 import app.book.api.tag.TagView;
 import app.user.api.UserWebService;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
+import core.framework.web.exception.BadRequestException;
 
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 /**
@@ -89,6 +92,9 @@ public class BookService {
     }
 
     public void borrow(Long id, BorrowBookAJAXRequest request, Long userId, String username) {
+        if (request.returnDate.atStartOfDay().plusDays(1).isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("book return date error!", Markers.errorCode("ERROR_BOOK_RETURN_DATE").getName());
+        }
         BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
         borrowBookRequest.borrowUserId = userId;
         borrowBookRequest.borrowUsername = username;
