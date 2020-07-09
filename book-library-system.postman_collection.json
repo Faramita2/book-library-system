@@ -1150,6 +1150,34 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "admin logout",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"account\": \"admin\",\r\n    \"password\": \"adminadmin\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/logout",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"logout"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1193,7 +1221,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"jay choua\"\r\n}",
+									"raw": "{\r\n    \"name\": \"Shi Nai'an\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1242,6 +1270,26 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "delete book author",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-author/3",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-author",
+										"3"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1285,7 +1333,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"fiction a\"\r\n}",
+									"raw": "{\r\n    \"name\": \"sad\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1320,6 +1368,26 @@
 										}
 									}
 								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-category/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-category",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete book category",
+							"request": {
+								"method": "DELETE",
+								"header": [],
 								"url": {
 									"raw": "{{url}}:9006/ajax/book-category/1",
 									"host": [
@@ -1377,7 +1445,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"moving\"\r\n}",
+									"raw": "{\r\n    \"name\": \"hot\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1412,6 +1480,26 @@
 										}
 									}
 								},
+								"url": {
+									"raw": "{{url}}:9006/ajax/book-tag/1",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9006",
+									"path": [
+										"ajax",
+										"book-tag",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete book tag",
+							"request": {
+								"method": "DELETE",
+								"header": [],
 								"url": {
 									"raw": "{{url}}:9006/ajax/book-tag/1",
 									"host": [
@@ -1582,7 +1670,7 @@
 					"name": "user",
 					"item": [
 						{
-							"name": "create user",
+							"name": "register user",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -1716,7 +1804,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"password\": \"8765432\"\n}",
+									"raw": "{\n\t\"username\": \"meowmeow\",\n\t\"password\": \"1234567\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1764,6 +1852,25 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "user logout",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{url}}:9007/ajax/logout",
+									"host": [
+										"{{url}}"
+									],
+									"port": "9007",
+									"path": [
+										"ajax",
+										"logout"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -1779,7 +1886,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"skip\": 0,\n\t\"limit\": 1000\n}",
+									"raw": "{\n\t\"skip\": 0,\n\t\"limit\": 1000,\n\t\"tag_ids\": [1]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1855,7 +1962,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"book_id\": 1,\n\t\"return_date\": \"2020-07-08\"\n}",
+									"raw": "{\n\t\"return_date\": \"2020-07-09\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1863,14 +1970,16 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/borrow-record",
+									"raw": "{{url}}:9007/ajax/book/1/borrow",
 									"host": [
 										"{{url}}"
 									],
 									"port": "9007",
 									"path": [
 										"ajax",
-										"borrow-record"
+										"book",
+										"1",
+										"borrow"
 									]
 								}
 							},
@@ -1891,7 +2000,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}:9007/ajax/borrow-record/5f04573dfa6c28363e93524a/return",
+									"raw": "{{url}}:9007/ajax/borrow-record/5f06b58c3fc41062ec0c3186/return",
 									"host": [
 										"{{url}}"
 									],
@@ -1899,7 +2008,7 @@
 									"path": [
 										"ajax",
 										"borrow-record",
-										"5f04573dfa6c28363e93524a",
+										"5f06b58c3fc41062ec0c3186",
 										"return"
 									]
 								}
@@ -2188,7 +2297,7 @@
 	],
 	"variable": [
 		{
-			"id": "a40d6fa5-4ea5-4542-9e93-cea065cea799",
+			"id": "7d25c03a-db05-4860-937f-cf6ec783f537",
 			"key": "url",
 			"value": "https://localhost"
 		}
