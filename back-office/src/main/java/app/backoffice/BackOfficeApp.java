@@ -2,6 +2,7 @@ package app.backoffice;
 
 import app.api.admin.BOAdminWebService;
 import app.api.authentication.BOAuthenticationWebService;
+import app.backoffice.web.interceptor.AuthInterceptor;
 import app.book.api.BOAuthorWebService;
 import app.book.api.BOBookWebService;
 import app.book.api.BOBorrowRecordWebService;
@@ -43,6 +44,8 @@ public class BackOfficeApp extends App {
         api().client(BOCategoryWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOTagWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
+
+        http().intercept(bind(AuthInterceptor.class));
     }
 
     private void sys() {

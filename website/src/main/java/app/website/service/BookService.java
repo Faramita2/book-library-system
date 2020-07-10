@@ -1,15 +1,15 @@
 package app.website.service;
 
-import app.api.website.book.BookStatusAJAXView;
-import app.api.website.book.GetBookAJAXResponse;
-import app.api.website.book.SearchBookAJAXRequest;
-import app.api.website.book.SearchBookAJAXResponse;
-import app.api.website.book.SearchBorrowedBookAJAXRequest;
-import app.api.website.book.SearchBorrowedBookAJAXResponse;
-import app.api.website.bookauthor.BookAuthorAJAXView;
-import app.api.website.bookcategory.BookCategoryAJAXView;
-import app.api.website.booktag.BookTagAJAXView;
-import app.api.website.borrowrecord.BorrowBookAJAXRequest;
+import app.website.api.book.BookStatusAJAXView;
+import app.website.api.book.GetBookAJAXResponse;
+import app.website.api.book.SearchBookAJAXRequest;
+import app.website.api.book.SearchBookAJAXResponse;
+import app.website.api.book.SearchBorrowedBookAJAXRequest;
+import app.website.api.book.SearchBorrowedBookAJAXResponse;
+import app.website.api.bookauthor.BookAuthorAJAXView;
+import app.website.api.bookcategory.BookCategoryAJAXView;
+import app.website.api.booktag.BookTagAJAXView;
+import app.website.api.borrowrecord.BorrowBookAJAXRequest;
 import app.book.api.BookWebService;
 import app.book.api.BorrowRecordWebService;
 import app.book.api.author.AuthorView;

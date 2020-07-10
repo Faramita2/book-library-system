@@ -1,6 +1,6 @@
 package app.website.web.interceptor;
 
-import app.api.website.user.UserStatusAJAXView;
+import app.website.api.user.UserStatusAJAXView;
 import core.framework.inject.Inject;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
@@ -28,7 +28,7 @@ public class AuthInterceptor implements Interceptor {
         if (pass == null) {
             Session session = invocation.context().request().session();
             String userId = session.get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-            Map<String, String> user = redis.hash().getAll(Strings.format("users:{}", userId));
+            Map<String, String> user = redis.hash().getAll(Strings.format("users:{}", userId)); // todo store sessionId
             if (!UserStatusAJAXView.ACTIVE.name().equals(user.get("status"))) {
                 throw new UnauthorizedException("Your account is inactive.");
             }

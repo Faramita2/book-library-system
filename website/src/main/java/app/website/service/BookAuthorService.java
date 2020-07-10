@@ -1,7 +1,7 @@
 package app.website.service;
 
-import app.api.website.bookauthor.SearchBookAuthorAJAXRequest;
-import app.api.website.bookauthor.SearchBookAuthorAJAXResponse;
+import app.website.api.bookauthor.SearchBookAuthorAJAXRequest;
+import app.website.api.bookauthor.SearchBookAuthorAJAXResponse;
 import app.book.api.AuthorWebService;
 import app.book.api.author.SearchAuthorRequest;
 import app.book.api.author.SearchAuthorResponse;

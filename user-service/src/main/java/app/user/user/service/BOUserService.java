@@ -140,6 +140,7 @@ public class BOUserService {
             SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
             byte[] hash = f.generateSecret(spec).getEncoded();
             Base64.Encoder enc = Base64.getEncoder();
+            // todo password hash error handle
             user.password = enc.encodeToString(hash);
             user.salt = enc.encodeToString(salt);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {

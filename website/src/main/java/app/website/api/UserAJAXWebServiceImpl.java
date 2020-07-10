@@ -1,9 +1,8 @@
 package app.website.api;
 
 import app.api.authentication.authentication.LoginResponse;
-import app.api.website.UserAJAXWebService;
-import app.api.website.user.LoginAJAXRequest;
-import app.api.website.user.ResetPasswordAJAXRequest;
+import app.website.api.user.LoginAJAXRequest;
+import app.website.api.user.ResetPasswordAJAXRequest;
 import app.website.service.UserService;
 import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
@@ -35,6 +34,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public void logout() {
         String userId = webContext.request().session().get("user_id").orElse(null);
+        // todo
         service.logout(userId);
         webContext.request().session().invalidate();
     }

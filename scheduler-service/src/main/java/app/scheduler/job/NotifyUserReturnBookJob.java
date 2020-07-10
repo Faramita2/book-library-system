@@ -34,7 +34,8 @@ public class NotifyUserReturnBookJob implements Job {
 
             logger.info("send message, book_name = {}, user_id = {}, borrowed_time = {}, return_date = {}, requested_by = {}",
                 message.bookName, message.userId, message.borrowedTime, message.returnDate, message.requestedBy);
-            publisher.publish("return-borrowed-book", message);
+            // todo key
+            publisher.publish(message);
         });
     }
 }

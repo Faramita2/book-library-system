@@ -1,5 +1,8 @@
 package app.book.api.borrowrecord;
 
+import app.book.api.author.AuthorView;
+import app.book.api.category.CategoryView;
+import app.book.api.tag.TagView;
 import core.framework.api.json.Property;
 import core.framework.api.validate.NotBlank;
 import core.framework.api.validate.NotNull;
@@ -12,6 +15,7 @@ import java.util.List;
  * @author meow
  */
 public class SearchBorrowRecordResponse {
+    // todo
     @NotNull
     @Property(name = "total")
     public Long total;
@@ -58,47 +62,14 @@ public class SearchBorrowRecordResponse {
 
         @NotNull
         @Property(name = "authors")
-        public List<Author> authors;
+        public List<AuthorView> authors;
 
         @NotNull
         @Property(name = "categories")
-        public List<Category> categories;
+        public List<CategoryView> categories;
 
         @NotNull
         @Property(name = "tags")
-        public List<Tag> tags;
-    }
-
-    public static class Author {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
-    }
-
-    public static class Category {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
-    }
-
-    public static class Tag {
-        @NotNull
-        @Property(name = "id")
-        public Long id;
-
-        @NotNull
-        @NotBlank
-        @Property(name = "name")
-        public String name;
+        public List<TagView> tags;
     }
 }

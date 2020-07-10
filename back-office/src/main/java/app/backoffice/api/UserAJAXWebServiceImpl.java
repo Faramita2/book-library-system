@@ -46,6 +46,7 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     @Override
     public void resetPassword(Long id) {
         ActionLogContext.put("id", id);
+        // todo hostname email config
         String hostName = webContext.request().hostName();
         service.resetPassword(id, hostName);
     }

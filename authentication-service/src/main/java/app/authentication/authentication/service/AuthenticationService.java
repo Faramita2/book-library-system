@@ -32,7 +32,8 @@ public class AuthenticationService {
     UserWebService userWebService;
     @Inject
     Redis redis;
-    String secretKey;
+    // todo pf
+    private final String secretKey;
 
     public AuthenticationService(String secretKey) {
         this.secretKey = secretKey;
@@ -48,7 +49,8 @@ public class AuthenticationService {
         }
 
         if (!getUserByUsernameResponse.password.equals(getPasswordHash(request.password, getUserByUsernameResponse.salt))) {
-            throw new BadRequestException("password incorrect", Markers.errorCode("USER_PASSWORD_INCORRECT").getName());
+            // todo error promotion
+            throw new BadRequestException("username or password incorrect", Markers.errorCode("USER_PASSWORD_INCORRECT").getName());
         }
 
         LoginResponse response = new LoginResponse();

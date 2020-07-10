@@ -14,28 +14,11 @@ import core.framework.module.Module;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        dbs();
-
-        services();
-
-        apiServices();
-
-        async();
-    }
-
-    private void async() {
+        // todo do need extract
+        db().repository(Notification.class);
+        bind(NotificationService.class);
+        api().service(NotificationWebService.class, bind(NotificationWebServiceImpl.class));
         kafka().subscribe("return-borrowed-book", ReturnBorrowedBookMessage.class, bind(ReturnBookMessageHandler.class));
     }
 
-    private void apiServices() {
-        api().service(NotificationWebService.class, bind(NotificationWebServiceImpl.class));
-    }
-
-    private void services() {
-        bind(NotificationService.class);
-    }
-
-    private void dbs() {
-        db().repository(Notification.class);
-    }
 }

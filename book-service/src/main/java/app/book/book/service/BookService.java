@@ -130,6 +130,8 @@ public class BookService {
         if (book.status == BookStatus.BORROWED) {
             throw new BadRequestException(Strings.format("book has been borrowed!"), Markers.errorCode("BOOK_BORROWED").getName());
         }
+        // todo 并发
+
         book.status = BookStatus.BORROWED;
         book.borrowUserId = request.borrowUserId;
         LocalDateTime now = LocalDateTime.now();
@@ -138,7 +140,8 @@ public class BookService {
         book.updatedTime = now;
         book.updatedBy = request.requestedBy;
 
-        BorrowRecord borrowRecord = getBorrowRecord(request, book, now);
+        // todo name
+        BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
 
         try (Transaction transaction = database.beginTransaction()) {
             bookRepository.update(book);
@@ -147,7 +150,7 @@ public class BookService {
         }
     }
 
-    private BorrowRecord getBorrowRecord(BorrowBookRequest request, Book book, LocalDateTime now) {
+    private BorrowRecord buildBorrowRecord(BorrowBookRequest request, Book book, LocalDateTime now) {
         BorrowRecord borrowRecord = new BorrowRecord();
         borrowRecord.id = ObjectId.get();
         borrowRecord.user = new BorrowRecord.User();

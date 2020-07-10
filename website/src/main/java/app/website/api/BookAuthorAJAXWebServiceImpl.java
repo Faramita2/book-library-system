@@ -1,9 +1,9 @@
 package app.website.api;
 
-import app.api.website.BookAuthorAJAXWebService;
-import app.api.website.bookauthor.SearchBookAuthorAJAXRequest;
-import app.api.website.bookauthor.SearchBookAuthorAJAXResponse;
+import app.website.api.bookauthor.SearchBookAuthorAJAXRequest;
+import app.website.api.bookauthor.SearchBookAuthorAJAXResponse;
 import app.website.service.BookAuthorService;
+import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 
 /**
@@ -13,6 +13,7 @@ public class BookAuthorAJAXWebServiceImpl implements BookAuthorAJAXWebService {
     @Inject
     BookAuthorService service;
 
+    @SkipLogin
     @Override
     public SearchBookAuthorAJAXResponse search(SearchBookAuthorAJAXRequest request) {
         return service.search(request);

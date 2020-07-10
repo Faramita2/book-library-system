@@ -4,8 +4,8 @@ import app.api.authentication.AuthenticationWebService;
 import app.api.authentication.authentication.LoginRequest;
 import app.api.authentication.authentication.LoginResponse;
 import app.api.authentication.authentication.ResetPasswordRequest;
-import app.api.website.user.LoginAJAXRequest;
-import app.api.website.user.ResetPasswordAJAXRequest;
+import app.website.api.user.LoginAJAXRequest;
+import app.website.api.user.ResetPasswordAJAXRequest;
 import core.framework.inject.Inject;
 import core.framework.redis.Redis;
 import core.framework.util.Maps;
@@ -48,6 +48,7 @@ public class UserService {
     }
 
     public void logout(String userId) {
+        // todo
         redis.hash().del(Strings.format("users:{}", userId), "status", "login");
     }
 }

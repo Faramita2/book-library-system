@@ -1,9 +1,9 @@
 package app.website.service;
 
-import app.api.website.notification.DeleteBatchNotificationAJAXRequest;
-import app.api.website.notification.GetNotificationAJAXResponse;
-import app.api.website.notification.SearchNotificationAJAXRequest;
-import app.api.website.notification.SearchNotificationAJAXResponse;
+import app.website.api.notification.DeleteBatchNotificationAJAXRequest;
+import app.website.api.notification.GetNotificationAJAXResponse;
+import app.website.api.notification.SearchNotificationAJAXRequest;
+import app.website.api.notification.SearchNotificationAJAXResponse;
 import app.notification.api.NotificationWebService;
 import app.notification.api.notification.DeleteBatchNotificationRequest;
 import app.notification.api.notification.DeleteNotificationRequest;

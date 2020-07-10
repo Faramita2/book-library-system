@@ -82,7 +82,8 @@ public class UserService {
         String token = Randoms.alphaNumeric(32);
         redis.set(token, String.valueOf(id), Duration.ofMinutes(30));
 
-        logger.info("send email to user(id = {}) with reset password url: {}/user/reset-password?token={}?requested_by=email", id, hostName, token);
+        // todo
+        logger.info("send email to user(id = {}) with reset password url: {}/user/reset-password?token={}&requested_by=email", id, hostName, token);
     }
 
     public void active(Long id, String adminAccount) {

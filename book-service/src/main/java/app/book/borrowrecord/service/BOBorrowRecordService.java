@@ -67,6 +67,7 @@ public class BOBorrowRecordService {
 
     public BOListBorrowRecordResponse list() {
         Query query = new Query();
+        // todo first
         query.filter = and(eq("actual_return_date", null),
             lt("return_date", LocalDate.now().atStartOfDay().plusDays(2))
         );

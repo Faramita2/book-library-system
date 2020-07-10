@@ -8,7 +8,6 @@ import app.book.book.domain.BookStatus;
 import app.book.borrowrecord.domain.BorrowRecord;
 import core.framework.db.Database;
 import core.framework.db.Repository;
-import core.framework.db.Transaction;
 import core.framework.inject.Inject;
 import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
@@ -37,8 +36,10 @@ public class BorrowRecordService {
     public void returnBook(String id, ReturnBookRequest request) {
         BorrowRecord borrowRecord = borrowRecordMongoCollection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
             Strings.format("borrow record not found, id = {}", id), Markers.errorCode("BORROW_RECORD_NOT_FOUND").getName()));
+
         if (borrowRecord.actualReturnDate != null) {
-            throw new BadRequestException(Strings.format("book has been returned!"), Markers.errorCode("BOOK_RETURNED").getName());
+            // todo pure
+            throw new BadRequestException("book has been returned!", Markers.errorCode("BOOK_RETURNED").getName());
         }
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.actualReturnDate = now;
@@ -54,11 +55,13 @@ public class BorrowRecordService {
         book.updatedBy = request.requestedBy;
         book.updatedTime = now;
 
-        try (Transaction transaction = database.beginTransaction()) {
-            bookRepository.update(book);
-            borrowRecordMongoCollection.replace(borrowRecord);
-            transaction.commit();
-        }
+//        try (Transaction transaction = database.beginTransaction()) {
+        borrowRecordMongoCollection.replace(borrowRecord);
+        bookRepository.update(book);
+            // todo
+
+//            transaction.commit();
+//        } catch ()
     }
 
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {
@@ -74,24 +77,9 @@ public class BorrowRecordService {
             bookView.id = borrowRecord.book.id;
             bookView.name = borrowRecord.book.name;
             bookView.description = borrowRecord.book.description;
-            bookView.authors = borrowRecord.book.authors.stream().map(author -> {
-                SearchBorrowRecordResponse.Author authorView = new SearchBorrowRecordResponse.Author();
-                authorView.id = author.id;
-                authorView.name = author.name;
-                return authorView;
-            }).collect(Collectors.toList());
-            bookView.categories = borrowRecord.book.categories.stream().map(category -> {
-                SearchBorrowRecordResponse.Category categoryView = new SearchBorrowRecordResponse.Category();
-                categoryView.id = category.id;
-                categoryView.name = category.name;
-                return categoryView;
-            }).collect(Collectors.toList());
-            bookView.tags = borrowRecord.book.tags.stream().map(tag -> {
-                SearchBorrowRecordResponse.Tag tagView = new SearchBorrowRecordResponse.Tag();
-                tagView.id = tag.id;
-                tagView.name = tag.name;
-                return tagView;
-            }).collect(Collectors.toList());
+            bookView.authors = borrowRecord.book.authors.stream().map(this::author).collect(Collectors.toList());
+            bookView.categories = borrowRecord.book.categories.stream().map(this::category).collect(Collectors.toList());
+            bookView.tags = borrowRecord.book.tags.stream().map(this::tag).collect(Collectors.toList());
 
             SearchBorrowRecordResponse.Record view = new SearchBorrowRecordResponse.Record();
             view.id = borrowRecord.id.toString();
@@ -103,5 +91,26 @@ public class BorrowRecordService {
         }).collect(Collectors.toList());
 
         return response;
+    }
+
+    private SearchBorrowRecordResponse.Tag tag(BorrowRecord.Tag tag) {
+        SearchBorrowRecordResponse.Tag tagView = new SearchBorrowRecordResponse.Tag();
+        tagView.id = tag.id;
+        tagView.name = tag.name;
+        return tagView;
+    }
+
+    private SearchBorrowRecordResponse.Category category(BorrowRecord.Category category) {
+        SearchBorrowRecordResponse.Category categoryView = new SearchBorrowRecordResponse.Category();
+        categoryView.id = category.id;
+        categoryView.name = category.name;
+        return categoryView;
+    }
+
+    private SearchBorrowRecordResponse.Author author(BorrowRecord.Author author) {
+        SearchBorrowRecordResponse.Author authorView = new SearchBorrowRecordResponse.Author();
+        authorView.id = author.id;
+        authorView.name = author.name;
+        return authorView;
     }
 }

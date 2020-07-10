@@ -1,12 +1,11 @@
 package app.website.api;
 
-import app.api.website.BookAJAXWebService;
-import app.api.website.book.GetBookAJAXResponse;
-import app.api.website.book.SearchBookAJAXRequest;
-import app.api.website.book.SearchBookAJAXResponse;
-import app.api.website.book.SearchBorrowedBookAJAXRequest;
-import app.api.website.book.SearchBorrowedBookAJAXResponse;
-import app.api.website.borrowrecord.BorrowBookAJAXRequest;
+import app.website.api.book.GetBookAJAXResponse;
+import app.website.api.book.SearchBookAJAXRequest;
+import app.website.api.book.SearchBookAJAXResponse;
+import app.website.api.book.SearchBorrowedBookAJAXRequest;
+import app.website.api.book.SearchBorrowedBookAJAXResponse;
+import app.website.api.borrowrecord.BorrowBookAJAXRequest;
 import app.website.service.BookService;
 import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;

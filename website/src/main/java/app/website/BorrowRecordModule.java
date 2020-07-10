@@ -1,6 +1,6 @@
 package app.website;
 
-import app.api.website.BorrowRecordAJAXWebService;
+import app.website.api.BorrowRecordAJAXWebService;
 import app.website.service.BorrowRecordService;
 import app.website.api.BorrowRecordAJAXWebServiceImpl;
 import core.framework.module.Module;

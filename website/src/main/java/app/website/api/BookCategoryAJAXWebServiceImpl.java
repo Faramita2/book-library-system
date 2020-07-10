@@ -1,8 +1,7 @@
 package app.website.api;
 
-import app.api.website.BookCategoryAJAXWebService;
-import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
-import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
+import app.website.api.bookcategory.SearchBookCategoryAJAXRequest;
+import app.website.api.bookcategory.SearchBookCategoryAJAXResponse;
 import app.website.service.BookCategoryService;
 import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;

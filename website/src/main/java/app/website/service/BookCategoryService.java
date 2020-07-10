@@ -1,7 +1,7 @@
 package app.website.service;
 
-import app.api.website.bookcategory.SearchBookCategoryAJAXRequest;
-import app.api.website.bookcategory.SearchBookCategoryAJAXResponse;
+import app.website.api.bookcategory.SearchBookCategoryAJAXRequest;
+import app.website.api.bookcategory.SearchBookCategoryAJAXResponse;
 import app.book.api.CategoryWebService;
 import app.book.api.category.SearchCategoryRequest;
 import app.book.api.category.SearchCategoryResponse;

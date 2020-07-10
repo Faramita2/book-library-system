@@ -1,6 +1,6 @@
 package app.website;
 
-import app.api.website.BookCategoryAJAXWebService;
+import app.website.api.BookCategoryAJAXWebService;
 import app.website.service.BookCategoryService;
 import app.website.api.BookCategoryAJAXWebServiceImpl;
 import core.framework.module.Module;

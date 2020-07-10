@@ -1,7 +1,7 @@
 package app.website.service;
 
-import app.api.website.booktag.SearchBookTagAJAXRequest;
-import app.api.website.booktag.SearchBookTagAJAXResponse;
+import app.website.api.booktag.SearchBookTagAJAXRequest;
+import app.website.api.booktag.SearchBookTagAJAXResponse;
 import app.book.api.TagWebService;
 import app.book.api.tag.SearchTagRequest;
 import app.book.api.tag.SearchTagResponse;

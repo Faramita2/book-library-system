@@ -18,7 +18,6 @@ public class AdminModule extends Module {
     }
 
     private void apiServices() {
-        http().intercept(bind(AuthInterceptor.class));
         api().service(AdminAJAXWebService.class, bind(AdminAJAXWebServiceImpl.class));
     }
 

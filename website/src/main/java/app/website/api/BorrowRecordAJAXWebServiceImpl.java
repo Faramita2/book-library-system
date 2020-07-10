@@ -1,6 +1,5 @@
 package app.website.api;
 
-import app.api.website.BorrowRecordAJAXWebService;
 import app.website.service.BorrowRecordService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
