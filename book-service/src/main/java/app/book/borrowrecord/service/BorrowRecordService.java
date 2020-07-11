@@ -1,15 +1,16 @@
 package app.book.borrowrecord.service;
 
+import app.book.api.author.AuthorView;
 import app.book.api.borrowrecord.ReturnBookRequest;
 import app.book.api.borrowrecord.SearchBorrowRecordRequest;
 import app.book.api.borrowrecord.SearchBorrowRecordResponse;
+import app.book.api.category.CategoryView;
+import app.book.api.tag.TagView;
 import app.book.book.domain.Book;
 import app.book.book.domain.BookStatus;
 import app.book.borrowrecord.domain.BorrowRecord;
-import core.framework.db.Database;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
 import core.framework.util.Strings;
@@ -30,38 +31,33 @@ public class BorrowRecordService {
     MongoCollection<BorrowRecord> borrowRecordMongoCollection;
     @Inject
     Repository<Book> bookRepository;
-    @Inject
-    Database database;
 
     public void returnBook(String id, ReturnBookRequest request) {
-        BorrowRecord borrowRecord = borrowRecordMongoCollection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
-            Strings.format("borrow record not found, id = {}", id), Markers.errorCode("BORROW_RECORD_NOT_FOUND").getName()));
+        synchronized (this) {
+            BorrowRecord borrowRecord = borrowRecordMongoCollection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
+                Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
 
-        if (borrowRecord.actualReturnDate != null) {
-            // todo pure
-            throw new BadRequestException("book has been returned!", Markers.errorCode("BOOK_RETURNED").getName());
+            if (borrowRecord.actualReturnDate != null) {
+                throw new BadRequestException("book has been returned!", "BOOK_RETURNED");
+            }
+
+            LocalDateTime now = LocalDateTime.now();
+            borrowRecord.actualReturnDate = now;
+            borrowRecord.updatedBy = request.requestedBy;
+            borrowRecord.updatedTime = now;
+
+            Book book = bookRepository.get(borrowRecord.book.id).orElseThrow(() -> new NotFoundException(
+                Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
+            book.status = BookStatus.AVAILABLE;
+            book.returnDate = null;
+            book.borrowedTime = null;
+            book.borrowUserId = null;
+            book.updatedBy = request.requestedBy;
+            book.updatedTime = now;
+
+            borrowRecordMongoCollection.replace(borrowRecord);
+            bookRepository.update(book);
         }
-        LocalDateTime now = LocalDateTime.now();
-        borrowRecord.actualReturnDate = now;
-        borrowRecord.updatedBy = request.requestedBy;
-        borrowRecord.updatedTime = now;
-
-        Book book = bookRepository.get(borrowRecord.book.id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
-        book.status = BookStatus.AVAILABLE;
-        book.returnDate = null;
-        book.borrowedTime = null;
-        book.borrowUserId = null;
-        book.updatedBy = request.requestedBy;
-        book.updatedTime = now;
-
-//        try (Transaction transaction = database.beginTransaction()) {
-        borrowRecordMongoCollection.replace(borrowRecord);
-        bookRepository.update(book);
-            // todo
-
-//            transaction.commit();
-//        } catch ()
     }
 
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {
@@ -93,22 +89,22 @@ public class BorrowRecordService {
         return response;
     }
 
-    private SearchBorrowRecordResponse.Tag tag(BorrowRecord.Tag tag) {
-        SearchBorrowRecordResponse.Tag tagView = new SearchBorrowRecordResponse.Tag();
+    private TagView tag(BorrowRecord.Tag tag) {
+        TagView tagView = new TagView();
         tagView.id = tag.id;
         tagView.name = tag.name;
         return tagView;
     }
 
-    private SearchBorrowRecordResponse.Category category(BorrowRecord.Category category) {
-        SearchBorrowRecordResponse.Category categoryView = new SearchBorrowRecordResponse.Category();
+    private CategoryView category(BorrowRecord.Category category) {
+        CategoryView categoryView = new CategoryView();
         categoryView.id = category.id;
         categoryView.name = category.name;
         return categoryView;
     }
 
-    private SearchBorrowRecordResponse.Author author(BorrowRecord.Author author) {
-        SearchBorrowRecordResponse.Author authorView = new SearchBorrowRecordResponse.Author();
+    private AuthorView author(BorrowRecord.Author author) {
+        AuthorView authorView = new AuthorView();
         authorView.id = author.id;
         authorView.name = author.name;
         return authorView;

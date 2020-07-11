@@ -11,8 +11,6 @@ import core.framework.inject.Inject;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -27,7 +25,6 @@ import java.util.Base64;
  * @author zoo
  */
 public class UserService {
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
     Repository<User> userRepository;
     String secretKey;
@@ -62,7 +59,7 @@ public class UserService {
         return response;
     }
 
-    public void resetPassword(Long id, ResetUserPasswordRequest request) {
+    public void resetPassword(Long id, ResetUserPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
@@ -79,17 +76,13 @@ public class UserService {
         return salt;
     }
 
-    private void hashPassword(User user, String password) {
+    private void hashPassword(User user, String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = generateSalt();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
-            byte[] hash = f.generateSecret(spec).getEncoded();
-            Base64.Encoder enc = Base64.getEncoder();
-            user.password = enc.encodeToString(hash);
-            user.salt = enc.encodeToString(salt);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            logger.error("hash user password failed: {}", e.getMessage());
-        }
+        SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
+        byte[] hash = f.generateSecret(spec).getEncoded();
+        Base64.Encoder enc = Base64.getEncoder();
+        user.password = enc.encodeToString(hash);
+        user.salt = enc.encodeToString(salt);
     }
 }

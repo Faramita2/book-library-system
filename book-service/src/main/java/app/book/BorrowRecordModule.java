@@ -14,10 +14,7 @@ import core.framework.module.Module;
 public class BorrowRecordModule extends Module {
     @Override
     protected void initialize() {
-        dbs();
-
         services();
-
         apiServices();
     }
 
@@ -29,8 +26,5 @@ public class BorrowRecordModule extends Module {
     private void services() {
         bind(BOBorrowRecordService.class);
         bind(BorrowRecordService.class);
-    }
-
-    private void dbs() {
     }
 }

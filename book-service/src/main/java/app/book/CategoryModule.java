@@ -17,9 +17,7 @@ public class CategoryModule extends Module {
     @Override
     protected void initialize() {
         dbs();
-
         services();
-
         apiServices();
     }
 

@@ -10,8 +10,13 @@ import app.website.service.BookService;
 import app.website.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
+import core.framework.redis.Redis;
+import core.framework.util.Strings;
+import core.framework.web.CookieSpec;
 import core.framework.web.WebContext;
 import core.framework.web.exception.UnauthorizedException;
+
+import java.util.Map;
 
 /**
  * @author meow
@@ -21,6 +26,8 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
     BookService service;
     @Inject
     WebContext webContext;
+    @Inject
+    Redis redis;
 
     @SkipLogin
     @Override
@@ -42,16 +49,27 @@ public class BookAJAXWebServiceImpl implements BookAJAXWebService {
 
     @Override
     public SearchBorrowedBookAJAXResponse searchBorrowedBook(SearchBorrowedBookAJAXRequest request) {
-        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
-        return service.searchBorrowedBook(request, Long.valueOf(userId));
+        return service.searchBorrowedBook(request, userId());
     }
 
     private Long userId() {
-        String userId = webContext.request().session().get("user_id").orElseThrow(() -> new UnauthorizedException("please login first."));
+        String userId = session().get("user_id");
+        if (Strings.isBlank(userId)) {
+            throw new UnauthorizedException("please login first.");
+        }
         return Long.valueOf(userId);
     }
 
     private String username() {
-        return webContext.request().session().get("username").orElseThrow(() -> new UnauthorizedException("please login first."));
+        String username = session().get("username");
+        if (Strings.isBlank(username)) {
+            throw new UnauthorizedException("please login first.");
+        }
+        return username;
+    }
+
+    private Map<String, String> session() {
+        String sessionId = webContext.request().cookie(new CookieSpec("SessionId")).orElse(null);
+        return redis.hash().getAll(Strings.format("session:{}", sessionId));
     }
 }

@@ -22,7 +22,6 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.db.Transaction;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.NotFoundException;
 
@@ -73,7 +72,7 @@ public class BOBookService {
 
     public BOGetBookResponse get(Long id) {
         Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
+            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         BOGetBookResponse response = new BOGetBookResponse();
         response.id = book.id;
@@ -137,7 +136,7 @@ public class BOBookService {
 
     public void update(Long id, BOUpdateBookRequest request) {
         Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
+            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.name = request.name;
         book.description = request.description;
         book.updatedTime = LocalDateTime.now();

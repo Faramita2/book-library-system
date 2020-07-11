@@ -11,12 +11,9 @@ import app.user.user.domain.UserStatus;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -32,7 +29,6 @@ import java.util.stream.Collectors;
  * @author zoo
  */
 public class BOUserService {
-    private final Logger logger = LoggerFactory.getLogger(BOUserService.class);
     @Inject
     Repository<User> userRepository;
     String secretKey;
@@ -41,13 +37,13 @@ public class BOUserService {
         this.secretKey = secretKey;
     }
 
-    public void create(BOCreateUserRequest request) {
+    public void create(BOCreateUserRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
         userRepository.selectOne("username = ?", request.username).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, username = {}", user.username), Markers.errorCode("USER_USERNAME_EXISTS").getName());
+            throw new ConflictException(Strings.format("user already exists, username = {}", user.username), "USER_USERNAME_EXISTS");
         });
 
         userRepository.selectOne("email = ?", request.email).ifPresent(user -> {
-            throw new ConflictException(Strings.format("user already exists, email = {}", user.email), Markers.errorCode("USER_EMAIL_EXISTS").getName());
+            throw new ConflictException(Strings.format("user already exists, email = {}", user.email), "USER_EMAIL_EXISTS");
         });
 
         User user = new User();
@@ -104,7 +100,7 @@ public class BOUserService {
 
     public void update(Long id, BOUpdateUserRequest request) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("user not found, id = {}", id), Markers.errorCode("USER_NOT_FOUND").getName()));
+            Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.status = UserStatus.valueOf(request.status.name());
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
@@ -114,7 +110,7 @@ public class BOUserService {
 
     public BOGetUserResponse get(Long id) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("user not found, id = {}", id), Markers.errorCode("USER_NOT_FOUND").getName()));
+            Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
 
         BOGetUserResponse response = new BOGetUserResponse();
         response.id = user.id;
@@ -133,18 +129,13 @@ public class BOUserService {
         return salt;
     }
 
-    private void hashPassword(User user, String password) {
+    private void hashPassword(User user, String password) throws InvalidKeySpecException, NoSuchAlgorithmException {
         byte[] salt = generateSalt();
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        try {
-            SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
-            byte[] hash = f.generateSecret(spec).getEncoded();
-            Base64.Encoder enc = Base64.getEncoder();
-            // todo password hash error handle
-            user.password = enc.encodeToString(hash);
-            user.salt = enc.encodeToString(salt);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            logger.error("hash user password failed: {}", e.getMessage());
-        }
+        SecretKeyFactory f = SecretKeyFactory.getInstance(secretKey);
+        byte[] hash = f.generateSecret(spec).getEncoded();
+        Base64.Encoder enc = Base64.getEncoder();
+        user.password = enc.encodeToString(hash);
+        user.salt = enc.encodeToString(salt);
     }
 }

@@ -12,22 +12,8 @@ import core.framework.module.Module;
 public class AdminModule extends Module {
     @Override
     protected void initialize() {
-        dbs();
-
-        services();
-
-        apiServices();
-    }
-
-    private void apiServices() {
-        api().service(BOAdminWebService.class, bind(BOAdminWebServiceImpl.class));
-    }
-
-    private void services() {
-        bind(BOAdminService.class);
-    }
-
-    private void dbs() {
         db().repository(Admin.class);
+        bind(BOAdminService.class);
+        api().service(BOAdminWebService.class, bind(BOAdminWebServiceImpl.class));
     }
 }

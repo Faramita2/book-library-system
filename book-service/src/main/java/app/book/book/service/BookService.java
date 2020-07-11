@@ -17,12 +17,9 @@ import app.book.book.domain.BookTag;
 import app.book.borrowrecord.domain.BorrowRecord;
 import app.book.category.domain.Category;
 import app.book.tag.domain.Tag;
-import core.framework.db.Database;
 import core.framework.db.Query;
 import core.framework.db.Repository;
-import core.framework.db.Transaction;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
@@ -51,8 +48,6 @@ public class BookService {
     Repository<Category> categoryRepository;
     @Inject
     Repository<Tag> tagRepository;
-    @Inject
-    Database database;
     @Inject
     MongoCollection<BorrowRecord> borrowRecordMongoCollection;
 
@@ -107,7 +102,7 @@ public class BookService {
 
     public GetBookResponse get(Long id) {
         Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
+            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         GetBookResponse response = new GetBookResponse();
         response.id = book.id;
@@ -125,28 +120,25 @@ public class BookService {
     }
 
     public void borrow(Long id, BorrowBookRequest request) {
-        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), Markers.errorCode("BOOK_NOT_FOUND").getName()));
-        if (book.status == BookStatus.BORROWED) {
-            throw new BadRequestException(Strings.format("book has been borrowed!"), Markers.errorCode("BOOK_BORROWED").getName());
-        }
-        // todo 并发
+        synchronized (this) {
+            Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
+                Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
+            if (book.status == BookStatus.BORROWED) {
+                throw new BadRequestException(Strings.format("book has been borrowed!"), "BOOK_BORROWED");
+            }
 
-        book.status = BookStatus.BORROWED;
-        book.borrowUserId = request.borrowUserId;
-        LocalDateTime now = LocalDateTime.now();
-        book.borrowedTime = now;
-        book.returnDate = request.returnDate;
-        book.updatedTime = now;
-        book.updatedBy = request.requestedBy;
+            book.status = BookStatus.BORROWED;
+            book.borrowUserId = request.borrowUserId;
+            LocalDateTime now = LocalDateTime.now();
+            book.borrowedTime = now;
+            book.returnDate = request.returnDate;
+            book.updatedTime = now;
+            book.updatedBy = request.requestedBy;
+            BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
 
-        // todo name
-        BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
-
-        try (Transaction transaction = database.beginTransaction()) {
             bookRepository.update(book);
             borrowRecordMongoCollection.insert(borrowRecord);
-            transaction.commit();
+
         }
     }
 

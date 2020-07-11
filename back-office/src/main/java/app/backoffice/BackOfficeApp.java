@@ -3,6 +3,7 @@ package app.backoffice;
 import app.api.admin.BOAdminWebService;
 import app.api.authentication.BOAuthenticationWebService;
 import app.backoffice.web.interceptor.AuthInterceptor;
+import app.backoffice.web.BackOfficeErrorHandler;
 import app.book.api.BOAuthorWebService;
 import app.book.api.BOBookWebService;
 import app.book.api.BOBorrowRecordWebService;
@@ -19,9 +20,7 @@ public class BackOfficeApp extends App {
     @Override
     protected void initialize() {
         sys();
-
         apiClients();
-
         modules();
     }
 
@@ -46,6 +45,7 @@ public class BackOfficeApp extends App {
         api().client(BOUserWebService.class, requiredProperty("app.user.ServiceURL"));
 
         http().intercept(bind(AuthInterceptor.class));
+        http().errorHandler(bind(BackOfficeErrorHandler.class));
     }
 
     private void sys() {

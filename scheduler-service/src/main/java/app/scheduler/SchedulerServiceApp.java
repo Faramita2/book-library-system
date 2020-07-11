@@ -13,16 +13,12 @@ public class SchedulerServiceApp extends App {
     protected void initialize() {
         sys();
         apiClients();
-        modules();
+        load(new SchedulerModule());
     }
 
     private void apiClients() {
         api().client(BookWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(BOBorrowRecordWebService.class, requiredProperty("app.book.ServiceURL"));
-    }
-
-    private void modules() {
-        load(new SchedulerModule());
     }
 
     private void sys() {

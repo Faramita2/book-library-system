@@ -7,8 +7,6 @@ import app.api.authentication.authentication.BOLoginRequest;
 import app.api.authentication.authentication.BOLoginResponse;
 import core.framework.inject.Inject;
 import core.framework.web.exception.BadRequestException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -21,16 +19,15 @@ import java.util.Base64;
  * @author zoo
  */
 public class BOAuthenticationService {
-    private final Logger logger = LoggerFactory.getLogger(BOAuthenticationService.class);
     @Inject
     BOAdminWebService boAdminWebService;
-    String secretKey;
+    private final String secretKey;
 
     public BOAuthenticationService(String secretKey) {
         this.secretKey = secretKey;
     }
 
-    public BOLoginResponse login(BOLoginRequest request) {
+    public BOLoginResponse login(BOLoginRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
         BOGetAdminByAccountRequest boGetAdminByAccountRequest = new BOGetAdminByAccountRequest();
         boGetAdminByAccountRequest.account = request.account;
         BOGetAdminByAccountResponse boGetAdminByAccountResponse = boAdminWebService.getByAccount(boGetAdminByAccountRequest);
@@ -46,18 +43,12 @@ public class BOAuthenticationService {
     }
 
 
-    private String getPasswordHash(String password, String salt) {
-        String passwordHash = "";
+    private String getPasswordHash(String password, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
         byte[] saltBytes = Base64.getDecoder().decode(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 128);
-        try {
-            SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKey);
-            byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
-            passwordHash = Base64.getEncoder().encodeToString(encoded);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            logger.error("hash password error, message = {}", e.getMessage());
-        }
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKey);
+        byte[] encoded = secretKeyFactory.generateSecret(spec).getEncoded();
 
-        return passwordHash;
+        return Base64.getEncoder().encodeToString(encoded);
     }
 }

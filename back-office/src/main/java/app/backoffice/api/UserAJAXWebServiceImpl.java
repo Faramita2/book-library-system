@@ -5,7 +5,6 @@ import app.api.backoffice.user.CreateUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
 import app.backoffice.service.UserService;
-import app.backoffice.web.interceptor.SkipLogin;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 import core.framework.web.WebContext;
@@ -19,6 +18,11 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
     UserService service;
     @Inject
     WebContext webContext;
+    private final String emailHostName;
+
+    public UserAJAXWebServiceImpl(String emailHostName) {
+        this.emailHostName = emailHostName;
+    }
 
     @Override
     public void create(CreateUserAJAXRequest request) {
@@ -42,13 +46,10 @@ public class UserAJAXWebServiceImpl implements UserAJAXWebService {
         service.inactive(id, adminAccount());
     }
 
-    @SkipLogin
     @Override
     public void resetPassword(Long id) {
         ActionLogContext.put("id", id);
-        // todo hostname email config
-        String hostName = webContext.request().hostName();
-        service.resetPassword(id, hostName);
+        service.resetPassword(id, emailHostName);
     }
 
     private String adminAccount() {

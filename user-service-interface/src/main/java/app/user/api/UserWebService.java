@@ -9,6 +9,9 @@ import core.framework.api.web.service.PUT;
 import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * @author zoo
  */
@@ -23,5 +26,5 @@ public interface UserWebService {
 
     @PUT
     @Path("/user/:id/reset-password")
-    void resetPassword(@PathParam("id") Long id, ResetUserPasswordRequest request);
+    void resetPassword(@PathParam("id") Long id, ResetUserPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException;
 }

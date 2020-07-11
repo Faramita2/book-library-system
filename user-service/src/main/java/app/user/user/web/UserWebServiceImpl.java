@@ -9,6 +9,9 @@ import app.user.user.service.UserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * @author zoo
  */
@@ -27,7 +30,7 @@ public class UserWebServiceImpl implements UserWebService {
     }
 
     @Override
-    public void resetPassword(Long id, ResetUserPasswordRequest request) {
+    public void resetPassword(Long id, ResetUserPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
         ActionLogContext.put("id", id);
         service.resetPassword(id, request);
     }

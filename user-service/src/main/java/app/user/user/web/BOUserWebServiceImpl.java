@@ -10,6 +10,9 @@ import app.user.user.service.BOUserService;
 import core.framework.inject.Inject;
 import core.framework.log.ActionLogContext;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * @author zoo
  */
@@ -18,7 +21,7 @@ public class BOUserWebServiceImpl implements BOUserWebService {
     BOUserService service;
 
     @Override
-    public void create(BOCreateUserRequest request) {
+    public void create(BOCreateUserRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
         service.create(request);
     }
 

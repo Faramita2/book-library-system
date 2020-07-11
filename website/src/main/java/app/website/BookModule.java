@@ -11,16 +11,7 @@ import core.framework.module.Module;
 public class BookModule extends Module {
     @Override
     protected void initialize() {
-        services();
-
-        apiServices();
-    }
-
-    private void apiServices() {
-        api().service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
-    }
-
-    private void services() {
         bind(BookService.class);
+        api().service(BookAJAXWebService.class, bind(BookAJAXWebServiceImpl.class));
     }
 }

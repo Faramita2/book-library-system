@@ -14,7 +14,6 @@ import core.framework.module.Module;
 public class NotificationModule extends Module {
     @Override
     protected void initialize() {
-        // todo do need extract
         db().repository(Notification.class);
         bind(NotificationService.class);
         api().service(NotificationWebService.class, bind(NotificationWebServiceImpl.class));

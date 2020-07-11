@@ -12,7 +12,7 @@ import core.framework.mongo.module.MongoConfig;
 public class BookServiceApp extends App {
     @Override
     protected void initialize() {
-        sys();
+        load(new SystemModule("sys.properties"));
         dbs();
         modules();
     }
@@ -22,10 +22,6 @@ public class BookServiceApp extends App {
         config.uri(requiredProperty("sys.mongo.uri"));
         config.collection(BorrowRecord.class);
         db().repository(Book.class);
-    }
-
-    private void sys() {
-        load(new SystemModule("sys.properties"));
     }
 
     private void modules() {

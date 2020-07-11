@@ -13,6 +13,9 @@ import core.framework.api.web.service.Path;
 import core.framework.api.web.service.PathParam;
 import core.framework.api.web.service.ResponseStatus;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+
 /**
  * @author zoo
  */
@@ -20,7 +23,7 @@ public interface BOUserWebService {
     @POST
     @Path("/bo/user")
     @ResponseStatus(HTTPStatus.CREATED)
-    void create(BOCreateUserRequest request);
+    void create(BOCreateUserRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException;
 
     @GET
     @Path("/bo/user/:id")

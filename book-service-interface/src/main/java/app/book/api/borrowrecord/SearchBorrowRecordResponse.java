@@ -15,7 +15,6 @@ import java.util.List;
  * @author meow
  */
 public class SearchBorrowRecordResponse {
-    // todo
     @NotNull
     @Property(name = "total")
     public Long total;

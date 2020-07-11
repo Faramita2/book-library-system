@@ -17,9 +17,7 @@ public class AuthorModule extends Module {
     @Override
     protected void initialize() {
         dbs();
-
         services();
-
         apiServices();
     }
 

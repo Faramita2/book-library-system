@@ -15,7 +15,6 @@ public class BookModule extends Module {
     @Override
     protected void initialize() {
         services();
-
         apiServices();
     }
 

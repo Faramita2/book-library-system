@@ -1,15 +1,5 @@
 package app.website.service;
 
-import app.website.api.book.BookStatusAJAXView;
-import app.website.api.book.GetBookAJAXResponse;
-import app.website.api.book.SearchBookAJAXRequest;
-import app.website.api.book.SearchBookAJAXResponse;
-import app.website.api.book.SearchBorrowedBookAJAXRequest;
-import app.website.api.book.SearchBorrowedBookAJAXResponse;
-import app.website.api.bookauthor.BookAuthorAJAXView;
-import app.website.api.bookcategory.BookCategoryAJAXView;
-import app.website.api.booktag.BookTagAJAXView;
-import app.website.api.borrowrecord.BorrowBookAJAXRequest;
 import app.book.api.BookWebService;
 import app.book.api.BorrowRecordWebService;
 import app.book.api.author.AuthorView;
@@ -23,8 +13,17 @@ import app.book.api.borrowrecord.SearchBorrowRecordResponse;
 import app.book.api.category.CategoryView;
 import app.book.api.tag.TagView;
 import app.user.api.UserWebService;
+import app.website.api.book.BookStatusAJAXView;
+import app.website.api.book.GetBookAJAXResponse;
+import app.website.api.book.SearchBookAJAXRequest;
+import app.website.api.book.SearchBookAJAXResponse;
+import app.website.api.book.SearchBorrowedBookAJAXRequest;
+import app.website.api.book.SearchBorrowedBookAJAXResponse;
+import app.website.api.bookauthor.BookAuthorAJAXView;
+import app.website.api.bookcategory.BookCategoryAJAXView;
+import app.website.api.booktag.BookTagAJAXView;
+import app.website.api.borrowrecord.BorrowBookAJAXRequest;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.web.exception.BadRequestException;
 
 import java.time.LocalDateTime;
@@ -93,7 +92,7 @@ public class BookService {
 
     public void borrow(Long id, BorrowBookAJAXRequest request, Long userId, String username) {
         if (request.returnDate.atStartOfDay().plusDays(1).isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("book return date error!", Markers.errorCode("ERROR_BOOK_RETURN_DATE").getName());
+            throw new BadRequestException("book return date error!", "ERROR_BOOK_RETURN_DATE");
         }
         BorrowBookRequest borrowBookRequest = new BorrowBookRequest();
         borrowBookRequest.borrowUserId = userId;

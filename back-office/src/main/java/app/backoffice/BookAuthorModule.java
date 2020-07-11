@@ -14,5 +14,4 @@ public class BookAuthorModule extends Module {
         bind(BookAuthorService.class);
         api().service(BookAuthorAJAXWebService.class, bind(BookAuthorAJAXWebServiceImpl.class));
     }
-
 }

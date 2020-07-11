@@ -9,7 +9,6 @@ import app.book.category.domain.Category;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
@@ -29,7 +28,7 @@ public class BOCategoryService {
 
     public void create(BOCreateCategoryRequest request) {
         categoryRepository.selectOne("name = ?", request.name).ifPresent(category -> {
-            throw new ConflictException(Strings.format("category exists, name = {}", category.name), Markers.errorCode("BOOK_CATEGORY_EXIST").getName());
+            throw new ConflictException(Strings.format("category exists, name = {}", category.name), "BOOK_CATEGORY_EXIST");
         });
         Category category = new Category();
         category.name = request.name;
@@ -66,7 +65,7 @@ public class BOCategoryService {
 
     public void update(Long id, BOUpdateCategoryRequest request) {
         Category category = categoryRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("category not found, id = {}", id), Markers.errorCode("BOOK_CATEGORY_NOT_FOUND").getName()));
+            Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         category.name = request.name;
         category.updatedBy = request.requestedBy;
         category.updatedTime = LocalDateTime.now();
@@ -76,9 +75,9 @@ public class BOCategoryService {
 
     public void delete(Long id) {
         categoryRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("category not found, id = {}", id), Markers.errorCode("BOOK_CATEGORY_NOT_FOUND").getName()));
+            Strings.format("category not found, id = {}", id), "BOOK_CATEGORY_NOT_FOUND"));
         if (bookCategoryRepository.count("category_id = ?", id) != 0) {
-            throw new BadRequestException("books have this category, cannot delete it!", Markers.errorCode("BOOK_RELATED_CATEGORY").getName());
+            throw new BadRequestException("books have this category, cannot delete it!", "BOOK_RELATED_CATEGORY");
         }
         categoryRepository.delete(id);
     }

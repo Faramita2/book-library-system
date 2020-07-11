@@ -9,7 +9,6 @@ import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.ConflictException;
@@ -29,7 +28,7 @@ public class BOTagService {
 
     public void create(BOCreateTagRequest request) {
         tagRepository.selectOne("name = ?", request.name).ifPresent(tag -> {
-            throw new ConflictException(Strings.format("tag exists, name = {}", tag.name), Markers.errorCode("BOOK_TAG_EXISTS").getName());
+            throw new ConflictException(Strings.format("tag exists, name = {}", tag.name), "BOOK_TAG_EXISTS");
         });
         Tag tag = new Tag();
         tag.name = request.name;
@@ -66,7 +65,7 @@ public class BOTagService {
 
     public void update(Long id, BOUpdateTagRequest request) {
         Tag tag = tagRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("tag not found, id = {}", id), Markers.errorCode("BOOK_TAG_NOT_FOUND").getName()));
+            Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
         tag.name = request.name;
         tag.updatedBy = request.requestedBy;
         tag.updatedTime = LocalDateTime.now();
@@ -76,9 +75,9 @@ public class BOTagService {
 
     public void delete(Long id) {
         tagRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("tag not found, id = {}", id), Markers.errorCode("BOOK_TAG_NOT_FOUND").getName()));
+            Strings.format("tag not found, id = {}", id), "BOOK_TAG_NOT_FOUND"));
         if (bookTagRepository.count("tag_id = ?", id) != 0) {
-            throw new BadRequestException("books have this tag, cannot delete it!", Markers.errorCode("BOOK_RELATED_TAG").getName());
+            throw new BadRequestException("books have this tag, cannot delete it!", "BOOK_RELATED_TAG");
         }
         tagRepository.delete(id);
     }

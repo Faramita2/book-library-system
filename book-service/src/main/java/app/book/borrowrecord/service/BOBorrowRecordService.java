@@ -4,6 +4,7 @@ import app.book.api.borrowrecord.BOListBorrowRecordResponse;
 import app.book.api.borrowrecord.BOSearchBorrowRecordRequest;
 import app.book.api.borrowrecord.BOSearchBorrowRecordResponse;
 import app.book.borrowrecord.domain.BorrowRecord;
+import com.mongodb.ReadPreference;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
@@ -67,7 +68,7 @@ public class BOBorrowRecordService {
 
     public BOListBorrowRecordResponse list() {
         Query query = new Query();
-        // todo first
+        query.readPreference = ReadPreference.secondary();
         query.filter = and(eq("actual_return_date", null),
             lt("return_date", LocalDate.now().atStartOfDay().plusDays(2))
         );

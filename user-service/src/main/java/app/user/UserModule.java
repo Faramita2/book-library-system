@@ -15,10 +15,8 @@ import core.framework.module.Module;
 public class UserModule extends Module {
     @Override
     protected void initialize() {
-        dbs();
-
+        db().repository(User.class);
         services();
-
         apiServices();
     }
 
@@ -33,9 +31,5 @@ public class UserModule extends Module {
         bind(boUserService);
         UserService userService = new UserService(secretKey);
         bind(userService);
-    }
-
-    private void dbs() {
-        db().repository(User.class);
     }
 }

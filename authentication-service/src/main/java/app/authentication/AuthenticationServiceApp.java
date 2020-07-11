@@ -12,13 +12,7 @@ public class AuthenticationServiceApp extends App {
     @Override
     protected void initialize() {
         sys();
-
         apiClients();
-
-        modules();
-    }
-
-    private void modules() {
         load(new AuthenticationModule());
     }
 

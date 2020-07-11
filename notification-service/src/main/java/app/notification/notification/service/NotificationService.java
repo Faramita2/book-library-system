@@ -10,7 +10,6 @@ import app.notification.notification.domain.Notification;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
-import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.ForbiddenException;
 import core.framework.web.exception.NotFoundException;
@@ -62,7 +61,7 @@ public class NotificationService {
         response.notifications = query.fetch().stream().map(notification -> {
             SearchNotificationResponse.Notification view = new SearchNotificationResponse.Notification();
             view.id = notification.id;
-            view.content = Strings.truncate(notification.content, 100); // todo not need
+            view.content = notification.content;
             view.createdTime = notification.createdTime;
             return view;
         }).collect(Collectors.toList());
@@ -72,7 +71,7 @@ public class NotificationService {
 
     public GetNotificationResponse get(Long id) {
         Notification notification = notificationRepository.get(id).orElseThrow(() -> new NotFoundException(
-            Strings.format("notification not found, id = ?", id), Markers.errorCode("NOTIFICATION_NOT_FOUND").getName()));
+            Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
         GetNotificationResponse response = new GetNotificationResponse();
         response.id = notification.id;
         response.content = notification.content;
@@ -83,7 +82,7 @@ public class NotificationService {
 
     public void delete(Long id, DeleteNotificationRequest request) {
         Notification notification = notificationRepository.selectOne("id = ?", id).orElseThrow(() -> new NotFoundException(
-            Strings.format("notification not found, id = ?", id), Markers.errorCode("NOTIFICATION_NOT_FOUND").getName()));
+            Strings.format("notification not found, id = ?", id), "NOTIFICATION_NOT_FOUND"));
         if (!notification.userId.equals(request.userId)) {
             throw new ForbiddenException("You cannot do this.");
         }
