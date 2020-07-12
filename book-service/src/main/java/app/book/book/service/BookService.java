@@ -21,11 +21,13 @@ import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
 import core.framework.mongo.MongoCollection;
+import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 import org.bson.types.ObjectId;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,6 +52,8 @@ public class BookService {
     Repository<Tag> tagRepository;
     @Inject
     MongoCollection<BorrowRecord> borrowRecordMongoCollection;
+    @Inject
+    Redis redis;
 
     public SearchBookResponse search(SearchBookRequest request) {
         Query<Book> query = bookRepository.select();
@@ -120,26 +124,28 @@ public class BookService {
     }
 
     public void borrow(Long id, BorrowBookRequest request) {
-        synchronized (this) {
-            Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
-                Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
-            if (book.status == BookStatus.BORROWED) {
-                throw new BadRequestException(Strings.format("book has been borrowed!"), "BOOK_BORROWED");
-            }
-
-            book.status = BookStatus.BORROWED;
-            book.borrowUserId = request.borrowUserId;
-            LocalDateTime now = LocalDateTime.now();
-            book.borrowedTime = now;
-            book.returnDate = request.returnDate;
-            book.updatedTime = now;
-            book.updatedBy = request.requestedBy;
-            BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
-
-            bookRepository.update(book);
-            borrowRecordMongoCollection.insert(borrowRecord);
-
+        Book book = bookRepository.get(id).orElseThrow(() -> new NotFoundException(
+            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
+        if (book.status == BookStatus.BORROWED) {
+            throw new BadRequestException(Strings.format("book has been borrowed!"), "BOOK_BORROWED");
         }
+
+        String borrowBookLock = Strings.format("borrow.book.{}", id);
+        if (!redis.set(borrowBookLock, "1", Duration.ofSeconds(2), true)) {
+            throw new BadRequestException("server is busy now.", "BORROW_BOOK_ERROR");
+        }
+        book.status = BookStatus.BORROWED;
+        book.borrowUserId = request.borrowUserId;
+        LocalDateTime now = LocalDateTime.now();
+        book.borrowedTime = now;
+        book.returnDate = request.returnDate;
+        book.updatedTime = now;
+        book.updatedBy = request.requestedBy;
+        BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
+
+        bookRepository.update(book);
+        borrowRecordMongoCollection.insert(borrowRecord);
+        redis.del(borrowBookLock);
     }
 
     private BorrowRecord buildBorrowRecord(BorrowBookRequest request, Book book, LocalDateTime now) {
