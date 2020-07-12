@@ -7,9 +7,6 @@ import app.api.authentication.authentication.ResetPasswordRequest;
 import app.authentication.authentication.service.AuthenticationService;
 import core.framework.inject.Inject;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
 /**
  * @author zoo
  */
@@ -18,12 +15,12 @@ public class AuthenticationWebServiceImpl implements AuthenticationWebService {
     AuthenticationService service;
 
     @Override
-    public LoginResponse login(LoginRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public LoginResponse login(LoginRequest request) {
         return service.login(request);
     }
 
     @Override
-    public void resetPassword(ResetPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public void resetPassword(ResetPasswordRequest request) {
         service.resetPassword(request);
     }
 }

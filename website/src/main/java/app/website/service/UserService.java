@@ -6,15 +6,11 @@ import app.api.authentication.authentication.LoginResponse;
 import app.api.authentication.authentication.ResetPasswordRequest;
 import app.website.api.user.LoginAJAXRequest;
 import app.website.api.user.ResetPasswordAJAXRequest;
-import app.website.web.WebsiteError;
 import core.framework.inject.Inject;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 /**
  * @author meow
@@ -32,13 +28,9 @@ public class UserService {
         loginRequest.password = request.password;
         logger.info(sessionId);
         LoginResponse loginResponse;
-        try {
-            loginResponse = authenticationWebService.login(loginRequest);
-            redis.hash().set(Strings.format("session:{}", sessionId), "status", loginResponse.status.name());
-            redis.set().add(Strings.format("users:{}:sessionIds", loginResponse.id), sessionId);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new WebsiteError("login failed.", e);
-        }
+        loginResponse = authenticationWebService.login(loginRequest);
+        redis.hash().set(Strings.format("session:{}", sessionId), "status", loginResponse.status.name());
+        redis.set().add(Strings.format("users:{}:sessionIds", loginResponse.id), sessionId);
 
         return loginResponse;
     }
@@ -49,11 +41,7 @@ public class UserService {
         resetPasswordRequest.token = request.token;
         resetPasswordRequest.requestedBy = request.requestedBy;
 
-        try {
-            authenticationWebService.resetPassword(resetPasswordRequest);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new WebsiteError("reset password failed.", e);
-        }
+        authenticationWebService.resetPassword(resetPasswordRequest);
         String userId = redis.get(request.token);
         redis.set().members(Strings.format("users:{}:sessionIds", userId)).stream().map(s -> Strings.format("session:{}", s)).forEach(redis::del);
         redis.del(Strings.format("users:{}:sessionIds", userId));

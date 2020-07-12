@@ -1,5 +1,6 @@
 package app.authentication.authentication.service;
 
+import app.api.authentication.authentication.AuthenticationException;
 import app.api.authentication.authentication.LoginRequest;
 import app.api.authentication.authentication.LoginResponse;
 import app.api.authentication.authentication.ResetPasswordRequest;
@@ -9,9 +10,12 @@ import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.ResetUserPasswordRequest;
 import app.user.api.user.UserStatusView;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -24,6 +28,7 @@ import java.util.Base64;
  * @author zoo
  */
 public class AuthenticationService {
+    private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
     @Inject
     UserWebService userWebService;
     @Inject
@@ -34,7 +39,7 @@ public class AuthenticationService {
         this.secretKey = secretKey;
     }
 
-    public LoginResponse login(LoginRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public LoginResponse login(LoginRequest request) {
         GetUserByUsernameRequest getUserByUsernameRequest = new GetUserByUsernameRequest();
         getUserByUsernameRequest.username = request.username;
         GetUserByUsernameResponse getUserByUsernameResponse = userWebService.getUserByUsername(getUserByUsernameRequest);
@@ -43,8 +48,13 @@ public class AuthenticationService {
             throw new BadRequestException("user not active", "USER_INACTIVE");
         }
 
-        if (!getUserByUsernameResponse.password.equals(getPasswordHash(request.password, getUserByUsernameResponse.salt))) {
-            throw new BadRequestException("username or password incorrect", "USER_PASSWORD_INCORRECT");
+        try {
+            if (!getUserByUsernameResponse.password.equals(getPasswordHash(request.password, getUserByUsernameResponse.salt))) {
+                throw new BadRequestException("username or password incorrect", "USER_PASSWORD_INCORRECT");
+            }
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
+            throw new AuthenticationException("login failed.", e);
         }
 
         LoginResponse response = new LoginResponse();
@@ -55,7 +65,7 @@ public class AuthenticationService {
         return response;
     }
 
-    public void resetPassword(ResetPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public void resetPassword(ResetPasswordRequest request) {
         String userId = redis.get(request.token);
         if (Strings.isBlank(userId)) {
             throw new BadRequestException("token expired", "RESET_PASSWORD_TOKEN_EXPIRED");

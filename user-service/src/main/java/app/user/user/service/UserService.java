@@ -4,13 +4,17 @@ import app.user.api.user.GetUserByUsernameRequest;
 import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.ResetUserPasswordRequest;
+import app.user.api.user.UserException;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -25,6 +29,7 @@ import java.util.Base64;
  * @author zoo
  */
 public class UserService {
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     @Inject
     Repository<User> userRepository;
     String secretKey;
@@ -59,11 +64,16 @@ public class UserService {
         return response;
     }
 
-    public void resetPassword(Long id, ResetUserPasswordRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public void resetPassword(Long id, ResetUserPasswordRequest request) {
         User user = userRepository.get(id).orElseThrow(() -> new NotFoundException(Strings.format("user not found, id = {}", id), "USER_NOT_FOUND"));
         user.updatedBy = request.requestedBy;
         user.updatedTime = LocalDateTime.now();
-        hashPassword(user, request.password);
+        try {
+            hashPassword(user, request.password);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
+            throw new UserException("reset password failed.", e);
+        }
 
         userRepository.partialUpdate(user);
     }

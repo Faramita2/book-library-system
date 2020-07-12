@@ -8,12 +8,16 @@ import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
 import app.user.user.domain.UserStatus;
+import app.user.api.user.UserException;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.util.Strings;
 import core.framework.web.exception.ConflictException;
 import core.framework.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
  * @author zoo
  */
 public class BOUserService {
+    private final Logger logger = LoggerFactory.getLogger(BOUserService.class);
     @Inject
     Repository<User> userRepository;
     String secretKey;
@@ -37,7 +42,7 @@ public class BOUserService {
         this.secretKey = secretKey;
     }
 
-    public void create(BOCreateUserRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public void create(BOCreateUserRequest request) {
         userRepository.selectOne("username = ?", request.username).ifPresent(user -> {
             throw new ConflictException(Strings.format("user already exists, username = {}", user.username), "USER_USERNAME_EXISTS");
         });
@@ -55,7 +60,12 @@ public class BOUserService {
         user.updatedTime = now;
         user.createdBy = request.requestedBy;
         user.updatedBy = request.requestedBy;
-        hashPassword(user, request.password);
+        try {
+            hashPassword(user, request.password);
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
+            throw new UserException("create user failed.", e);
+        }
 
         userRepository.insert(user);
     }

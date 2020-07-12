@@ -4,7 +4,6 @@ import app.api.backoffice.user.CreateUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXRequest;
 import app.api.backoffice.user.SearchUserAJAXResponse;
 import app.api.backoffice.user.UserStatusAJAXView;
-import app.backoffice.web.BackOfficeException;
 import app.user.api.BOUserWebService;
 import app.user.api.user.BOCreateUserRequest;
 import app.user.api.user.BOSearchUserRequest;
@@ -19,8 +18,6 @@ import core.framework.web.exception.TooManyRequestsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.stream.Collectors;
 
@@ -42,11 +39,7 @@ public class UserService {
         boCreateUserRequest.status = UserStatusView.valueOf(request.status.name());
         boCreateUserRequest.requestedBy = adminAccount;
 
-        try {
-            boUserWebService.create(boCreateUserRequest);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            throw new BackOfficeException("create user error", e);
-        }
+        boUserWebService.create(boCreateUserRequest);
     }
 
     public SearchUserAJAXResponse search(SearchUserAJAXRequest request) {

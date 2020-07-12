@@ -3,10 +3,14 @@ package app.authentication.authentication.service;
 import app.api.admin.BOAdminWebService;
 import app.api.admin.admin.BOGetAdminByAccountRequest;
 import app.api.admin.admin.BOGetAdminByAccountResponse;
+import app.api.authentication.authentication.AuthenticationException;
 import app.api.authentication.authentication.BOLoginRequest;
 import app.api.authentication.authentication.BOLoginResponse;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.web.exception.BadRequestException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -19,6 +23,7 @@ import java.util.Base64;
  * @author zoo
  */
 public class BOAuthenticationService {
+    private final Logger logger = LoggerFactory.getLogger(BOAuthenticationService.class);
     @Inject
     BOAdminWebService boAdminWebService;
     private final String secretKey;
@@ -27,13 +32,18 @@ public class BOAuthenticationService {
         this.secretKey = secretKey;
     }
 
-    public BOLoginResponse login(BOLoginRequest request) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public BOLoginResponse login(BOLoginRequest request) {
         BOGetAdminByAccountRequest boGetAdminByAccountRequest = new BOGetAdminByAccountRequest();
         boGetAdminByAccountRequest.account = request.account;
         BOGetAdminByAccountResponse boGetAdminByAccountResponse = boAdminWebService.getByAccount(boGetAdminByAccountRequest);
 
-        if (!boGetAdminByAccountResponse.password.equals(getPasswordHash(request.password, boGetAdminByAccountResponse.salt))) {
-            throw new BadRequestException("account or password incorrect", "ADMIN_PASSWORD_INCORRECT");
+        try {
+            if (!boGetAdminByAccountResponse.password.equals(getPasswordHash(request.password, boGetAdminByAccountResponse.salt))) {
+                throw new BadRequestException("account or password incorrect", "ADMIN_PASSWORD_INCORRECT");
+            }
+        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
+            throw new AuthenticationException("login failed.", e);
         }
 
         BOLoginResponse response = new BOLoginResponse();
