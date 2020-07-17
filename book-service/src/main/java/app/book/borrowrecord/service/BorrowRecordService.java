@@ -11,6 +11,7 @@ import app.book.book.domain.BookStatus;
 import app.book.borrowrecord.domain.BorrowRecord;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
 import core.framework.mongo.Query;
 import core.framework.redis.Redis;
@@ -18,6 +19,8 @@ import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -29,6 +32,7 @@ import static com.mongodb.client.model.Filters.eq;
  * @author zoo
  */
 public class BorrowRecordService {
+    private final Logger logger = LoggerFactory.getLogger(BorrowRecordService.class);
     @Inject
     MongoCollection<BorrowRecord> borrowRecordMongoCollection;
     @Inject
@@ -39,6 +43,8 @@ public class BorrowRecordService {
     public void returnBook(String id, ReturnBookRequest request) {
         BorrowRecord borrowRecord = borrowRecordMongoCollection.get(new ObjectId(id)).orElseThrow(() -> new NotFoundException(
             Strings.format("borrow record not found, id = {}", id), "BORROW_RECORD_NOT_FOUND"));
+        Book book = bookRepository.get(borrowRecord.book.id).orElseThrow(() -> new NotFoundException(
+            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
 
         if (borrowRecord.actualReturnDate != null) {
             throw new BadRequestException("book has been returned!", "BOOK_RETURNED");
@@ -48,13 +54,12 @@ public class BorrowRecordService {
         if (!redis.set(returnBookLock, "1", Duration.ofSeconds(2), true)) {
             throw new BadRequestException("server is busy now.", "RETURN_BOOK_ERROR");
         }
+
         LocalDateTime now = LocalDateTime.now();
         borrowRecord.actualReturnDate = now;
         borrowRecord.updatedBy = request.requestedBy;
         borrowRecord.updatedTime = now;
 
-        Book book = bookRepository.get(borrowRecord.book.id).orElseThrow(() -> new NotFoundException(
-            Strings.format("book not found, id = {}", id), "BOOK_NOT_FOUND"));
         book.status = BookStatus.AVAILABLE;
         book.returnDate = null;
         book.borrowedTime = null;
@@ -62,9 +67,14 @@ public class BorrowRecordService {
         book.updatedBy = request.requestedBy;
         book.updatedTime = now;
 
-        borrowRecordMongoCollection.replace(borrowRecord);
-        bookRepository.update(book);
-        redis.del(returnBookLock);
+        try {
+            borrowRecordMongoCollection.replace(borrowRecord);
+            bookRepository.update(book);
+        } catch (Exception e) {
+            logger.error(Markers.errorCode("RETURN_BOOK_ERROR"), e.getMessage());
+        } finally {
+            redis.del(returnBookLock);
+        }
     }
 
     public SearchBorrowRecordResponse search(SearchBorrowRecordRequest request) {

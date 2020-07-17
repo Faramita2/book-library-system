@@ -3,7 +3,7 @@ package app.authentication.authentication.service;
 import app.api.admin.BOAdminWebService;
 import app.api.admin.admin.BOGetAdminByAccountRequest;
 import app.api.admin.admin.BOGetAdminByAccountResponse;
-import app.api.authentication.authentication.AuthenticationException;
+import app.authentication.authentication.exception.AuthenticationException;
 import app.api.authentication.authentication.BOLoginRequest;
 import app.api.authentication.authentication.BOLoginResponse;
 import core.framework.inject.Inject;
@@ -43,7 +43,7 @@ public class BOAuthenticationService {
             }
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
-            throw new AuthenticationException("login failed.", e);
+            throw new AuthenticationException("login failed.", e, "HASH_PASSWORD_ERROR");
         }
 
         BOLoginResponse response = new BOLoginResponse();

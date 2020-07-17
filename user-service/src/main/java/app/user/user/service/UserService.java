@@ -4,7 +4,7 @@ import app.user.api.user.GetUserByUsernameRequest;
 import app.user.api.user.GetUserByUsernameResponse;
 import app.user.api.user.GetUserResponse;
 import app.user.api.user.ResetUserPasswordRequest;
-import app.user.api.user.UserException;
+import app.user.user.exception.UserException;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
 import core.framework.db.Repository;
@@ -72,7 +72,7 @@ public class UserService {
             hashPassword(user, request.password);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
-            throw new UserException("reset password failed.", e);
+            throw new UserException("reset password failed.", e, "HASH_PASSWORD_ERROR");
         }
 
         userRepository.partialUpdate(user);

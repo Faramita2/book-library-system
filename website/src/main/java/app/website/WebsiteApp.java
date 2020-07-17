@@ -8,7 +8,6 @@ import app.book.api.CategoryWebService;
 import app.book.api.TagWebService;
 import app.notification.api.NotificationWebService;
 import app.user.api.UserWebService;
-import app.website.web.WebsiteErrorHandler;
 import core.framework.module.App;
 import core.framework.module.SystemModule;
 
@@ -42,8 +41,6 @@ public class WebsiteApp extends App {
         api().client(NotificationWebService.class, requiredProperty("app.notification.ServiceURL"));
         api().client(TagWebService.class, requiredProperty("app.book.ServiceURL"));
         api().client(UserWebService.class, requiredProperty("app.user.ServiceURL"));
-
-        http().errorHandler(bind(WebsiteErrorHandler.class));
     }
 
     private void sys() {

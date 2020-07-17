@@ -8,7 +8,7 @@ import app.user.api.user.BOUpdateUserRequest;
 import app.user.api.user.UserStatusView;
 import app.user.user.domain.User;
 import app.user.user.domain.UserStatus;
-import app.user.api.user.UserException;
+import app.user.user.exception.UserException;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
@@ -64,7 +64,7 @@ public class BOUserService {
             hashPassword(user, request.password);
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
-            throw new UserException("create user failed.", e);
+            throw new UserException("create user failed.", e, "HASH_PASSWORD_ERROR");
         }
 
         userRepository.insert(user);

@@ -20,12 +20,15 @@ import app.book.tag.domain.Tag;
 import core.framework.db.Query;
 import core.framework.db.Repository;
 import core.framework.inject.Inject;
+import core.framework.log.Markers;
 import core.framework.mongo.MongoCollection;
 import core.framework.redis.Redis;
 import core.framework.util.Strings;
 import core.framework.web.exception.BadRequestException;
 import core.framework.web.exception.NotFoundException;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -36,6 +39,7 @@ import java.util.stream.Collectors;
  * @author zoo
  */
 public class BookService {
+    private final Logger logger = LoggerFactory.getLogger(BookService.class);
     @Inject
     Repository<Book> bookRepository;
     @Inject
@@ -143,9 +147,15 @@ public class BookService {
         book.updatedBy = request.requestedBy;
         BorrowRecord borrowRecord = buildBorrowRecord(request, book, now);
 
-        bookRepository.update(book);
-        borrowRecordMongoCollection.insert(borrowRecord);
-        redis.del(borrowBookLock);
+        try {
+            bookRepository.update(book);
+            borrowRecordMongoCollection.insert(borrowRecord);
+        } catch (Exception e) {
+            logger.error(Markers.errorCode("BORROW_BOOK_ERROR"), e.getMessage());
+        } finally {
+            redis.del(borrowBookLock);
+        }
+
     }
 
     private BorrowRecord buildBorrowRecord(BorrowBookRequest request, Book book, LocalDateTime now) {

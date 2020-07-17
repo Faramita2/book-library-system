@@ -1,6 +1,6 @@
 package app.authentication.authentication.service;
 
-import app.api.authentication.authentication.AuthenticationException;
+import app.authentication.authentication.exception.AuthenticationException;
 import app.api.authentication.authentication.LoginRequest;
 import app.api.authentication.authentication.LoginResponse;
 import app.api.authentication.authentication.ResetPasswordRequest;
@@ -54,7 +54,7 @@ public class AuthenticationService {
             }
         } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             logger.error(Markers.errorCode("HASH_PASSWORD_ERROR"), e.getMessage());
-            throw new AuthenticationException("login failed.", e);
+            throw new AuthenticationException("login failed.", e, "HASH_PASSWORD_ERROR");
         }
 
         LoginResponse response = new LoginResponse();
@@ -79,7 +79,7 @@ public class AuthenticationService {
     }
 
     private String getPasswordHash(String password, String salt) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        String passwordHash = "";
+        String passwordHash;
         byte[] saltBytes = Base64.getDecoder().decode(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), saltBytes, 65536, 128);
         SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance(secretKey);
